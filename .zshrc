@@ -20,16 +20,13 @@ export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
 ### alias'
-alias lss="ls -laGF"
+alias ls="ls -laG"
+alias lss="ls"
 alias v="vim"
 alias sv="sudo vim"
 alias pacman="sudo pacman"
 alias clyde="sudo clyde"
 alias tma="tmux attach -d"
-alias transmote="transmission-remote"
-alias snooze="sudo pm-suspend"
-alias cake-ssh="ssh -p4445 chris@cake.mine.nu"
-alias cake-sftp="sftp -oPort=4445 chris@cake.mine.nu"
 
 ### tab completion
 autoload -U compinit; compinit
@@ -51,38 +48,7 @@ zstyle ":completion:*:cd:*" ignore-parents parent pwd
 zstyle ":completion:*" list-colors ""
 
 ### prompt
-setprompt () {
-	# load some modules
-	autoload -U colors zsh/terminfo # Used in the colour alias below
-	colors
-	setopt extended_glob prompt_subst
-
-	# make some aliases for the colours: (coud use normal escap.seq's too)
-	for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
-		eval PR_$color='%{$fg[${(L)color}]%}'
-	done
-	PR_NO_COLOR="%{$terminfo[sgr0]%}"
-
-	# Check the UID
-	if [[ $UID -ge 1000 ]]; then # normal user
-		eval PR_USER='${PR_WHITE}%n${PR_NO_COLOR}'
-		eval PR_USER_OP='${PR_WHITE}%#${PR_NO_COLOR}'
-	elif [[ $UID -eq 0 ]]; then # root
-		eval PR_USER='${PR_RED}%n${PR_NO_COLOR}'
-		eval PR_USER_OP='${PR_RED}%#${PR_NO_COLOR}'
-	fi	
-
-	# Check if we are on SSH or not
-	if [[ -n "$SSH_CLIENT"  ||  -n "$SSH2_CLIENT" ]]; then 
-		eval PR_HOST='${PR_YELLOW}%M${PR_NO_COLOR}' #SSH
-	else 
-		eval PR_HOST='${PR_CYAN}%M${PR_NO_COLOR}' # no SSH
-	fi
-	# set the prompt
-	PS1=$'${PR_USER}${PR_CYAN}@${PR_HOST}${PR_BLUE} %~ ${PR_USER_OP} ${PR_WHITE}'
-	PS2=$'%_>'
-}
-setprompt
+PROMPT='%n@%m :: %2~ %B$%b '
 
 ### key bindings
 bindkey "\e[1~" beginning-of-line
