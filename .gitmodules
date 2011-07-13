@@ -4,9 +4,6 @@
 [submodule ".vim/bundle/vim-ruby"]
 	path = .vim/bundle/vim-ruby
 	url = https://github.com/vim-ruby/vim-ruby.git
-[submodule ".vim/bundle/vim-ruby-runner"]
-	path = .vim/bundle/vim-ruby-runner
-	url = https://github.com/henrik/vim-ruby-runner.git
 [submodule ".vim/bundle/vim-fugitive"]
 	path = .vim/bundle/vim-fugitive
 	url = https://github.com/tpope/vim-fugitive.git
@@ -31,3 +28,6 @@
 [submodule ".vim/bundle/snipMate"]
 	path = .vim/bundle/snipMate
 	url = https://github.com/msanders/snipmate.vim.git
+[submodule ".vim/bundle/vim-html5"]
+	path = .vim/bundle/vim-html5
+	url = https://github.com/othree/html5.vim.git
