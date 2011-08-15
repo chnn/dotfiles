@@ -21,12 +21,10 @@ export LESS_TERMCAP_us=$'\E[01;32m'
 
 ### alias'
 alias ls="ls -laG"
-alias lss="ls"
 alias v="vim"
 alias sv="sudo vim"
-alias pacman="sudo pacman"
-alias clyde="sudo clyde"
 alias tma="tmux attach -d"
+alias sshtunnel="ssh -fp7890 -ND 4711 murakami"
 
 ### tab completion
 autoload -U compinit; compinit
@@ -47,40 +45,5 @@ zstyle ":completion:*:cd:*" ignore-parents parent pwd
 # Complete with colors
 zstyle ":completion:*" list-colors ""
 
-### prompt
+# or a very simple prompt... (good for osx)
 PROMPT='%n@%m :: %2~ %B$%b '
-
-### key bindings
-bindkey "\e[1~" beginning-of-line
-bindkey "\e[4~" end-of-line
-bindkey "\e[5~" beginning-of-history
-bindkey "\e[6~" end-of-history
-bindkey "\e[3~" delete-char
-bindkey "\e[2~" quoted-insert
-bindkey "\e[5C" forward-word
-bindkey "\eOc" emacs-forward-word
-bindkey "\e[5D" backward-word
-bindkey "\eOd" emacs-backward-word
-bindkey "\e\e[C" forward-word
-bindkey "\e\e[D" backward-word
-bindkey "^H" backward-delete-word
-# for rxvt
-bindkey "\e[8~" end-of-line
-bindkey "\e[7~" beginning-of-line
-# for non RH/Debian xterm, can't hurt for RH/DEbian xterm
-bindkey "\eOH" beginning-of-line
-bindkey "\eOF" end-of-line
-# for freebsd console
-bindkey "\e[H" beginning-of-line
-bindkey "\e[F" end-of-line
-# completion in the middle of a line
-bindkey '^i' expand-or-complete-prefix
-
-if [[ -z "$DISPLAY" ]] && [[ $(tty) = /dev/tty1 ]]; then
-  . startx
-  logout
-fi
-
-### RVM
-# load RVM into shell session as a function (sandboxed home directory goodness
-#[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
