@@ -1,6 +1,6 @@
 ### environment variables
 export EDITOR="vim"
-export PATH="/usr/local/bin:/usr/bin:$PATH"
+export PATH="/usr/local/bin:/usr/bin:/usr/texbin:$PATH"
 
 ### history
 HISTFILE=~/.zsh_history
