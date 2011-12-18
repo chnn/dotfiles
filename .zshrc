@@ -1,6 +1,6 @@
 ### environment variables
 export EDITOR="vim"
-export PATH="/usr/local/bin:/usr/bin:/usr/texbin:$PATH"
+export PATH="/usr/local/bin:/usr/bin:/usr/texbin:$HOME/.rbenv/bin:$PATH"
 
 ### history
 HISTFILE=~/.zsh_history
@@ -24,7 +24,10 @@ alias ls="ls -laG"
 alias v="vim"
 alias sv="sudo vim"
 alias tma="tmux attach -d"
-alias sshtunnel="ssh -fp7890 -ND 4711 murakami"
+alias sshtunnel="ssh -fND 4711 -p" # sshtunnel [port] [server] --- starts tunnel on local port 4711
+alias jk="jekyll --server --auto"
+alias rsync-chenn="rsync -rP ./_site/ abbey:/srv/http/chenn.io/public/log/"
+alias qemu="qemu-system-x86_64"
 
 ### tab completion
 autoload -U compinit; compinit
@@ -47,3 +50,6 @@ zstyle ":completion:*" list-colors ""
 
 # or a very simple prompt... (good for osx)
 PROMPT='%n@%m :: %2~ %B$%b '
+
+# rbenv
+eval "$(rbenv init -)"
