@@ -52,4 +52,4 @@ zstyle ":completion:*" list-colors ""
 PROMPT='%n@%m :: %2~ %B$%b '
 
 # rbenv
-eval "$(rbenv init -)"
+# eval "$(rbenv init -)"
