@@ -11,7 +11,6 @@ Bundle 'gmarik/vundle'
 " List bundles
 Bundle 'tpope/vim-fugitive'
 Bundle 'scrooloose/nerdtree'
-Bundle 'git://git.wincent.com/command-t.git'
 Bundle 'csexton/jekyll.vim'
 Bundle 'tpope/vim-commentary'
 Bundle 'scrooloose/syntastic'
@@ -24,10 +23,21 @@ Bundle 'vim-ruby/vim-ruby'
 Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-abolish'
 Bundle 'tpope/vim-liquid'
-Bundle 'YankRing.vim'
 Bundle 'godlygeek/tabular'
-Bundle 'henrik/vim-ruby-runner'
 Bundle 'vim-ruby/vim-ruby'
+Bundle 'nelstrom/vim-blackboard'
+Bundle 'tpope/vim-rails'
+Bundle 'vim-scripts/SuperTab-continued.'
+Bundle 'kien/ctrlp.vim'
+Bundle 'Jinja'
+Bundle 'pangloss/vim-javascript'
+Bundle 'majutsushi/tagbar'
+Bundle 'aaronj1335/underscore-templates.vim'
+" Bundle 'vim-scripts/Rainbow-Parenthesis'
+" Bundle 'briandoll/change-inside-surroundings.vim'
+" Bundle 'henrik/vim-ruby-runner'
+" Bundle 'YankRing.vim'
+" Bundle 'git://git.wincent.com/command-t.git'
 
 " Re-enable file detection after vundle has been called
 filetype plugin indent on
@@ -45,7 +55,7 @@ syntax on
 set background=dark
 
 " Set color scheme
-colorscheme vimbrant
+colorscheme solarized
 
 " Set tab/spaces options
 set ai et sw=4 sts=4 ts=4
@@ -66,17 +76,20 @@ cmap w!! w !sudo tee % >/dev/null<CR>:e!<CR><CR>
 au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
 
 " Set path to Jekyll blog for Jekyll.vim
-let g:jekyll_path = "~/Dev/chenn.io"
+let g:jekyll_path = "~/Dev/chrishenn.net/"
 
 " Highlight Jekyll post YAML content correctly
 execute "autocmd BufNewFile,BufRead " . g:jekyll_path . "/* syn match jekyllYamlFrontmatter /\\%^---\\_.\\{-}---$/ contains=@Spell"
+
+" Support more formats for commentary.vim
+autocmd filetype apache set commentstring=#\ %s
 
 " For markdown documents
 command! -nargs=* Wrap set wrap linebreak nolist
 
 " Some key mappings
 map <S-n> :NERDTreeToggle<CR>
-map <C-t> :CommandT<CR>
+map <S-y> :YRShow<CR>
 map <S-t> :Tab /=<CR>
 
 " Turn off toolbar in GUI
