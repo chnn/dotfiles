@@ -21,4 +21,4 @@ The Vim configuration under `.vim/` is the most complicated, but I try to keep i
 
     :BundleInstall
 
-vundle should take care of everything for you. Some plugins require a little extra work. Check the `README` in [Command-T](https://github.com/wincent/Command-T) to see how to set it up (it requires vim with ruby enabled.)
+vundle should take care of everything for you, though some plugins may require a little extra work. 
