@@ -15,10 +15,15 @@ They're from my macbook, but I share them with some linux machines too. Please u
 
 #### Notes about Vim dotfiles
 
-The Vim configuration under `.vim/` is the most complicated, but I try to keep it simple. I use [vundle](https://github.com/gmarik/vundle) to manage plugins. 
+The Vim configuration under `.vim/` is the most complicated, but I try to keep it simple. I use [vundle](https://github.com/gmarik/vundle) to manage plugins.
 
-"Vundles" are specified in `.vimrc`. Once you've copied or symlinked `.vim/` and `.vimrc` to your home directory, open vim and run:
+To use vundle, make sure you update the submodules in your local repo so vundle gets downloaded:
 
-    :BundleInstall
+    $ git submodule init
+    $ git submodule update
 
-vundle should take care of everything for you, though some plugins may require a little extra work. 
+This will clone vundle to .vim/bundle/vundle. Now copy .vim/ and .vimrc to your home directory, then run `:BundleInstall` in vim.
+
+This will download the latest version of the plugins specified in .vimrc.
+
+You should copy and not symlink the .vim/ directory (though symlinking .vimrc is fine.) Otherwise, you'll have a bunch of submodules in .vim/bundle that vundle has downloaded that won't actually be in .gitmodules. Icky.
