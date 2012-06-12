@@ -7,8 +7,6 @@ autodetach on
 
 # startup sessions
 screen -t sh    0 
-screen -t sh    1
-select 0
 
 # status
 hardstatus alwayslastline '%{= M} %H%{= G} %l %= %{= w}%-w%{+b r}%n*%t%{-b r}%{w}%+w %= %{c}%d %D %{B}%c '

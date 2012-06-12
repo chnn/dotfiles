@@ -33,6 +33,7 @@ Bundle 'Jinja'
 Bundle 'pangloss/vim-javascript'
 Bundle 'majutsushi/tagbar'
 Bundle 'aaronj1335/underscore-templates.vim'
+Bundle 'kchmck/vim-coffee-script'
 " Bundle 'vim-scripts/Rainbow-Parenthesis'
 " Bundle 'briandoll/change-inside-surroundings.vim'
 " Bundle 'henrik/vim-ruby-runner'
@@ -55,10 +56,13 @@ syntax on
 set background=dark
 
 " Set color scheme
-colorscheme solarized
+colorscheme Tomorrow-Night
 
 " Set tab/spaces options
 set ai et sw=4 sts=4 ts=4
+
+" Set folding options
+set foldmethod=indent
 
 " Turn on paste mode, formatting doesn't mess up when pasting in code
 set pastetoggle=<f12>
@@ -96,7 +100,7 @@ map <S-t> :Tab /=<CR>
 if has("gui_running")
     set guioptions=egmt
     set guioptions-=r
-    set guifont=M+\ 1m\ light:h14
+    set guifont=Inconsolata:h14
     set antialias
     set spell
 endif
