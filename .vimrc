@@ -34,6 +34,9 @@ Bundle 'pangloss/vim-javascript'
 Bundle 'majutsushi/tagbar'
 Bundle 'aaronj1335/underscore-templates.vim'
 Bundle 'kchmck/vim-coffee-script'
+Bundle 'vim-indent-object'
+Bundle 'tpope/vim-unimpaired'
+" Bundle 'Lokaltog/vim-powerline'
 " Bundle 'vim-scripts/Rainbow-Parenthesis'
 " Bundle 'briandoll/change-inside-surroundings.vim'
 " Bundle 'henrik/vim-ruby-runner'
@@ -42,6 +45,9 @@ Bundle 'kchmck/vim-coffee-script'
 
 " Re-enable file detection after vundle has been called
 filetype plugin indent on
+
+" Necessary to show unicode glyphs
+set encoding=utf-8
 
 " Turn off annoying bell
 set visualbell
@@ -56,7 +62,7 @@ syntax on
 set background=dark
 
 " Set color scheme
-colorscheme Tomorrow-Night
+colorscheme Tomorrow-Night-Bright
 
 " Set tab/spaces options
 set ai et sw=4 sts=4 ts=4
@@ -88,6 +94,10 @@ execute "autocmd BufNewFile,BufRead " . g:jekyll_path . "/* syn match jekyllYaml
 " Support more formats for commentary.vim
 autocmd filetype apache set commentstring=#\ %s
 
+" Coffeescript options
+" let coffee_make_options = '-o public/assets/js/'
+au BufWritePost *.coffee silent CoffeeMake
+
 " For markdown documents
 command! -nargs=* Wrap set wrap linebreak nolist
 
@@ -95,12 +105,13 @@ command! -nargs=* Wrap set wrap linebreak nolist
 map <S-n> :NERDTreeToggle<CR>
 map <S-y> :YRShow<CR>
 map <S-t> :Tab /=<CR>
+map <C-p> :CtrlPLastMode
 
 " Turn off toolbar in GUI
 if has("gui_running")
     set guioptions=egmt
     set guioptions-=r
-    set guifont=Inconsolata:h14
+    set guifont=M+\ 1mn\ light:h14
     set antialias
     set spell
 endif
