@@ -51,7 +51,7 @@ myModMask = mod1Mask
 
 -- Names and number of workspaces.
 myWorkspaces :: [WorkspaceId]
-myWorkspaces = ["term", "tab", "3", "4", "5", "6", "7", "8", "9"]
+myWorkspaces = ["0","1","2","3","4","5","6","7","8","9"]
 
 -- Border width.
 myBorderWidth = 2
@@ -67,14 +67,14 @@ myFocusFollowsMouse = False
 
 -- Theme for tabbed layout 1.
 tabTheme1 = defaultTheme { decoHeight = 20
-                         , activeColor = "#ccccc6"
-			 , inactiveColor = "#0f0f0f"
-			 , urgentColor = "#B7416E"
-                         , activeBorderColor = "#0d0d0d"
-                         , activeTextColor = "#000000"
-                         , inactiveBorderColor = "#0d0d0d"
-			 , fontName = "xft:Droid Sans-8"
-                         }
+        , activeColor = "#ccccc6"
+        , inactiveColor = "#0f0f0f"
+        , urgentColor = "#B7416E"
+        , activeBorderColor = "#0d0d0d"
+        , activeTextColor = "#000000"
+        , inactiveBorderColor = "#0d0d0d"
+        , fontName = "xft:Droid Sans-8"
+}
 
 -- Layout config.
 myLayoutHook = onWorkspace "tab" (tab ||| tiled ||| wtiled ||| full) $ tiled ||| wtiled ||| full ||| tab
@@ -105,12 +105,12 @@ myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
     manageTerm = customFloating $ W.RationalRect l t w h
       where
         h = 0.15      -- height - 10%
-	w = 1         -- width - 100%
-	t = 1 - h     -- bottom edge
-	l = (1 - w)/2 -- centered
-    spawnSonata = "sonata"
-    findSonata = className =? "Sonata"
-    manageSonata = doFloat
+        w = 1         -- width - 100%
+        t = 1 - h     -- bottom edge
+        l = (1 - w)/2 -- centered
+        spawnSonata = "sonata"
+        findSonata = className =? "Sonata"
+        manageSonata = doFloat
 
 -- Config for xmobar (additional config in ~/.xmobarrc).
 customPP = defaultPP { ppTitle = xmobarColor "#dfaf8f" "" . shorten 80
