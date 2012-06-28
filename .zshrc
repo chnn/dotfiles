@@ -1,6 +1,9 @@
 ### environment variables
 export EDITOR="vim"
-export PATH="/usr/local/bin:/usr/bin:/usr/texbin:$HOME/.rbenv/bin:$PATH"
+export PATH="/usr/local/bin:/usr/bin:/usr/local/share/python:$HOME/.rbenv/bin:$PATH"
+export WORKON_HOME=$HOME/.virtualenvs
+export PROJECT_HOME=$HOME/Dev
+source /usr/local/share/python/virtualenvwrapper.sh
 
 ### history
 HISTFILE=~/.zsh_history
@@ -48,7 +51,7 @@ zstyle ":completion:*:cd:*" ignore-parents parent pwd
 # Complete with colors
 zstyle ":completion:*" list-colors ""
 
-# or a very simple prompt... (good for osx)
+# Prompt
 PROMPT='%n@%m :: %2~ %B$%b '
 
 # rbenv
