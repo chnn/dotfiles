@@ -36,6 +36,7 @@ Bundle 'aaronj1335/underscore-templates.vim'
 Bundle 'kchmck/vim-coffee-script'
 Bundle 'vim-indent-object'
 Bundle 'tpope/vim-unimpaired'
+Bundle 'nono/vim-handlebars'
 " Bundle 'Lokaltog/vim-powerline'
 " Bundle 'vim-scripts/Rainbow-Parenthesis'
 " Bundle 'briandoll/change-inside-surroundings.vim'
@@ -82,11 +83,11 @@ set backupdir=~/.vim/backup
 " Get permission to edit file
 cmap w!! w !sudo tee % >/dev/null<CR>:e!<CR><CR>
 
-" This beauty remembers where you were the last time you edited the file, and returns to the same position
+" Remembers last position in file
 au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
 
 " Set path to Jekyll blog for Jekyll.vim
-let g:jekyll_path = "~/Dev/chrishenn.net/"
+let g:jekyll_path = "~/Dev/chenn.github.com/"
 
 " Highlight Jekyll post YAML content correctly
 execute "autocmd BufNewFile,BufRead " . g:jekyll_path . "/* syn match jekyllYamlFrontmatter /\\%^---\\_.\\{-}---$/ contains=@Spell"
@@ -95,8 +96,11 @@ execute "autocmd BufNewFile,BufRead " . g:jekyll_path . "/* syn match jekyllYaml
 autocmd filetype apache set commentstring=#\ %s
 
 " Coffeescript options
-" let coffee_make_options = '-o public/assets/js/'
+au BufNewFile,BufReadPost *.coffee setl shiftwidth=2 expandtab
 au BufWritePost *.coffee silent CoffeeMake
+
+" Start CtrlP in last used mode
+let g:ctrlp_cmd = 'CtrlPLastMode'
 
 " For markdown documents
 command! -nargs=* Wrap set wrap linebreak nolist
@@ -105,7 +109,6 @@ command! -nargs=* Wrap set wrap linebreak nolist
 map <S-n> :NERDTreeToggle<CR>
 map <S-y> :YRShow<CR>
 map <S-t> :Tab /=<CR>
-map <C-p> :CtrlPLastMode
 
 " Turn off toolbar in GUI
 if has("gui_running")
