@@ -102,6 +102,10 @@ au BufWritePost *.coffee silent CoffeeMake
 " Start CtrlP in last used mode
 let g:ctrlp_cmd = 'CtrlPLastMode'
 
+" Commands to hide JavaScript files in CtrlP
+command! ShowJS let g:ctrlp_custom_ignore= '\.pyc$' | :ClearAllCtrlPCaches
+command! HideJS let g:ctrlp_custom_ignore= '\.js$\|\.pyc$' | :ClearAllCtrlPCaches
+
 " For markdown documents
 command! -nargs=* Wrap set wrap linebreak nolist
 
