@@ -120,5 +120,6 @@ if has("gui_running")
     set guioptions-=r
     set guifont=M+\ 1mn\ light:h14
     set antialias
+    colorscheme getafe
     set spell
 endif

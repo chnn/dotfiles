@@ -1,9 +1,9 @@
 ### environment variables
 export EDITOR="vim"
-export PATH="/usr/local/bin:/usr/bin:/usr/local/share/python:$HOME/.rbenv/bin:$PATH"
+export PATH="/usr/local/bin:/usr/bin:/usr/local/share/python:$HOME/.rbenv/bin:/usr/local/share/npm/bin:$PATH"
 export WORKON_HOME=$HOME/.virtualenvs
 export PROJECT_HOME=$HOME/Dev
-source /usr/local/share/python/virtualenvwrapper.sh
+source /usr/local/bin/virtualenvwrapper.sh
 
 ### history
 HISTFILE=~/.zsh_history
@@ -52,7 +52,7 @@ zstyle ":completion:*:cd:*" ignore-parents parent pwd
 zstyle ":completion:*" list-colors ""
 
 # Prompt
-PROMPT='%n@%m :: %2~ %B$%b '
+PROMPT='%n@%m %2~ %B$%b '
 
 # rbenv
-# eval "$(rbenv init -)"
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
