@@ -37,6 +37,8 @@ Bundle 'kchmck/vim-coffee-script'
 Bundle 'vim-indent-object'
 Bundle 'tpope/vim-unimpaired'
 Bundle 'nono/vim-handlebars'
+Bundle 'tobinvanpelt/vim-semicolon'
+Bundle 'wlangstroth/vim-haskell'
 " Bundle 'Lokaltog/vim-powerline'
 " Bundle 'vim-scripts/Rainbow-Parenthesis'
 " Bundle 'briandoll/change-inside-surroundings.vim'
@@ -63,7 +65,7 @@ syntax on
 set background=dark
 
 " Set color scheme
-colorscheme Tomorrow-Night-Bright
+colorscheme vimbrant
 
 " Set tab/spaces options
 set ai et sw=4 sts=4 ts=4
@@ -96,8 +98,10 @@ execute "autocmd BufNewFile,BufRead " . g:jekyll_path . "/* syn match jekyllYaml
 autocmd filetype apache set commentstring=#\ %s
 
 " Coffeescript options
+let coffee_compiler = '/usr/local/share/npm/bin/coffee'
+let coffee_linter = '/usr/local/share/npm/bin/coffeelint'
 au BufNewFile,BufReadPost *.coffee setl shiftwidth=2 expandtab
-au BufWritePost *.coffee silent CoffeeMake
+" au BufWritePost *.coffee silent CoffeeMake
 
 " Start CtrlP in last used mode
 let g:ctrlp_cmd = 'CtrlPLastMode'
@@ -105,6 +109,9 @@ let g:ctrlp_cmd = 'CtrlPLastMode'
 " Commands to hide JavaScript files in CtrlP
 command! ShowJS let g:ctrlp_custom_ignore= '\.pyc$' | :ClearAllCtrlPCaches
 command! HideJS let g:ctrlp_custom_ignore= '\.js$\|\.pyc$' | :ClearAllCtrlPCaches
+
+" Ignore certain checks in syntastic
+let g:syntastic_python_checker_args='--ignore=E70'
 
 " For markdown documents
 command! -nargs=* Wrap set wrap linebreak nolist
@@ -119,7 +126,8 @@ if has("gui_running")
     set guioptions=egmt
     set guioptions-=r
     set guifont=M+\ 1mn\ light:h14
+    set background=dark
+    colorscheme vimbrant
     set antialias
-    colorscheme getafe
     set spell
 endif

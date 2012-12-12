@@ -1,6 +1,6 @@
 ### environment variables
 export EDITOR="vim"
-export PATH="/usr/local/bin:/usr/bin:/usr/local/share/python:$HOME/.rbenv/bin:/usr/local/share/npm/bin:$PATH"
+export PATH="/usr/local/bin:/usr/bin:/usr/local/share/python:$HOME/.rbenv/bin:/usr/local/share/npm/bin:$HOME/Library/Haskell/bin:$PATH"
 export WORKON_HOME=$HOME/.virtualenvs
 export PROJECT_HOME=$HOME/Dev
 source /usr/local/bin/virtualenvwrapper.sh
@@ -30,7 +30,9 @@ alias tma="tmux attach -d"
 alias sshtunnel="ssh -fND 4711 -p" # sshtunnel [port] [server] --- starts tunnel on local port 4711
 alias jk="jekyll --server --auto"
 alias rsync-chenn="rsync -rP ./_site/ abbey:/srv/http/chenn.io/public/log/"
+alias rsync-music="rsync -avzP --delete ~/Music/iTunes/iTunes\ Media/Music /Volumes/Backup\ Drive/backup-chris/Music"
 alias qemu="qemu-system-x86_64"
+alias mongod="mongod run --config /usr/local/etc/mongod.conf"
 
 ### tab completion
 autoload -U compinit; compinit
