@@ -16,30 +16,30 @@ Bundle 'tpope/vim-commentary'
 Bundle 'scrooloose/syntastic'
 Bundle 'skammer/vim-css-color'
 Bundle 'othree/html5.vim'
-Bundle 'tpope/vim-haml'
 Bundle 'groenewege/vim-less'
 Bundle 'tpope/vim-markdown'
-Bundle 'vim-ruby/vim-ruby'
 Bundle 'tpope/vim-surround'
-Bundle 'tpope/vim-abolish'
 Bundle 'tpope/vim-liquid'
 Bundle 'godlygeek/tabular'
-Bundle 'vim-ruby/vim-ruby'
 Bundle 'nelstrom/vim-blackboard'
-Bundle 'tpope/vim-rails'
 Bundle 'vim-scripts/SuperTab-continued.'
 Bundle 'kien/ctrlp.vim'
-Bundle 'Jinja'
 Bundle 'pangloss/vim-javascript'
-Bundle 'majutsushi/tagbar'
-Bundle 'aaronj1335/underscore-templates.vim'
 Bundle 'kchmck/vim-coffee-script'
 Bundle 'vim-indent-object'
-Bundle 'tpope/vim-unimpaired'
 Bundle 'nono/vim-handlebars'
-Bundle 'tobinvanpelt/vim-semicolon'
 Bundle 'wlangstroth/vim-haskell'
-" Bundle 'Lokaltog/vim-powerline'
+Bundle 'closetag.vim'
+" Bundle 'vim-ruby/vim-ruby'
+" Bundle 'tpope/vim-abolish'
+" Bundle 'tpope/vim-rails'
+" Bundle 'Jinja'
+" Bundle 'majutsushi/tagbar'
+" Bundle 'aaronj1335/underscore-templates.vim'
+" Bundle 'tpope/vim-unimpaired'
+" Bundle 'tobinvanpelt/vim-semicolon'
+" Bundle 'tpope/vim-haml'
+" Bundle 'Lokaltog/powerline'
 " Bundle 'vim-scripts/Rainbow-Parenthesis'
 " Bundle 'briandoll/change-inside-surroundings.vim'
 " Bundle 'henrik/vim-ruby-runner'
@@ -54,6 +54,9 @@ set encoding=utf-8
 
 " Turn off annoying bell
 set visualbell
+
+" Turn on mouse
+set mouse=a
 
 " Turn on line numbering
 set number
@@ -100,7 +103,8 @@ autocmd filetype apache set commentstring=#\ %s
 " Coffeescript options
 let coffee_compiler = '/usr/local/share/npm/bin/coffee'
 let coffee_linter = '/usr/local/share/npm/bin/coffeelint'
-au BufNewFile,BufReadPost *.coffee setl shiftwidth=2 expandtab
+let coffee_make_options = ''
+au BufNewFile,BufReadPost *.coffee setl shiftwidth=2 expandtab foldlevel=2 foldmethod=indent textwidth=80
 " au BufWritePost *.coffee silent CoffeeMake
 
 " Start CtrlP in last used mode
@@ -127,7 +131,7 @@ if has("gui_running")
     set guioptions-=r
     set guifont=M+\ 1mn\ light:h14
     set background=dark
-    colorscheme vimbrant
+    colorscheme Tomorrow-Night
     set antialias
     set spell
 endif
