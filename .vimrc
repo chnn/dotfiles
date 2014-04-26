@@ -19,25 +19,33 @@ Bundle 'kien/ctrlp.vim'
 Bundle 'pangloss/vim-javascript'
 Bundle 'kchmck/vim-coffee-script'
 Bundle 'vim-indent-object'
-Bundle 'nono/vim-handlebars'
-Bundle 'wlangstroth/vim-haskell'
+Bundle 'mustache/vim-mustache-handlebars'
 Bundle 'skammer/vim-css-color'
 Bundle 'godlygeek/tabular'
 Bundle 'vim-scripts/SuperTab-continued.'
 Bundle 'bling/vim-airline'
 Bundle 'tpope/vim-unimpaired'
 Bundle 'mileszs/ack.vim'
-Bundle 'baskerville/bubblegum'
-Bundle 'goatslacker/mango.vim'
 Bundle 'jnwhiteh/vim-golang'
-Bundle 'noahfrederick/vim-hemisu'
-Bundle 'jellybeans.vim'
-Bundle 'chriskempson/base16-vim'
 Bundle 'tpope/vim-vinegar'
-Bundle 'scrooloose/syntastic'
-Bundle 'closetag.vim'
 Bundle 'jiangmiao/auto-pairs'
 Bundle 'majutsushi/tagbar'
+Bundle 'rizzatti/funcoo.vim'
+Bundle 'rizzatti/dash.vim'
+Bundle 'reedes/vim-pencil'
+Bundle 'reedes/vim-wordy'
+Bundle 'scrooloose/syntastic'
+
+Bundle 'noahfrederick/vim-hemisu'
+Bundle 'baskerville/bubblegum'
+Bundle 'goatslacker/mango.vim'
+Bundle 'jellybeans.vim'
+Bundle 'chriskempson/base16-vim'
+Bundle 'altercation/vim-colors-solarized'
+Bundle 'reedes/vim-colors-pencil'
+
+" Bundle 'airblade/vim-gitgutter'
+" Bundle 'wlangstroth/vim-haskell'
 " Bundle 'Raimondi/delimitMate'
 " Bundle 'scrooloose/nerdtree'
 " Bundle 'mhinz/vim-signify'
@@ -73,14 +81,12 @@ set mouse=a
 " Turn on line numbering
 set number
 
-" Background is dark
-set background=dark
-
 " Syntax highlighting
-syntax on
+syntax enable
 
 " Set color scheme
-colorscheme base16-tomorrow
+set background=dark
+colorscheme base16-ocean
 
 " Set tab/spaces options
 set ai et sw=4 sts=4 ts=4
@@ -105,11 +111,14 @@ cmap w!! w !sudo tee % >/dev/null<CR>:e!<CR><CR>
 " Remembers last position in file
 " au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
 
-" Set path to Jekyll blog for Jekyll.vim
-" let g:jekyll_path = "~/Dev/chenn.github.com/"
-
-" Highlight Jekyll post YAML content correctly
-" execute "autocmd BufNewFile,BufRead " . g:jekyll_path . "/* syn match jekyllYamlFrontmatter /\\%^---\\_.\\{-}---$/ contains=@Spell"
+" vim-pencil
+let g:pencil#wrapModeDefault = 'soft'
+augroup pencil
+  autocmd!
+  autocmd FileType markdown call pencil#init()
+  autocmd FileType textile call pencil#init()
+  autocmd FileType text call pencil#init({'wrap': 'hard'})
+augroup END
 
 " Support more formats for commentary.vim
 autocmd filetype apache set commentstring=#\ %s
@@ -123,10 +132,14 @@ au BufNewFile,BufReadPost *.coffee setfiletype coffee
 
 " CoffeeTags setup
 let g:tagbar_iconchars = ['+', '-']
+let g:tagbar_left = 1
+let g:tagbar_foldlevel = 1
+let g:tagbar_autofocus = 1
+let g:tagbar_sort = 0
 if executable('coffeetags')
   let g:tagbar_type_coffee = {
         \ 'ctagsbin' : 'coffeetags',
-        \ 'ctagsargs' : '--include-vars',
+        \ 'ctagsargs' : '',
         \ 'kinds' : [
         \ 'f:functions',
         \ 'o:object',
@@ -150,9 +163,18 @@ augroup myvimrc
     au BufWritePost .vimrc,_vimrc,vimrc,.gvimrc,_gvimrc,gvimrc so $MYVIMRC
 augroup END
 
-" Start CtrlP in last used mode
-let g:ctrlp_cmd = 'CtrlPLastMode'
-let g:ctrlp_custom_ignore = ''
+" CtrlP
+let g:ctrlp_working_path_mode = 0
+set wildignore+=*/build/**
+set wildignore+=*/tmp/**
+set wildignore+=*/dist/**
+set wildignore+=*/bower_componenets/**
+set wildignore+=*/node_modules/**
+set wildignore+=*.pyc
+
+" .swp and backup file locations
+set directory=~/.vim-tmp
+set backupdir=~/.vim-tmp
 
 " vim-airline options
 let g:airline_detect_whitespace=0
@@ -161,12 +183,13 @@ let g:airline_left_sep=''
 let g:airline_right_sep=''
 
 " Some key mappings
-map <S-t> :Tab /=<CR>
+map <C-t> :TagbarToggle<CR>
+map <D-t> :CtrlP<CR>
 
 " Turn off toolbar in GUI
 if has("gui_running")
     set guioptions=egmt
     set guioptions-=r
-    set guifont=M+\ 1mn\ light:h14
+    set guifont=Source\ Code\ Pro:h14
     set antialias
 endif
