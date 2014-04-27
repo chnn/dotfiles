@@ -1,27 +1,26 @@
-# environment
 export EDITOR="vim"
-export PATH="/usr/local/bin:$PATH"
+bindkey -e
+
+export PATH="/usr/local/share/npm/bin:/usr/local/bin:$HOME/.rbenv/bin:$PATH"
+
+export GOPATH=$HOME/.go
+
 export WORKON_HOME=$HOME/.virtualenvs
-export PROJECT_HOME=$HOME/Dev
 source /usr/local/bin/virtualenvwrapper.sh
 
+eval "$(rbenv init -)"
 
-# history
 HISTFILE=~/.zsh_history
-HISTSIZE=10000
-SAVEHIST=10000
+HISTSIZE=100000
+SAVEHIST=100000
 setopt APPEND_HISTORY  # append history to history file as opposed to overwriting it
 setopt INC_APPEND_HISTORY  # append history incrementally
 setopt SHARE_HISTORY  # share history
 
-
-# prompt
 autoload -U colors && colors
-PROMPT="%n@%{$fg[yellow]%}%m%{$reset_color%} %~ $ "
+PROMPT="%n@%{$fg[blue]%}%m%{$reset_color%} %~ $ "
 
-
-# completion
-autoload -U compinit; compinit
+autoload -U compinit; compinit -i
 zstyle ":completion:*" completer _complete _match _approximate
 zstyle ":completion:*:match:*" original only
 zstyle ":completion:*:approximate:*" max-errors 1 numeric
@@ -33,13 +32,10 @@ zstyle ":completion:*:*:kill:*:processes" list-colors "=(#b) #([0-9]#)*=0=01;32"
 zstyle ":completion:*:cd:*" ignore-parents parent pwd
 zstyle ":completion:*" list-colors ""
 
-
-# alias'
 alias ls="ls -laG"
 alias v="vim"
 alias sv="sudo vim"
 alias tma="tmux attach -d"
-alias sshtunnel="ssh -fND 4711 -p" # sshtunnel [port] [server] --- starts tunnel on local port 4711
-alias rsync-chenn="rsync -rP ./_site/ abbey:/srv/http/chenn.io/public/log/"
-alias rsync-music="rsync -avzP --delete ~/Music/iTunes/iTunes\ Media/Music /Volumes/Backup\ Drive/backup-chris/Music"
-alias qemu="qemu-system-x86_64"
+alias sshtunnel="sudo networksetup -setsocksfirewallproxy Wi-Fi localhost 4040 && ssh -D 4040 -C -N pi"
+alias sshtunneloff="sudo networksetup -setsocksfirewallproxystate Wi-Fi off"
+alias rsync-writing="rsync -rP --delete ./_site/ precipice:/home/precipice/sites/home/public_html/writing"
