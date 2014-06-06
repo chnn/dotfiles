@@ -1,72 +1,70 @@
 " filename: .vimrc
 " author: Chris Henn
 
-" Set up vundle
+" Set up Vundle
 set nocompatible
 filetype off
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
-Bundle 'gmarik/vundle'
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+Plugin 'gmarik/Vundle.vim'
 
-" List bundles
-Bundle 'tpope/vim-fugitive'
-Bundle 'csexton/jekyll.vim'
-Bundle 'tpope/vim-commentary'
-Bundle 'othree/html5.vim'
-Bundle 'groenewege/vim-less'
-Bundle 'tpope/vim-surround'
-Bundle 'kien/ctrlp.vim'
-Bundle 'pangloss/vim-javascript'
-Bundle 'kchmck/vim-coffee-script'
-Bundle 'vim-indent-object'
-Bundle 'mustache/vim-mustache-handlebars'
-Bundle 'skammer/vim-css-color'
-Bundle 'godlygeek/tabular'
-Bundle 'vim-scripts/SuperTab-continued.'
-Bundle 'bling/vim-airline'
-Bundle 'tpope/vim-unimpaired'
-Bundle 'mileszs/ack.vim'
-Bundle 'jnwhiteh/vim-golang'
-Bundle 'tpope/vim-vinegar'
-Bundle 'jiangmiao/auto-pairs'
-Bundle 'majutsushi/tagbar'
-Bundle 'rizzatti/funcoo.vim'
-Bundle 'rizzatti/dash.vim'
-Bundle 'reedes/vim-pencil'
-Bundle 'reedes/vim-wordy'
-Bundle 'scrooloose/syntastic'
+Plugin 'tpope/vim-fugitive'
+Plugin 'csexton/jekyll.vim'
+Plugin 'tpope/vim-commentary'
+Plugin 'othree/html5.vim'
+Plugin 'groenewege/vim-less'
+Plugin 'tpope/vim-surround'
+Plugin 'kien/ctrlp.vim'
+Plugin 'pangloss/vim-javascript'
+Plugin 'kchmck/vim-coffee-script'
+Plugin 'mustache/vim-mustache-handlebars'
+Plugin 'godlygeek/tabular'
+Plugin 'ap/vim-css-color'
+Plugin 'ervandew/supertab'
+Plugin 'bling/vim-airline'
+Plugin 'tpope/vim-unimpaired'
+Plugin 'tpope/vim-vinegar'
+Plugin 'jiangmiao/auto-pairs'
+Plugin 'majutsushi/tagbar'
+Plugin 'rizzatti/funcoo.vim'
+Plugin 'rizzatti/dash.vim'
+Plugin 'scrooloose/syntastic'
+Plugin 'rking/ag.vim'
+Plugin 'davidhalter/jedi-vim'
+Plugin 'fatih/vim-go'
 
-Bundle 'noahfrederick/vim-hemisu'
-Bundle 'baskerville/bubblegum'
-Bundle 'goatslacker/mango.vim'
-Bundle 'jellybeans.vim'
-Bundle 'chriskempson/base16-vim'
-Bundle 'altercation/vim-colors-solarized'
-Bundle 'reedes/vim-colors-pencil'
+Plugin 'goatslacker/mango.vim'
+Plugin 'jellybeans.vim'
+Plugin 'chriskempson/base16-vim'
+Plugin 'altercation/vim-colors-solarized'
 
-" Bundle 'airblade/vim-gitgutter'
-" Bundle 'wlangstroth/vim-haskell'
-" Bundle 'Raimondi/delimitMate'
-" Bundle 'scrooloose/nerdtree'
-" Bundle 'mhinz/vim-signify'
-" Bundle 'xoria256.vim'
-" Bundle 'tpope/vim-liquid'
-" Bundle 'tobinvanpelt/vim-semicolon'
-" Bundle 'vim-ruby/vim-ruby'
-" Bundle 'tpope/vim-abolish'
-" Bundle 'tpope/vim-rails'
-" Bundle 'Jinja'
-" Bundle 'majutsushi/tagbar'
-" Bundle 'aaronj1335/underscore-templates.vim'
-" Bundle 'tpope/vim-haml'
-" Bundle 'Lokaltog/powerline'
-" Bundle 'vim-scripts/Rainbow-Parenthesis'
-" Bundle 'briandoll/change-inside-surroundings.vim'
-" Bundle 'henrik/vim-ruby-runner'
-" Bundle 'YankRing.vim'
-" Bundle 'git://git.wincent.com/command-t.git'
+" Plugin 'reedes/vim-pencil'
+" Plugin 'reedes/vim-wordy'
+" Plugin 'vim-indent-object'
+" Plugin 'jnwhiteh/vim-golang'
+" Plugin 'airblade/vim-gitgutter'
+" Plugin 'wlangstroth/vim-haskell'
+" Plugin 'Raimondi/delimitMate'
+" Plugin 'scrooloose/nerdtree'
+" Plugin 'mhinz/vim-signify'
+" Plugin 'xoria256.vim'
+" Plugin 'tpope/vim-liquid'
+" Plugin 'tobinvanpelt/vim-semicolon'
+" Plugin 'vim-ruby/vim-ruby'
+" Plugin 'tpope/vim-abolish'
+" Plugin 'tpope/vim-rails'
+" Plugin 'Jinja'
+" Plugin 'majutsushi/tagbar'
+" Plugin 'aaronj1335/underscore-templates.vim'
+" Plugin 'tpope/vim-haml'
+" Plugin 'Lokaltog/powerline'
+" Plugin 'vim-scripts/Rainbow-Parenthesis'
+" Plugin 'briandoll/change-inside-surroundings.vim'
+" Plugin 'henrik/vim-ruby-runner'
+" Plugin 'YankRing.vim'
+" Plugin 'git://git.wincent.com/command-t.git'
 
-" Re-enable file detection after vundle has been called
+call vundle#end()
 filetype plugin indent on
 
 " Necessary to show unicode glyphs
@@ -96,6 +94,9 @@ set foldmethod=indent
 
 set wildmenu
 
+" Always show statusbar
+set laststatus=2
+
 " Turn on paste mode, formatting doesn't mess up when pasting in code
 set pastetoggle=<f12>
 
@@ -104,21 +105,6 @@ nnoremap <F2> :set nonumber!<CR>:set foldcolumn=0<CR>
 
 " Set backup directory for files being edited
 set backupdir=~/.vim/backup
-
-" Get permission to edit file
-cmap w!! w !sudo tee % >/dev/null<CR>:e!<CR><CR>
-
-" Remembers last position in file
-" au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
-
-" vim-pencil
-let g:pencil#wrapModeDefault = 'soft'
-augroup pencil
-  autocmd!
-  autocmd FileType markdown call pencil#init()
-  autocmd FileType textile call pencil#init()
-  autocmd FileType text call pencil#init({'wrap': 'hard'})
-augroup END
 
 " Support more formats for commentary.vim
 autocmd filetype apache set commentstring=#\ %s
@@ -158,6 +144,7 @@ au BufNewFile,BufReadPost *.js setl shiftwidth=2 expandtab foldlevel=1 foldmetho
 " Markdown options
 au BufNewFile,BufReadPost *.markdown setl wrap linebreak textwidth=0 spell
 
+" Reload vimrc when after it's written
 augroup myvimrc
     au!
     au BufWritePost .vimrc,_vimrc,vimrc,.gvimrc,_gvimrc,gvimrc so $MYVIMRC
@@ -182,14 +169,20 @@ let g:airline_theme='simple'
 let g:airline_left_sep=''
 let g:airline_right_sep=''
 
+" jedi-vim options
+let g:jedi#use_tabs_not_buffers = 0
+let g:jedi#popup_on_dot = 0
+
+" Syntastic options
+let g:syntastic_html_checkers = ['']
+
 " Some key mappings
 map <C-t> :TagbarToggle<CR>
-map <D-t> :CtrlP<CR>
 
 " Turn off toolbar in GUI
 if has("gui_running")
     set guioptions=egmt
     set guioptions-=r
-    set guifont=Source\ Code\ Pro:h14
+    set guifont=Source\ Code\ Pro:h15
     set antialias
 endif
