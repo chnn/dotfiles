@@ -31,13 +31,13 @@ Plugin 'rizzatti/dash.vim'
 Plugin 'scrooloose/syntastic'
 Plugin 'rking/ag.vim'
 Plugin 'davidhalter/jedi-vim'
-Plugin 'fatih/vim-go'
 
 Plugin 'goatslacker/mango.vim'
 Plugin 'jellybeans.vim'
 Plugin 'chriskempson/base16-vim'
 Plugin 'altercation/vim-colors-solarized'
 
+" Plugin 'fatih/vim-go'
 " Plugin 'reedes/vim-pencil'
 " Plugin 'reedes/vim-wordy'
 " Plugin 'vim-indent-object'
@@ -84,7 +84,7 @@ syntax enable
 
 " Set color scheme
 set background=dark
-colorscheme base16-ocean
+colorscheme base16-twilight
 
 " Set tab/spaces options
 set ai et sw=4 sts=4 ts=4
@@ -102,9 +102,6 @@ set pastetoggle=<f12>
 
 " Toggle numbers on/off for easy copying using <F2>:
 nnoremap <F2> :set nonumber!<CR>:set foldcolumn=0<CR>
-
-" Set backup directory for files being edited
-set backupdir=~/.vim/backup
 
 " Support more formats for commentary.vim
 autocmd filetype apache set commentstring=#\ %s

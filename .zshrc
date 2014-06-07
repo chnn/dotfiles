@@ -4,10 +4,10 @@ export PATH="/usr/local/share/npm/bin:/usr/local/bin:$HOME/.rbenv/bin:$PATH"
 
 export GOPATH=$HOME/.go
 
-export WORKON_HOME=$HOME/.virtualenvs
-source /usr/local/bin/virtualenvwrapper.sh
+# export WORKON_HOME=$HOME/.virtualenvs
+# source /usr/local/bin/virtualenvwrapper.sh
 
-eval "$(rbenv init -)"
+# eval "$(rbenv init -)"
 
 export ANSIBLE_NOCOWS=1
 
