@@ -9,11 +9,21 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 Plugin 'tpope/vim-fugitive'
-Plugin 'csexton/jekyll.vim'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-markdown'
 Plugin 'tpope/vim-commentary'
+Plugin 'tpope/vim-unimpaired'
+Plugin 'tpope/vim-vinegar'
+Plugin 'vim-pandoc/vim-pandoc'
+Plugin 'vim-pandoc/vim-pandoc-syntax'
+Plugin 'vim-pandoc/vim-rmarkdown'
+Plugin 'rizzatti/funcoo.vim'
+Plugin 'rizzatti/dash.vim'
+Plugin 'mattn/webapi-vim'
+Plugin 'mattn/gist-vim'
+Plugin 'csexton/jekyll.vim'
 Plugin 'othree/html5.vim'
 Plugin 'groenewege/vim-less'
-Plugin 'tpope/vim-surround'
 Plugin 'kien/ctrlp.vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'kchmck/vim-coffee-script'
@@ -22,47 +32,17 @@ Plugin 'godlygeek/tabular'
 Plugin 'ap/vim-css-color'
 Plugin 'ervandew/supertab'
 Plugin 'bling/vim-airline'
-Plugin 'tpope/vim-unimpaired'
-Plugin 'tpope/vim-vinegar'
-Plugin 'jiangmiao/auto-pairs'
 Plugin 'majutsushi/tagbar'
-Plugin 'rizzatti/funcoo.vim'
-Plugin 'rizzatti/dash.vim'
 Plugin 'scrooloose/syntastic'
 Plugin 'rking/ag.vim'
 Plugin 'davidhalter/jedi-vim'
+Plugin 'chenn/vim-jsdoc'
 
 Plugin 'goatslacker/mango.vim'
 Plugin 'jellybeans.vim'
 Plugin 'chriskempson/base16-vim'
 Plugin 'altercation/vim-colors-solarized'
-
-" Plugin 'fatih/vim-go'
-" Plugin 'reedes/vim-pencil'
-" Plugin 'reedes/vim-wordy'
-" Plugin 'vim-indent-object'
-" Plugin 'jnwhiteh/vim-golang'
-" Plugin 'airblade/vim-gitgutter'
-" Plugin 'wlangstroth/vim-haskell'
-" Plugin 'Raimondi/delimitMate'
-" Plugin 'scrooloose/nerdtree'
-" Plugin 'mhinz/vim-signify'
-" Plugin 'xoria256.vim'
-" Plugin 'tpope/vim-liquid'
-" Plugin 'tobinvanpelt/vim-semicolon'
-" Plugin 'vim-ruby/vim-ruby'
-" Plugin 'tpope/vim-abolish'
-" Plugin 'tpope/vim-rails'
-" Plugin 'Jinja'
-" Plugin 'majutsushi/tagbar'
-" Plugin 'aaronj1335/underscore-templates.vim'
-" Plugin 'tpope/vim-haml'
-" Plugin 'Lokaltog/powerline'
-" Plugin 'vim-scripts/Rainbow-Parenthesis'
-" Plugin 'briandoll/change-inside-surroundings.vim'
-" Plugin 'henrik/vim-ruby-runner'
-" Plugin 'YankRing.vim'
-" Plugin 'git://git.wincent.com/command-t.git'
+Plugin 'romainl/apprentice'
 
 call vundle#end()
 filetype plugin indent on
@@ -82,9 +62,12 @@ set number
 " Syntax highlighting
 syntax enable
 
+" Allow backspacing auto-indentation, line breaks, previous edits
+set backspace=indent,eol,start
+
 " Set color scheme
 set background=dark
-colorscheme base16-twilight
+colorscheme base16-tomorrow
 
 " Set tab/spaces options
 set ai et sw=4 sts=4 ts=4
@@ -107,7 +90,6 @@ nnoremap <F2> :set nonumber!<CR>:set foldcolumn=0<CR>
 autocmd filetype apache set commentstring=#\ %s
 
 " CoffeeScript options
-let coffee_compiler = '/usr/local/share/npm/bin/coffee'
 let coffee_compile_vert = 1
 let coffee_linter = '/usr/local/share/npm/bin/coffeelint'
 au BufNewFile,BufReadPost *.coffee setl shiftwidth=2 expandtab foldlevel=2 foldmethod=indent tw=80 formatoptions+=w
@@ -138,9 +120,6 @@ endif
 " JS options
 au BufNewFile,BufReadPost *.js setl shiftwidth=2 expandtab foldlevel=1 foldmethod=indent tw=80 formatoptions+=w
 
-" Markdown options
-au BufNewFile,BufReadPost *.markdown setl wrap linebreak textwidth=0 spell
-
 " Reload vimrc when after it's written
 augroup myvimrc
     au!
@@ -152,8 +131,9 @@ let g:ctrlp_working_path_mode = 0
 set wildignore+=*/build/**
 set wildignore+=*/tmp/**
 set wildignore+=*/dist/**
-set wildignore+=*/bower_componenets/**
+set wildignore+=*/bower_components/**
 set wildignore+=*/node_modules/**
+set wildignore+=*/docs/**
 set wildignore+=*.pyc
 
 " .swp and backup file locations
@@ -161,10 +141,10 @@ set directory=~/.vim-tmp
 set backupdir=~/.vim-tmp
 
 " vim-airline options
-let g:airline_detect_whitespace=0
 let g:airline_theme='simple'
 let g:airline_left_sep=''
 let g:airline_right_sep=''
+" let g:airline_detect_whitespace=0
 
 " jedi-vim options
 let g:jedi#use_tabs_not_buffers = 0
@@ -172,6 +152,9 @@ let g:jedi#popup_on_dot = 0
 
 " Syntastic options
 let g:syntastic_html_checkers = ['']
+
+" vim-pandoc options
+let g:pandoc#syntax#conceal#use = 0
 
 " Some key mappings
 map <C-t> :TagbarToggle<CR>

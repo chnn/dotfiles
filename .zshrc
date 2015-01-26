@@ -1,13 +1,15 @@
 bindkey -e
-export EDITOR="vim"
-export PATH="/usr/local/share/npm/bin:/usr/local/bin:$HOME/.rbenv/bin:$PATH"
+export TERM="xterm-256color"
+export EDITOR="nvim"
+export PATH="/usr/local/bin:$PATH"
+export SHELL="/bin/zsh"
 
 export GOPATH=$HOME/.go
 
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+
 # export WORKON_HOME=$HOME/.virtualenvs
 # source /usr/local/bin/virtualenvwrapper.sh
-
-# eval "$(rbenv init -)"
 
 export ANSIBLE_NOCOWS=1
 
@@ -39,7 +41,17 @@ alias sv="sudo vim"
 alias tma="tmux attach -d"
 alias sshtunnel="sudo networksetup -setsocksfirewallproxy Wi-Fi localhost 4040 && ssh -D 4040 -C -N pi"
 alias sshtunneloff="sudo networksetup -setsocksfirewallproxystate Wi-Fi off"
-alias rsync-writing="rsync -rP --delete ./_site/ precipice:/home/precipice/sites/home/public_html/writing"
+alias rsync-writing="rsync -rP --delete ./_site/ cloudsrest:/home/cloudsrest/writing/public_html"
+alias nombom='echo "\n (╯°□°）╯︵ ┻━┻ \n" && npm cache clear && bower cache clean && rm -rf node_modules bower_components && npm install && bower install'
+
+function nom() {
+  if [ -z "$1" ]; then
+    rm -rf node_modules && npm cache clear && npm i
+    return
+  fi
+
+  `npm $@`
+}
 
 alias g='git'
 compdef g=git
@@ -51,6 +63,10 @@ alias gc='git commit'
 compdef _git gc=git-commit
 alias gco='git checkout'
 compdef _git gco=git-checkout
+alias gb='git branch'
+compdef _git gb=git-branch
+alias gba='git branch -a'
+compdef _git gba=git-branch
 alias glg='git log --stat --max-count=10'
 compdef _git glg=git-log
 alias glgg='git log --graph --max-count=10'
@@ -68,3 +84,58 @@ compdef _git ga=git-add
 alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
 
 ulimit -n 2048
+
+
+###-begin-npm-completion-###
+#
+# npm command completion script
+#
+# Installation: npm completion >> ~/.bashrc  (or ~/.zshrc)
+# Or, maybe: npm completion > /usr/local/etc/bash_completion.d/npm
+#
+
+COMP_WORDBREAKS=${COMP_WORDBREAKS/=/}
+COMP_WORDBREAKS=${COMP_WORDBREAKS/@/}
+export COMP_WORDBREAKS
+
+if type complete &>/dev/null; then
+  _npm_completion () {
+    local si="$IFS"
+    IFS=$'\n' COMPREPLY=($(COMP_CWORD="$COMP_CWORD" \
+                           COMP_LINE="$COMP_LINE" \
+                           COMP_POINT="$COMP_POINT" \
+                           npm completion -- "${COMP_WORDS[@]}" \
+                           2>/dev/null)) || return $?
+    IFS="$si"
+  }
+  complete -F _npm_completion npm
+elif type compdef &>/dev/null; then
+  _npm_completion() {
+    si=$IFS
+    compadd -- $(COMP_CWORD=$((CURRENT-1)) \
+                 COMP_LINE=$BUFFER \
+                 COMP_POINT=0 \
+                 npm completion -- "${words[@]}" \
+                 2>/dev/null)
+    IFS=$si
+  }
+  compdef _npm_completion npm
+elif type compctl &>/dev/null; then
+  _npm_completion () {
+    local cword line point words si
+    read -Ac words
+    read -cn cword
+    let cword-=1
+    read -l line
+    read -ln point
+    si="$IFS"
+    IFS=$'\n' reply=($(COMP_CWORD="$cword" \
+                       COMP_LINE="$line" \
+                       COMP_POINT="$point" \
+                       npm completion -- "${words[@]}" \
+                       2>/dev/null)) || return $?
+    IFS="$si"
+  }
+  compctl -K _npm_completion npm
+fi
+###-end-npm-completion-###
