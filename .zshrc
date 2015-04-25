@@ -3,6 +3,7 @@ export TERM="xterm-256color"
 export EDITOR="nvim"
 export PATH="/usr/local/bin:$PATH"
 export SHELL="/bin/zsh"
+export RAMDISK_DISABLED=true
 
 export GOPATH=$HOME/.go
 
@@ -36,8 +37,8 @@ zstyle ":completion:*:cd:*" ignore-parents parent pwd
 zstyle ":completion:*" list-colors ""
 
 alias ls="ls -lahG"
-alias v="vim"
-alias sv="sudo vim"
+alias v="nvim"
+alias sv="sudo nvim"
 alias tma="tmux attach -d"
 alias sshtunnel="sudo networksetup -setsocksfirewallproxy Wi-Fi localhost 4040 && ssh -D 4040 -C -N pi"
 alias sshtunneloff="sudo networksetup -setsocksfirewallproxystate Wi-Fi off"

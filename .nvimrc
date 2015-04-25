@@ -10,13 +10,9 @@ Plugin 'gmarik/Vundle.vim'
 
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-markdown'
 Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'tpope/vim-vinegar'
-Plugin 'vim-pandoc/vim-pandoc'
-Plugin 'vim-pandoc/vim-pandoc-syntax'
-Plugin 'vim-pandoc/vim-rmarkdown'
 Plugin 'rizzatti/funcoo.vim'
 Plugin 'rizzatti/dash.vim'
 Plugin 'mattn/webapi-vim'
@@ -37,12 +33,14 @@ Plugin 'scrooloose/syntastic'
 Plugin 'rking/ag.vim'
 Plugin 'davidhalter/jedi-vim'
 Plugin 'chenn/vim-jsdoc'
+Plugin 'marijnh/tern_for_vim'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'plasticboy/vim-markdown'
+Plugin 'vim-scripts/YankRing.vim'
+Plugin 'terryma/vim-multiple-cursors'
+Plugin 'rust-lang/rust.vim'
 
-Plugin 'goatslacker/mango.vim'
-Plugin 'jellybeans.vim'
 Plugin 'chriskempson/base16-vim'
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'romainl/apprentice'
 
 call vundle#end()
 filetype plugin indent on
@@ -78,7 +76,7 @@ set foldmethod=indent
 set wildmenu
 
 " Always show statusbar
-set laststatus=2
+set laststatus=1
 
 " Turn on paste mode, formatting doesn't mess up when pasting in code
 set pastetoggle=<f12>
@@ -119,11 +117,13 @@ endif
 
 " JS options
 au BufNewFile,BufReadPost *.js setl shiftwidth=2 expandtab foldlevel=1 foldmethod=indent tw=80 formatoptions+=w
+let g:javascript_conceal_function = "ƒ"
+let g:javascript_ignore_javaScriptdoc = 1
 
 " Reload vimrc when after it's written
 augroup myvimrc
     au!
-    au BufWritePost .vimrc,_vimrc,vimrc,.gvimrc,_gvimrc,gvimrc so $MYVIMRC
+    au BufWritePost .nvimrc,_nvimrc,vimrc,.gvimrc,_gvimrc,gvimrc so $MYVIMRC
 augroup END
 
 " CtrlP
@@ -158,6 +158,10 @@ let g:pandoc#syntax#conceal#use = 0
 
 " Some key mappings
 map <C-t> :TagbarToggle<CR>
+map <F3> :w !pbcopy<CR><CR>
+nnoremap <leader>f :CtrlP<CR>
+nnoremap <leader>b :CtrlPBuffer<CR>
+set pastetoggle=<F4>
 
 " Turn off toolbar in GUI
 if has("gui_running")
