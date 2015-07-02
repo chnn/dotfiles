@@ -11,13 +11,13 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-commentary'
-Plugin 'tpope/vim-unimpaired'
 Plugin 'tpope/vim-vinegar'
+Plugin 'tpope/vim-sleuth'
+Plugin 'tpope/vim-unimpaired'
+Plugin 'tpope/vim-repeat'
+Plugin 'bling/vim-airline'
 Plugin 'rizzatti/funcoo.vim'
 Plugin 'rizzatti/dash.vim'
-Plugin 'mattn/webapi-vim'
-Plugin 'mattn/gist-vim'
-Plugin 'csexton/jekyll.vim'
 Plugin 'othree/html5.vim'
 Plugin 'groenewege/vim-less'
 Plugin 'kien/ctrlp.vim'
@@ -27,7 +27,6 @@ Plugin 'mustache/vim-mustache-handlebars'
 Plugin 'godlygeek/tabular'
 Plugin 'ap/vim-css-color'
 Plugin 'ervandew/supertab'
-Plugin 'bling/vim-airline'
 Plugin 'majutsushi/tagbar'
 Plugin 'scrooloose/syntastic'
 Plugin 'rking/ag.vim'
@@ -36,11 +35,15 @@ Plugin 'chenn/vim-jsdoc'
 Plugin 'marijnh/tern_for_vim'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'plasticboy/vim-markdown'
-Plugin 'vim-scripts/YankRing.vim'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'rust-lang/rust.vim'
+Plugin 'raichoo/haskell-vim'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'Raimondi/delimitMate'
+Plugin 'mattn/emmet-vim'
 
 Plugin 'chriskempson/base16-vim'
+Plugin 'altercation/vim-colors-solarized'
 
 call vundle#end()
 filetype plugin indent on
@@ -56,6 +59,9 @@ set mouse=a
 
 " Turn on line numbering
 set number
+
+" Highlight all matches when searching
+set hlsearch
 
 " Syntax highlighting
 syntax enable
@@ -76,7 +82,7 @@ set foldmethod=indent
 set wildmenu
 
 " Always show statusbar
-set laststatus=1
+set laststatus=2
 
 " Turn on paste mode, formatting doesn't mess up when pasting in code
 set pastetoggle=<f12>
@@ -84,41 +90,10 @@ set pastetoggle=<f12>
 " Toggle numbers on/off for easy copying using <F2>:
 nnoremap <F2> :set nonumber!<CR>:set foldcolumn=0<CR>
 
-" Support more formats for commentary.vim
-autocmd filetype apache set commentstring=#\ %s
-
-" CoffeeScript options
-let coffee_compile_vert = 1
-let coffee_linter = '/usr/local/share/npm/bin/coffeelint'
-au BufNewFile,BufReadPost *.coffee setl shiftwidth=2 expandtab foldlevel=2 foldmethod=indent tw=80 formatoptions+=w
-au BufNewFile,BufReadPost *.coffee setfiletype coffee
-
-" CoffeeTags setup
-let g:tagbar_iconchars = ['+', '-']
-let g:tagbar_left = 1
-let g:tagbar_foldlevel = 1
-let g:tagbar_autofocus = 1
-let g:tagbar_sort = 0
-if executable('coffeetags')
-  let g:tagbar_type_coffee = {
-        \ 'ctagsbin' : 'coffeetags',
-        \ 'ctagsargs' : '',
-        \ 'kinds' : [
-        \ 'f:functions',
-        \ 'o:object',
-        \ ],
-        \ 'sro' : ".",
-        \ 'kind2scope' : {
-        \ 'f' : 'object',
-        \ 'o' : 'object',
-        \ }
-        \ }
-endif
-
 " JS options
-au BufNewFile,BufReadPost *.js setl shiftwidth=2 expandtab foldlevel=1 foldmethod=indent tw=80 formatoptions+=w
-let g:javascript_conceal_function = "ƒ"
-let g:javascript_ignore_javaScriptdoc = 1
+" au BufNewFile,BufReadPost *.js setl shiftwidth=2 expandtab foldlevel=1 foldmethod=indent tw=80 formatoptions+=w
+" let g:javascript_conceal_function = "ƒ"
+" let g:javascript_ignore_javaScriptdoc = 1
 
 " Reload vimrc when after it's written
 augroup myvimrc
@@ -144,7 +119,6 @@ set backupdir=~/.vim-tmp
 let g:airline_theme='simple'
 let g:airline_left_sep=''
 let g:airline_right_sep=''
-" let g:airline_detect_whitespace=0
 
 " jedi-vim options
 let g:jedi#use_tabs_not_buffers = 0
@@ -153,20 +127,16 @@ let g:jedi#popup_on_dot = 0
 " Syntastic options
 let g:syntastic_html_checkers = ['']
 
+" emmet options
+let g:user_emmet_leader_key = '<leader>e'
+let g:emmet_html5 = 1
+
 " vim-pandoc options
 let g:pandoc#syntax#conceal#use = 0
 
 " Some key mappings
-map <C-t> :TagbarToggle<CR>
 map <F3> :w !pbcopy<CR><CR>
+set pastetoggle=<F4>
 nnoremap <leader>f :CtrlP<CR>
 nnoremap <leader>b :CtrlPBuffer<CR>
-set pastetoggle=<F4>
-
-" Turn off toolbar in GUI
-if has("gui_running")
-    set guioptions=egmt
-    set guioptions-=r
-    set guifont=Source\ Code\ Pro:h15
-    set antialias
-endif
+nnoremap <D-p>f :CtrlP<CR>
