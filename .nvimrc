@@ -1,52 +1,40 @@
-" filename: .vimrc
-" author: Chris Henn
+call plug#begin('~/.vim/plugged')
 
-" Set up Vundle
-set nocompatible
-filetype off
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-Plugin 'gmarik/Vundle.vim'
+Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-vinegar'
+Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-repeat'
 
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-commentary'
-Plugin 'tpope/vim-vinegar'
-Plugin 'tpope/vim-sleuth'
-Plugin 'tpope/vim-unimpaired'
-Plugin 'tpope/vim-repeat'
-Plugin 'bling/vim-airline'
-Plugin 'rizzatti/funcoo.vim'
-Plugin 'rizzatti/dash.vim'
-Plugin 'othree/html5.vim'
-Plugin 'groenewege/vim-less'
-Plugin 'kien/ctrlp.vim'
-Plugin 'pangloss/vim-javascript'
-Plugin 'kchmck/vim-coffee-script'
-Plugin 'mustache/vim-mustache-handlebars'
-Plugin 'godlygeek/tabular'
-Plugin 'ap/vim-css-color'
-Plugin 'ervandew/supertab'
-Plugin 'majutsushi/tagbar'
-Plugin 'scrooloose/syntastic'
-Plugin 'rking/ag.vim'
-Plugin 'davidhalter/jedi-vim'
-Plugin 'chenn/vim-jsdoc'
-Plugin 'marijnh/tern_for_vim'
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'plasticboy/vim-markdown'
-Plugin 'terryma/vim-multiple-cursors'
-Plugin 'rust-lang/rust.vim'
-Plugin 'raichoo/haskell-vim'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'Raimondi/delimitMate'
-Plugin 'mattn/emmet-vim'
+Plug 'bling/vim-airline'
+Plug 'othree/html5.vim'
+Plug 'groenewege/vim-less'
+Plug 'kien/ctrlp.vim'
+Plug 'Jelera/vim-javascript-syntax'
+Plug 'mustache/vim-mustache-handlebars'
+Plug 'godlygeek/tabular'
+Plug 'ap/vim-css-color'
+Plug 'scrooloose/syntastic'
+Plug 'rking/ag.vim'
+Plug 'airblade/vim-gitgutter'
+Plug 'Raimondi/delimitMate'
+Plug 'mattn/emmet-vim'
+Plug 'plasticboy/vim-markdown'
+Plug 'Valloric/YouCompleteMe', { 'do': './install.sh' }
+Plug 'davidhalter/jedi-vim', { 'for': 'python' }
+Plug 'rust-lang/rust.vim', { 'for': 'rust' }
+Plug 'raichoo/haskell-vim', { 'for': 'haskell' }
+Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
+Plug 'marijnh/tern_for_vim', { 'for': 'javascript', 'do': 'npm install' }
+Plug 'chenn/vim-jsdoc', { 'for': 'javascript' }
 
-Plugin 'chriskempson/base16-vim'
-Plugin 'altercation/vim-colors-solarized'
+Plug 'chriskempson/base16-vim'
+Plug 'altercation/vim-colors-solarized'
 
-call vundle#end()
-filetype plugin indent on
+call plug#end()
 
 " Necessary to show unicode glyphs
 set encoding=utf-8
@@ -60,40 +48,18 @@ set mouse=a
 " Turn on line numbering
 set number
 
-" Highlight all matches when searching
-set hlsearch
-
-" Syntax highlighting
-syntax enable
-
-" Allow backspacing auto-indentation, line breaks, previous edits
-set backspace=indent,eol,start
-
 " Set color scheme
 set background=dark
-colorscheme base16-tomorrow
-
-" Set tab/spaces options
-set ai et sw=4 sts=4 ts=4
+colorscheme base16-chalk
 
 " Set folding options
 set foldmethod=indent
 
-set wildmenu
-
-" Always show statusbar
-set laststatus=2
-
-" Turn on paste mode, formatting doesn't mess up when pasting in code
-set pastetoggle=<f12>
+" Avoid NeoVim double status line bug
+set wildmode=full
 
 " Toggle numbers on/off for easy copying using <F2>:
 nnoremap <F2> :set nonumber!<CR>:set foldcolumn=0<CR>
-
-" JS options
-" au BufNewFile,BufReadPost *.js setl shiftwidth=2 expandtab foldlevel=1 foldmethod=indent tw=80 formatoptions+=w
-" let g:javascript_conceal_function = "ƒ"
-" let g:javascript_ignore_javaScriptdoc = 1
 
 " Reload vimrc when after it's written
 augroup myvimrc
@@ -116,7 +82,7 @@ set directory=~/.vim-tmp
 set backupdir=~/.vim-tmp
 
 " vim-airline options
-let g:airline_theme='simple'
+let g:airline_theme='base16'
 let g:airline_left_sep=''
 let g:airline_right_sep=''
 
@@ -133,10 +99,3 @@ let g:emmet_html5 = 1
 
 " vim-pandoc options
 let g:pandoc#syntax#conceal#use = 0
-
-" Some key mappings
-map <F3> :w !pbcopy<CR><CR>
-set pastetoggle=<F4>
-nnoremap <leader>f :CtrlP<CR>
-nnoremap <leader>b :CtrlPBuffer<CR>
-nnoremap <D-p>f :CtrlP<CR>
