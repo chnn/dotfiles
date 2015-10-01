@@ -23,6 +23,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'Raimondi/delimitMate'
 Plug 'mattn/emmet-vim'
 Plug 'plasticboy/vim-markdown'
+Plug 'editorconfig/editorconfig-vim'
 Plug 'Valloric/YouCompleteMe', { 'do': './install.sh' }
 Plug 'davidhalter/jedi-vim', { 'for': 'python' }
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
@@ -30,14 +31,18 @@ Plug 'raichoo/haskell-vim', { 'for': 'haskell' }
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 Plug 'marijnh/tern_for_vim', { 'for': 'javascript', 'do': 'npm install' }
 Plug 'chenn/vim-jsdoc', { 'for': 'javascript' }
-
+Plug 'tpope/vim-salve', { 'for': 'clojure' }
+Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
+Plug 'fatih/vim-go', { 'for': 'go' }
+Plug 'lervag/vimtex'
 Plug 'chriskempson/base16-vim'
 Plug 'altercation/vim-colors-solarized'
+Plug 'vim-pandoc/vim-pandoc'
 
 call plug#end()
 
 " Necessary to show unicode glyphs
-set encoding=utf-8
+" set encoding=utf-8
 
 " Turn off annoying bell
 set visualbell
@@ -49,14 +54,22 @@ set mouse=a
 set number
 
 " Set color scheme
-set background=dark
-colorscheme base16-chalk
+set t_Co=256
+set background=light
+colorscheme solarized
 
 " Set folding options
 set foldmethod=indent
 
 " Avoid NeoVim double status line bug
 set wildmode=full
+
+" Don't highlight long lines for speed
+set synmaxcol=240
+
+" Avoid NeoVim esc bug
+set ttimeout
+set ttimeoutlen=0
 
 " Toggle numbers on/off for easy copying using <F2>:
 nnoremap <F2> :set nonumber!<CR>:set foldcolumn=0<CR>
@@ -82,7 +95,7 @@ set directory=~/.vim-tmp
 set backupdir=~/.vim-tmp
 
 " vim-airline options
-let g:airline_theme='base16'
+let g:airline_theme='solarized'
 let g:airline_left_sep=''
 let g:airline_right_sep=''
 
@@ -99,3 +112,4 @@ let g:emmet_html5 = 1
 
 " vim-pandoc options
 let g:pandoc#syntax#conceal#use = 0
+let g:pandoc#modules#disabled = ["formatting", "folding"]

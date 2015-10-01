@@ -1,42 +1,22 @@
 bindkey -e
+
 export TERM="xterm-256color"
 export EDITOR="nvim"
-export PATH="/usr/local/bin:$PATH"
 export SHELL="/bin/zsh"
-export RAMDISK_DISABLED=true
 
-export GOPATH=$HOME/.go
+export WORKON_HOME=$HOME/.virtualenvs
 
-# Setup rbenv
+export GOPATH=$HOME/Dev/go
+export GOROOT=/usr/local/opt/go/libexec
+
+export PATH="/usr/local/bin:/usr/local/texlive/2015basic/bin/x86_64-darwin:$PATH"
+
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
-# Setup autojump
-[[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]] && . $(brew --prefix)/etc/profile.d/autojump.sh
+export NVM_DIR=~/.nvm
+source $(brew --prefix nvm)/nvm.sh
 
-export ANSIBLE_NOCOWS=1
-
-HISTFILE=~/.zsh_history
-HISTSIZE=100000
-SAVEHIST=100000
-setopt APPEND_HISTORY  # append history to history file as opposed to overwriting it
-setopt INC_APPEND_HISTORY  # append history incrementally
-setopt SHARE_HISTORY  # share history
-
-autoload -U colors && colors
-PROMPT="%n@%{$fg[blue]%}%m%{$reset_color%} %~ $ "
-
-autoload -U compinit; compinit -i
-zstyle ":completion:*" completer _complete _match _approximate
-zstyle ":completion:*:match:*" original only
-zstyle ":completion:*:approximate:*" max-errors 1 numeric
-zstyle ":completion:*" menu select=1
-zstyle ":completion:*:*:kill:*" menu yes select
-zstyle ":completion:*:kill:*" force-list always
-zstyle ":completion:*:processes" command "ps -au$USER"
-zstyle ":completion:*:*:kill:*:processes" list-colors "=(#b) #([0-9]#)*=0=01;32"
-zstyle ":completion:*:cd:*" ignore-parents parent pwd
-zstyle ":completion:*" list-colors ""
-
+# alias
 alias ls="ls -lahG"
 alias v="nvim"
 alias sv="sudo nvim"
@@ -56,6 +36,32 @@ function nom() {
   `npm $@`
 }
 
+# history
+HISTFILE=~/.zsh_history
+HISTSIZE=100000
+SAVEHIST=100000
+setopt APPEND_HISTORY  # append history to history file as opposed to overwriting it
+setopt INC_APPEND_HISTORY  # append history incrementally
+setopt SHARE_HISTORY  # share history
+
+# prompt
+autoload -U colors && colors
+PROMPT="%n@%{$fg[blue]%}%m%{$reset_color%} %~ $ "
+
+# completion
+autoload -U compinit; compinit -i
+zstyle ":completion:*" completer _complete _match _approximate
+zstyle ":completion:*:match:*" original only
+zstyle ":completion:*:approximate:*" max-errors 1 numeric
+zstyle ":completion:*" menu select=1
+zstyle ":completion:*:*:kill:*" menu yes select
+zstyle ":completion:*:kill:*" force-list always
+zstyle ":completion:*:processes" command "ps -au$USER"
+zstyle ":completion:*:*:kill:*:processes" list-colors "=(#b) #([0-9]#)*=0=01;32"
+zstyle ":completion:*:cd:*" ignore-parents parent pwd
+zstyle ":completion:*" list-colors ""
+
+# git alias
 alias g='git'
 compdef g=git
 alias gst='git status'
