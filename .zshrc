@@ -3,23 +3,15 @@ bindkey -e
 export TERM="xterm-256color"
 export EDITOR="nvim"
 export SHELL="/bin/zsh"
-
 export WORKON_HOME=$HOME/.virtualenvs
-
 export GOPATH=$HOME/Dev/go
 export GOROOT=/usr/local/opt/go/libexec
-
 export PATH="/usr/local/bin:/usr/local/texlive/2015basic/bin/x86_64-darwin:$PATH"
 
-if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
-
-export NVM_DIR=~/.nvm
-source $(brew --prefix nvm)/nvm.sh
-
-# alias
 alias ls="ls -lahG"
 alias v="nvim"
-alias sv="sudo nvim"
+alias cdcs="cd ~/Dropbox/Reed/math221"
+alias cdnotes="cd ~/Dropbox/Notes"
 alias tma="tmux attach -d"
 alias sshtunnel="sudo networksetup -setsocksfirewallproxy Wi-Fi localhost 4040 && ssh -D 4040 -C -N pi"
 alias sshtunneloff="sudo networksetup -setsocksfirewallproxystate Wi-Fi off"
@@ -36,7 +28,6 @@ function nom() {
   `npm $@`
 }
 
-# history
 HISTFILE=~/.zsh_history
 HISTSIZE=100000
 SAVEHIST=100000
@@ -44,11 +35,9 @@ setopt APPEND_HISTORY  # append history to history file as opposed to overwritin
 setopt INC_APPEND_HISTORY  # append history incrementally
 setopt SHARE_HISTORY  # share history
 
-# prompt
 autoload -U colors && colors
 PROMPT="%n@%{$fg[blue]%}%m%{$reset_color%} %~ $ "
 
-# completion
 autoload -U compinit; compinit -i
 zstyle ":completion:*" completer _complete _match _approximate
 zstyle ":completion:*:match:*" original only
@@ -61,7 +50,6 @@ zstyle ":completion:*:*:kill:*:processes" list-colors "=(#b) #([0-9]#)*=0=01;32"
 zstyle ":completion:*:cd:*" ignore-parents parent pwd
 zstyle ":completion:*" list-colors ""
 
-# git alias
 alias g='git'
 compdef g=git
 alias gst='git status'

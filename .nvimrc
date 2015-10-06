@@ -41,9 +41,6 @@ Plug 'vim-pandoc/vim-pandoc'
 
 call plug#end()
 
-" Necessary to show unicode glyphs
-" set encoding=utf-8
-
 " Turn off annoying bell
 set visualbell
 
@@ -67,10 +64,6 @@ set wildmode=full
 " Don't highlight long lines for speed
 set synmaxcol=240
 
-" Avoid NeoVim esc bug
-set ttimeout
-set ttimeoutlen=0
-
 " Toggle numbers on/off for easy copying using <F2>:
 nnoremap <F2> :set nonumber!<CR>:set foldcolumn=0<CR>
 
@@ -80,7 +73,7 @@ augroup myvimrc
     au BufWritePost .nvimrc,_nvimrc,vimrc,.gvimrc,_gvimrc,gvimrc so $MYVIMRC
 augroup END
 
-" CtrlP
+" ctrlp options
 let g:ctrlp_working_path_mode = 0
 set wildignore+=*/build/**
 set wildignore+=*/tmp/**
@@ -113,3 +106,8 @@ let g:emmet_html5 = 1
 " vim-pandoc options
 let g:pandoc#syntax#conceal#use = 0
 let g:pandoc#modules#disabled = ["formatting", "folding"]
+
+" vimtex options
+let g:vimtex_view_general_viewer = '/Applications/Skim.app/Contents/SharedSupport/displayline'
+let g:vimtex_view_general_options = '@line @pdf @tex'
+let g:vimtex_latexmk_options = '-pdf -xelatex'
