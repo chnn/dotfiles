@@ -3,21 +3,30 @@ bindkey -e
 export TERM="xterm-256color"
 export EDITOR="nvim"
 export SHELL="/bin/zsh"
-export WORKON_HOME=$HOME/.virtualenvs
+export PATH="/usr/local/bin:$PATH"
+
+export PATH="/usr/local/texlive/2015basic/bin/x86_64-darwin:$PATH"
+
 export GOPATH=$HOME/Dev/go
-export GOROOT=/usr/local/opt/go/libexec
-export PATH="/usr/local/bin:/usr/local/texlive/2015basic/bin/x86_64-darwin:$PATH"
+export PATH="$GOPATH/bin:$GOBIN:$PATH"
+
+export NVM_DIR=~/.nvm
+source $(brew --prefix nvm)/nvm.sh
+
+export WORKON_HOME=$HOME/.virtualenvs
+export PROJECT_HOME=$HOME/Dev
+source /usr/local/bin/virtualenvwrapper.sh
 
 alias ls="ls -lahG"
-alias v="nvim"
-alias cdcs="cd ~/Dropbox/Reed/math221"
-alias cdnotes="cd ~/Dropbox/Notes"
+alias t="cd ~/Dropbox/Notes && nvim t.md"
 alias tma="tmux attach -d"
 alias sshtunnel="sudo networksetup -setsocksfirewallproxy Wi-Fi localhost 4040 && ssh -D 4040 -C -N pi"
 alias sshtunneloff="sudo networksetup -setsocksfirewallproxystate Wi-Fi off"
 alias rsync-writing="rsync -rP --delete ./_site/ cloudsrest:/home/cloudsrest/writing/public_html"
 alias nombom='echo "\n (╯°□°）╯︵ ┻━┻ \n" && npm cache clear && bower cache clean && rm -rf node_modules bower_components && npm install && bower install'
-alias b='bundle exec'
+alias b="bundle exec"
+alias m="python manage.py"
+alias e="$EDITOR"
 
 function nom() {
   if [ -z "$1" ]; then
