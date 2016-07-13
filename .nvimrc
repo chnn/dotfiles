@@ -2,6 +2,7 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-vinegar'
@@ -17,26 +18,27 @@ Plug 'groenewege/vim-less', { 'for': 'less' }
 Plug 'kien/ctrlp.vim'
 Plug 'Jelera/vim-javascript-syntax'
 Plug 'mustache/vim-mustache-handlebars'
-Plug 'godlygeek/tabular'
 Plug 'ap/vim-css-color'
 Plug 'scrooloose/syntastic'
 Plug 'rking/ag.vim'
-Plug 'airblade/vim-gitgutter'
+" Plug 'airblade/vim-gitgutter'
 Plug 'Valloric/YouCompleteMe', { 'do': './install.py --tern-completer --gocode-completer --racer-completer' }
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 Plug 'raichoo/haskell-vim', { 'for': 'haskell' }
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
-Plug 'marijnh/tern_for_vim', { 'for': 'javascript', 'do': 'npm install' }
 Plug 'tpope/vim-salve', { 'for': 'clojure' }
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 Plug 'tpope/vim-sexp-mappings-for-regular-people', { 'for': 'clojure' }
 Plug 'guns/vim-sexp', { 'for': 'clojure' }
 Plug 'fatih/vim-go', { 'for': 'go' }
+Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
 Plug 'lervag/vimtex', { 'for': 'tex' }
+" Plug 'kana/vim-textobj-user'
+" Plug 'reedes/vim-textobj-quote'
+Plug 'editorconfig/editorconfig-vim'
 Plug 'reedes/vim-pencil'
 Plug 'junegunn/goyo.vim'
 Plug 'chriskempson/base16-vim'
-Plug 'altercation/vim-colors-solarized'
 
 call plug#end()
 
@@ -47,12 +49,12 @@ set nowrap
 set foldmethod=indent
 set foldlevel=1
 set wildmode=full
-set tabstop=2
+set tabstop=8 softtabstop=0 expandtab shiftwidth=2 smarttab
 
 " Set color scheme
 set background=light
-colorscheme solarized
-let g:airline_theme='solarized'
+colorscheme base16-solarized
+let g:airline_theme='base16'
 
 " Toggle numbers on/off for easy copying using <F2>:
 nnoremap <F2> :set nonumber!<CR>:set foldcolumn=0<CR>
@@ -65,6 +67,7 @@ set wildignore+=*/dist/**
 set wildignore+=*/bower_components/**
 set wildignore+=*/node_modules/**
 set wildignore+=*/docs/**
+set wildignore+=*/staticfiles/**
 set wildignore+=*.pyc
 
 " .swp and backup file locations
@@ -74,12 +77,15 @@ set backupdir=~/.vim-tmp
 " vim-airline options
 let g:airline_left_sep=''
 let g:airline_right_sep=''
+let g:airline_section_error=''
 
 autocmd Filetype javascript setlocal ts=2
 let g:javascript_ignore_javaScriptdoc = 1
 
 " Syntastic options
 let g:syntastic_html_checkers = ['']
+let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_always_populate_loc_list = 1
 
 " VimTex options
 let g:vimtex_view_general_viewer = '/Applications/Skim.app/Contents/SharedSupport/displayline'
@@ -95,7 +101,7 @@ let g:vimtex_quickfix_open_on_warning = 0
 let g:vimtex_latexmk_progname = 'nvr'  
 
 " LaTeX support for YCM
-au FileType tex let g:ycm_min_num_of_chars_for_completion = 6
+au FileType tex let g:ycm_min_num_of_chars_for_completion = 4
 
 if !exists('g:ycm_semantic_triggers')
   let g:ycm_semantic_triggers = {}
@@ -107,6 +113,8 @@ let g:ycm_semantic_triggers.tex = [
 \ 're!\\includegraphics\*?(\[[^]]*\]){0,2}{[^}]*',
 \ 're!\\(include(only)?|input){[^}]*'
 \ ]
+
+let g:ycm_rust_src_path = '/usr/local/rust/rust-1.9.0/src'
 
 " YouCompleteMe leader shortcuts
 nnoremap <leader>jd :YcmCompleter GoTo<CR>
@@ -125,3 +133,7 @@ au FileType go nmap <leader>gt <Plug>(go-test)
 
 " Exit NeoVim terminal mode with esc key
 tnoremap <Esc> <C-\><C-n>
+
+nnoremap <leader>t :terminal<CR>
+nnoremap <leader>c :ClearAllCtrlPCaches<CR>
+nnoremap <leader>n :noh<CR>
