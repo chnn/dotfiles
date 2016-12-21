@@ -5,10 +5,12 @@ export EDITOR="nvim"
 export SHELL="/bin/zsh"
 export PATH="/usr/local/bin:$PATH"
 
-export PATH="/usr/local/texlive/2015basic/bin/x86_64-darwin:$PATH"
+export PATH="/usr/local/texlive/2016/bin/x86_64-darwin:$PATH"
 
 export GOPATH=$HOME/Dev/go
 export PATH="$GOPATH/bin:$GOBIN:$PATH"
+
+export PATH="$PATH:`yarn global bin`"
 
 export HOMEBREW_GITHUB_API_TOKEN="fa9e409b28c78229a7e0656eb0b2ed23268b3de9"
 

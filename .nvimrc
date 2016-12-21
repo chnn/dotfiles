@@ -1,6 +1,6 @@
 call plug#begin('~/.vim/plugged')
 
-Plug 'tpope/vim-sensible'
+" Our lord and savior
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-surround'
@@ -19,10 +19,9 @@ Plug 'kien/ctrlp.vim'
 Plug 'Jelera/vim-javascript-syntax'
 Plug 'mustache/vim-mustache-handlebars'
 Plug 'ap/vim-css-color'
-Plug 'scrooloose/syntastic'
+Plug 'neomake/neomake'
 Plug 'rking/ag.vim'
-" Plug 'airblade/vim-gitgutter'
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py --tern-completer --gocode-completer --racer-completer' }
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 Plug 'raichoo/haskell-vim', { 'for': 'haskell' }
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
@@ -33,31 +32,20 @@ Plug 'guns/vim-sexp', { 'for': 'clojure' }
 Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
 Plug 'lervag/vimtex', { 'for': 'tex' }
-" Plug 'kana/vim-textobj-user'
-" Plug 'reedes/vim-textobj-quote'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'reedes/vim-pencil'
 Plug 'junegunn/goyo.vim'
 Plug 'chriskempson/base16-vim'
+Plug 'altercation/vim-colors-solarized'
 
 call plug#end()
 
-set visualbell
-set mouse=a
-set number
 set nowrap
-set foldmethod=indent
-set foldlevel=1
-set wildmode=full
 set tabstop=8 softtabstop=0 expandtab shiftwidth=2 smarttab
 
-" Set color scheme
 set background=light
-colorscheme base16-solarized
-let g:airline_theme='base16'
-
-" Toggle numbers on/off for easy copying using <F2>:
-nnoremap <F2> :set nonumber!<CR>:set foldcolumn=0<CR>
+colorscheme solarized
+let g:airline_theme='solarized'
 
 " ctrlp options
 let g:ctrlp_working_path_mode = 0
@@ -83,19 +71,44 @@ autocmd Filetype javascript setlocal ts=2
 let g:javascript_ignore_javaScriptdoc = 1
 
 " Syntastic options
-let g:syntastic_html_checkers = ['']
 let g:syntastic_javascript_checkers = ['eslint']
-let g:syntastic_always_populate_loc_list = 1
+
+" Neomake options
+autocmd! BufWritePost,BufEnter * Neomake
+let g:neomake_verbose = 0
+let g:neomake_javascript_enabled_makers = ['eslint']
+let g:neomake_tex_enabled_makers = []
+let g:neomake_markdown_enabled_makers = []
 
 " VimTex options
-let g:vimtex_view_general_viewer = '/Applications/Skim.app/Contents/SharedSupport/displayline'
-let g:vimtex_view_general_options = '@line @pdf @tex'
-let g:vimtex_latexmk_options = '-pdf -xelatex'
+let g:vimtex_latexmk_options = '-pdf -xelatex -shell-escape'
 let g:vimtex_indent_enabled = 0
 let g:vimtex_index_show_help = 0
 let g:vimtex_toc_show_numbers = 0
 let g:vimtex_quickfix_mode = 1
 let g:vimtex_quickfix_open_on_warning = 0
+let g:vimtex_view_general_viewer = '/Applications/Skim.app/Contents/SharedSupport/displayline'
+let g:vimtex_view_general_options = '-r @line @pdf @tex'
+let g:vimtex_latexmk_callback_hooks = ['UpdateSkim']
+
+function! UpdateSkim(status)
+  if !a:status | return | endif
+
+  let l:out = b:vimtex.out()
+  let l:tex = expand('%:p')
+  let l:cmd = [g:vimtex_view_general_viewer, '-r']
+  if !empty(system('pgrep Skim'))
+    call extend(l:cmd, ['-g'])
+  endif
+  if has('nvim')
+    call jobstart(l:cmd + [line('.'), l:out, l:tex])
+  elseif has('job')
+    call job_start(l:cmd + [line('.'), l:out, l:tex])
+  else
+    call system(join(l:cmd + [line('.'), shellescape(l:out), shellescape(l:tex)], ' '))
+  endif
+endfunction
+
 " Workaround to enable clientserver support (for the vimtex quickfix window).
 " This requires the `neovim-remote` package from PyPi.
 let g:vimtex_latexmk_progname = 'nvr'  
@@ -137,3 +150,6 @@ tnoremap <Esc> <C-\><C-n>
 nnoremap <leader>t :terminal<CR>
 nnoremap <leader>c :ClearAllCtrlPCaches<CR>
 nnoremap <leader>n :noh<CR>
+nnoremap <F2> :set nonumber!<CR>:set foldcolumn=0<CR>
+nnoremap <leader>lw :VimtexCompile<CR>:SoftPencil<CR>:set laststatus=0<CR>
+
