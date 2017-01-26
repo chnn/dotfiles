@@ -21,7 +21,7 @@ Plug 'mustache/vim-mustache-handlebars'
 Plug 'ap/vim-css-color'
 Plug 'neomake/neomake'
 Plug 'rking/ag.vim'
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 Plug 'raichoo/haskell-vim', { 'for': 'haskell' }
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
@@ -32,6 +32,7 @@ Plug 'guns/vim-sexp', { 'for': 'clojure' }
 Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
 Plug 'lervag/vimtex', { 'for': 'tex' }
+Plug 'Raimondi/delimitMate'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'reedes/vim-pencil'
 Plug 'junegunn/goyo.vim'
@@ -41,11 +42,13 @@ Plug 'altercation/vim-colors-solarized'
 call plug#end()
 
 set nowrap
+set number
+set foldmethod=indent
 set tabstop=8 softtabstop=0 expandtab shiftwidth=2 smarttab
 
-set background=light
-colorscheme solarized
-let g:airline_theme='solarized'
+set background=dark
+colorscheme base16-oceanicnext
+let g:airline_theme='base16'
 
 " ctrlp options
 let g:ctrlp_working_path_mode = 0
@@ -113,26 +116,22 @@ endfunction
 " This requires the `neovim-remote` package from PyPi.
 let g:vimtex_latexmk_progname = 'nvr'  
 
-" LaTeX support for YCM
-au FileType tex let g:ycm_min_num_of_chars_for_completion = 4
+let g:deoplete#enable_at_startup = 1
 
-if !exists('g:ycm_semantic_triggers')
-  let g:ycm_semantic_triggers = {}
+if !exists('g:deoplete#omni#input_patterns')
+  let g:deoplete#omni#input_patterns = {}
 endif
 
-let g:ycm_semantic_triggers.tex = [
-\ 're!\\[A-Za-z]*cite[A-Za-z]*(\[[^]]*\]){0,2}{[^}]*',
-\ 're!\\[A-Za-z]*ref({[^}]*|range{([^,{}]*(}{)?))',
-\ 're!\\includegraphics\*?(\[[^]]*\]){0,2}{[^}]*',
-\ 're!\\(include(only)?|input){[^}]*'
-\ ]
-
-let g:ycm_rust_src_path = '/usr/local/rust/rust-1.9.0/src'
-
-" YouCompleteMe leader shortcuts
-nnoremap <leader>jd :YcmCompleter GoTo<CR>
-nnoremap <leader>jr :YcmCompleter GoToReferences<CR>
-nnoremap <leader>jk :YcmCompleter GetDoc<CR>
+let g:deoplete#omni#input_patterns.tex = '\\(?:'
+  \ .  '\w*cite\w*(?:\s*\[[^]]*\]){0,2}\s*{[^}]*'
+  \ . '|\w*ref(?:\s*\{[^}]*|range\s*\{[^,}]*(?:}{)?)'
+  \ . '|hyperref\s*\[[^]]*'
+  \ . '|includegraphics\*?(?:\s*\[[^]]*\]){0,2}\s*\{[^}]*'
+  \ . '|(?:include(?:only)?|input)\s*\{[^}]*'
+  \ . '|\w*(gls|Gls|GLS)(pl)?\w*(\s*\[[^]]*\]){0,2}\s*\{[^}]*'
+  \ . '|includepdf(\s*\[[^]]*\])?\s*\{[^}]*'
+  \ . '|includestandalone(\s*\[[^]]*\])?\s*\{[^}]*'
+  \ .')'
 
 " vim-pencil options
 let g:pencil#textwidth = 79
@@ -147,9 +146,19 @@ au FileType go nmap <leader>gt <Plug>(go-test)
 " Exit NeoVim terminal mode with esc key
 tnoremap <Esc> <C-\><C-n>
 
+" I just want to be a wizard
+function! Incr()
+  let a = line('.') - line("'<")
+  let c = virtcol("'<")
+  if a > 0
+    execute 'normal! '.c.'|'.a."\<C-a>"
+  endif
+  normal `<
+endfunction
+vnoremap <C-i> :call Incr()<CR>
+
 nnoremap <leader>t :terminal<CR>
 nnoremap <leader>c :ClearAllCtrlPCaches<CR>
 nnoremap <leader>n :noh<CR>
 nnoremap <F2> :set nonumber!<CR>:set foldcolumn=0<CR>
 nnoremap <leader>lw :VimtexCompile<CR>:SoftPencil<CR>:set laststatus=0<CR>
-

@@ -7,12 +7,12 @@ export PATH="/usr/local/bin:$PATH"
 
 export PATH="/usr/local/texlive/2016/bin/x86_64-darwin:$PATH"
 
-export GOPATH=$HOME/Dev/go
-export PATH="$GOPATH/bin:$GOBIN:$PATH"
-
-export PATH="$PATH:`yarn global bin`"
+export PATH="$(yarn global bin):$PATH"
 
 export HOMEBREW_GITHUB_API_TOKEN="fa9e409b28c78229a7e0656eb0b2ed23268b3de9"
+
+# export GOPATH=$HOME/Dev/go
+# export PATH="$GOPATH/bin:$GOBIN:$PATH"
 
 # export NVM_DIR=~/.nvm
 # source $(brew --prefix nvm)/nvm.sh
