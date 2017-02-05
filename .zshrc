@@ -5,11 +5,13 @@ export EDITOR="nvim"
 export SHELL="/bin/zsh"
 export PATH="/usr/local/bin:$PATH"
 
-export PATH="/usr/local/texlive/2016/bin/x86_64-darwin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 
-export PATH="$(yarn global bin):$PATH"
+# export PATH="/usr/local/texlive/2016/bin/x86_64-darwin:$PATH"
 
-export HOMEBREW_GITHUB_API_TOKEN="fa9e409b28c78229a7e0656eb0b2ed23268b3de9"
+# export PATH="$(yarn global bin):$PATH"
+
+# export HOMEBREW_GITHUB_API_TOKEN="fa9e409b28c78229a7e0656eb0b2ed23268b3de9"
 
 # export GOPATH=$HOME/Dev/go
 # export PATH="$GOPATH/bin:$GOBIN:$PATH"
@@ -58,13 +60,3 @@ setopt SHARE_HISTORY  # share history
 autoload -U compinit; compinit -i
 
 PROMPT="%~ $ "
-
-source ~/.zsh/git-prompt/git-prompt.zsh
-
-if test -f $HOME/.gpg-agent-info && kill -0 `cut -d: -f 2 $HOME/.gpg-agent-info` 2>/dev/null; then
-    GPG_AGENT_INFO=`cat $HOME/.gpg-agent-info | cut -c 16-`
-else
-    eval `gpg-agent --daemon --no-grab --write-env-file $HOME/.gpg-agent-info`
-fi
-export GPG_TTY=`tty`
-export GPG_AGENT_INFO

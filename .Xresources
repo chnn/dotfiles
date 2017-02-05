@@ -1,38 +1,28 @@
-# Urxvt Settings
+! vim: set filetype=xdefaults :
 
-!URxvt.font: xft:inconsolata:pixelsize=12
-!URxvt.font: xft:lime
-!URxvt.font: xft:Terminus-8
-!URxvt.font: xft:Liberation Mono-8
-!URxvt.font: xft:Bitstream Vera Sans Mono-8
-!URxvt.font: xft:Envy Code R:pixelsize=11
-URxvt.font: xft:Droid Sans Mono:pixelsize=10
-!URxvt.font: xft:gohufont-8
-!URxvt.font: xft:MonteCarlo-9
+URxvt.font: xft:PragmataPro Mono-9
 URxvt.scrollBar: false
 URxvt.urgentOnBell: true
 URxvt.perl-ext: default,matcher
 URxvt.urlLauncher: /usr/bin/chromium
+URxvt.letterSpace: -2
 URxvt.matcher.button:  1 
 URxvt.geometry: 110x30
-!URxvt.visualBell: True
 
-# Font hinting
-
-Xft.antialias: true
+Xft.dpi: 144
+Xft.lcdfilter: lcddefault
+Xft.hintstyle: hintslight
 Xft.hinting: true
+Xft.antialias: true
 Xft.rgba: rgb
-Xft.hintstyle: hintfull
 
-# Colors
-
-# Vimbrant Colors
+! Vimbrant Colors
 
 !urxvt*cursorColor:      #fd971f
 
 ! terminal colours
-*foreground:#a0a0a0
-*background:#282c2e
+!*foreground:#a0a0a0
+!*background:#282c2e
 
 !black
 !*color0:    #1b1d1e
@@ -76,12 +66,12 @@ alsamixer*color11:  #777777
 alsamixer*color4:   #1b1d1e
 alsamixer*scrollBar:  false
 
-# My Colors
+! My Colors
 
 !*foreground: #e5e5e5
 !*background: #0d0d0d
 
-# Artur Colors
+! Artur Colors
 
 !black
 !*color0: #262729
@@ -118,7 +108,7 @@ alsamixer*scrollBar:  false
 !*color15: #ddccbb
 
 
-# Tater Colors
+! Tater Colors
 
 !black
 !*color0: #1C1C1C
@@ -153,46 +143,46 @@ alsamixer*scrollBar:  false
 !*color15: #6C887A
 
 
-# Zenburn Colors
+! Zenburn Colors
 
 !*background:  #3f3f3f
 !*foreground:  #dcdccc
 
 !black
-*color0:      #3f3f3f
-*color0:      #1E2320
-*color8:      #709080
+!*color0:      #3f3f3f
+!*color0:      #1E2320
+!*color8:      #709080
 
 !red
-*color1:      #705050
-*color9:      #dca3a3
+!*color1:      #705050
+!*color9:      #dca3a3
 
 !green
-*color2:      #60b48a
-*color10:     #c3bf9f
+!*color2:      #60b48a
+!*color10:     #c3bf9f
 
 !yellow
-*color3:      #dfaf8f
-*color11:     #f0dfaf
+!*color3:      #dfaf8f
+!*color11:     #f0dfaf
 
 !blue
-*color4:      #506070
-*color12:     #94bff3
+!*color4:      #506070
+!*color12:     #94bff3
 
 !magenta
-*color5:      #dc8cc3
-*color13:     #ec93d3
+!*color5:      #dc8cc3
+!*color13:     #ec93d3
 
 !cyan
-*color6:      #8cd0d3
-*color14:     #93e0e3
+!*color6:      #8cd0d3
+!*color14:     #93e0e3
 
 !white
-*color7:      #dcdccc
-*color15:     #ffffff
+!*color7:      #dcdccc
+!*color15:     #ffffff
 
 
-# Thayer Colors
+! Thayer Colors
 
 !black
 !*color0: #1B1D1E
@@ -229,7 +219,7 @@ alsamixer*scrollBar:  false
 !*color15: #F8F8F2
 
 
-#Justin Colors
+! Justin Colors
 
 !black
 !*color0: #242424
@@ -263,7 +253,7 @@ alsamixer*scrollBar:  false
 !*color7: #ffffff
 !*color15: #dedede
 
-# molokai inspired colors
+! molokai inspired colors
 
 !black
 !*color0:    #1b1d1e
@@ -297,7 +287,7 @@ alsamixer*scrollBar:  false
 !*color7:    #ccccc6
 !*color15:   #f8f8f2
 
-# jwr dark
+! jwr dark
 
 !black
 !*color0:  #333333
@@ -330,3 +320,45 @@ alsamixer*scrollBar:  false
 !white
 !*color7:  #899CA1
 !*color15: #C0C0C0
+
+! Base16 Solar Flare
+! Scheme: Chuck Harmston (https://chuck.harmston.ch)
+
+#define base00 #18262F
+#define base01 #222E38
+#define base02 #586875
+#define base03 #667581
+#define base04 #85939E
+#define base05 #A6AFB8
+#define base06 #E8E9ED
+#define base07 #F5F7FA
+#define base08 #EF5253
+#define base09 #E66B2B
+#define base0A #E4B51C
+#define base0B #7CC844
+#define base0C #52CBB0
+#define base0D #33B5E1
+#define base0E #A363D5
+#define base0F #D73C9A
+
+*.foreground:   base05
+*.background:   base00
+*.cursorColor:  base05
+
+*.color0:       base00
+*.color1:       base08
+*.color2:       base0B
+*.color3:       base0A
+*.color4:       base0D
+*.color5:       base0E
+*.color6:       base0C
+*.color7:       base05
+
+*.color8:       base03
+*.color9:       base09
+*.color10:      base01
+*.color11:      base02
+*.color12:      base04
+*.color13:      base06
+*.color14:      base0F
+*.color15:      base07
