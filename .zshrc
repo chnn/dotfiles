@@ -50,6 +50,7 @@ alias glog='git log --oneline --decorate --color --graph'
 alias gss='git status -s'
 alias ga='git add'
 alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
+alias bl='xbacklight -set'
 
 HISTFILE=~/.zsh_history
 HISTSIZE=100000
