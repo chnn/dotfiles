@@ -1,13 +1,15 @@
 ! vim: set filetype=xdefaults :
 
-URxvt.font: xft:PragmataPro Mono-9
+URxvt.font: xft:iosevka:regular:size=9
 URxvt.scrollBar: false
 URxvt.urgentOnBell: true
-URxvt.perl-ext: default,matcher
+URxvt.perl-ext: default,matcher,selection-to-clipboard
 URxvt.urlLauncher: /usr/bin/chromium
-URxvt.letterSpace: -2
+URxvt.letterSpace: -1
 URxvt.matcher.button:  1 
 URxvt.geometry: 110x30
+URxvt.matcher.rend.0: Uline
+URxvt.colorUL: base05
 
 Xft.dpi: 144
 Xft.lcdfilter: lcddefault
@@ -16,11 +18,53 @@ Xft.hinting: true
 Xft.antialias: true
 Xft.rgba: rgb
 
+#define base00 #2e2a31
+#define base01 #4a464d
+#define base02 #666369
+#define base03 #838085
+#define base04 #9f9da2
+#define base05 #bcbabe
+#define base06 #d8d7da
+#define base07 #f5f4f7
+#define base08 #d8137f
+#define base09 #d65407
+#define base0A #dc8a0e
+#define base0B #17ad98
+#define base0C #149bda
+#define base0D #796af5
+#define base0E #bb60ea
+#define base0F #c720ca
+
+*.foreground:   base05
+#ifdef background_opacity
+*.background:   [background_opacity]base00
+#else
+*.background:   base00
+#endif
+*.cursorColor:  base05
+
+*.color0:       base00
+*.color1:       base08
+*.color2:       base0B
+*.color3:       base0A
+*.color4:       base0D
+*.color5:       base0E
+*.color6:       base0C
+*.color7:       base05
+
+*.color8:       base03
+*.color9:       base09
+*.color10:      base01
+*.color11:      base02
+*.color12:      base04
+*.color13:      base06
+*.color14:      base0F
+*.color15:      base07
+
 ! Vimbrant Colors
 
 !urxvt*cursorColor:      #fd971f
 
-! terminal colours
 !*foreground:#a0a0a0
 !*background:#282c2e
 
@@ -54,17 +98,6 @@ Xft.rgba: rgb
 !*color15:   #ebebe5
 !*color7:    #aaaaaa
 !*color15:   #ffffff
-
-! alsamixer scheme
-alsamixer*color1:   #ff2759
-alsamixer*color9:   #ff2759
-alsamixer*color2:   #52aebf
-alsamixer*color10:  #52aebf
-alsamixer*color7:   #ffffff
-alsamixer*color15:  #ffffff
-alsamixer*color11:  #777777
-alsamixer*color4:   #1b1d1e
-alsamixer*scrollBar:  false
 
 ! My Colors
 
@@ -320,45 +353,3 @@ alsamixer*scrollBar:  false
 !white
 !*color7:  #899CA1
 !*color15: #C0C0C0
-
-! Base16 Solar Flare
-! Scheme: Chuck Harmston (https://chuck.harmston.ch)
-
-#define base00 #18262F
-#define base01 #222E38
-#define base02 #586875
-#define base03 #667581
-#define base04 #85939E
-#define base05 #A6AFB8
-#define base06 #E8E9ED
-#define base07 #F5F7FA
-#define base08 #EF5253
-#define base09 #E66B2B
-#define base0A #E4B51C
-#define base0B #7CC844
-#define base0C #52CBB0
-#define base0D #33B5E1
-#define base0E #A363D5
-#define base0F #D73C9A
-
-*.foreground:   base05
-*.background:   base00
-*.cursorColor:  base05
-
-*.color0:       base00
-*.color1:       base08
-*.color2:       base0B
-*.color3:       base0A
-*.color4:       base0D
-*.color5:       base0E
-*.color6:       base0C
-*.color7:       base05
-
-*.color8:       base03
-*.color9:       base09
-*.color10:      base01
-*.color11:      base02
-*.color12:      base04
-*.color13:      base06
-*.color14:      base0F
-*.color15:      base07

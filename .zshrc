@@ -17,20 +17,29 @@ export PATH="$HOME/.local/bin:$PATH"
 # export PATH="$GOPATH/bin:$GOBIN:$PATH"
 
 # export NVM_DIR=~/.nvm
-# source $(brew --prefix nvm)/nvm.sh
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
 # if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
 # if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
 
 # export WORKON_HOME=$HOME/.virtualenvs
 # export PROJECT_HOME=$HOME/Dev
-# export VIRTUALENVWRAPPER_PYTHON=`which python`
-# source /usr/local/bin/virtualenvwrapper.sh
+# source $HOME/.local/bin/virtualenvwrapper.sh
 
-alias ls="ls -lahG"
+source /usr/share/autojump/autojump.zsh
+
+function cd {
+    builtin cd $@
+    pwd > ~/.last_dir
+}
+
+if [ -f ~/.last_dir ]
+    then cd `cat ~/.last_dir`
+fi
+
+alias ls="ls -l"
 alias t="cd ~/Dropbox/Notes && nvim t.md"
 alias tma="tmux attach -d"
-alias rsync-writing="rsync -rP --delete ./_site/ cloudsrest:/home/cloudsrest/writing/public_html"
 alias nombom='echo "\n (╯°□°）╯︵ ┻━┻ \n" && npm cache clear && bower cache clean && rm -rf node_modules bower_components && npm install && bower install'
 alias b="bundle exec"
 alias m="python manage.py"
@@ -50,7 +59,6 @@ alias glog='git log --oneline --decorate --color --graph'
 alias gss='git status -s'
 alias ga='git add'
 alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
-alias bl='xbacklight -set'
 
 HISTFILE=~/.zsh_history
 HISTSIZE=100000

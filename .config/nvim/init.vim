@@ -11,8 +11,8 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-markdown'
 
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+" Plug 'vim-airline/vim-airline'
+" Plug 'vim-airline/vim-airline-themes'
 Plug 'othree/html5.vim'
 Plug 'groenewege/vim-less', { 'for': 'less' }
 Plug 'kien/ctrlp.vim'
@@ -22,6 +22,7 @@ Plug 'ap/vim-css-color'
 Plug 'neomake/neomake'
 Plug 'rking/ag.vim'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'zchee/deoplete-jedi', { 'for': 'python' }
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 Plug 'raichoo/haskell-vim', { 'for': 'haskell' }
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
@@ -38,16 +39,19 @@ Plug 'reedes/vim-pencil'
 Plug 'junegunn/goyo.vim'
 Plug 'chriskempson/base16-vim'
 Plug 'altercation/vim-colors-solarized'
+Plug 'godlygeek/tabular'
+Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
 
 call plug#end()
 
 set nowrap
 set number
-set foldmethod=indent
+set foldmethod=expr
 set tabstop=8 softtabstop=0 expandtab shiftwidth=2 smarttab
+set laststatus=1
 
 set background=dark
-colorscheme base16-solar-flare
+colorscheme base16-unikitty-dark
 let g:airline_theme='base16'
 
 " ctrlp options
@@ -66,8 +70,6 @@ set directory=~/.vim-tmp
 set backupdir=~/.vim-tmp
 
 " vim-airline options
-let g:airline_left_sep=''
-let g:airline_right_sep=''
 let g:airline_section_error=''
 
 autocmd Filetype javascript setlocal ts=2
@@ -97,6 +99,8 @@ let g:vimtex_view_method="zathura"
 let g:vimtex_latexmk_progname = 'nvr'  
 
 let g:deoplete#enable_at_startup = 1
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
 if !exists('g:deoplete#omni#input_patterns')
   let g:deoplete#omni#input_patterns = {}
@@ -141,4 +145,6 @@ nnoremap <leader>t :terminal<CR>
 nnoremap <leader>c :ClearAllCtrlPCaches<CR>
 nnoremap <leader>n :noh<CR>
 nnoremap <F2> :set nonumber!<CR>:set foldcolumn=0<CR>
-nnoremap <leader>lw :VimtexCompile<CR>:SoftPencil<CR>:set laststatus=0<CR>
+nnoremap <leader>w :SoftPencil<CR>:Goyo<CR>
+nnoremap <leader>lw :VimtexCompile<CR>:SoftPencil<CR>
+vnoremap <C-a> :Tab /&<CR> :Tab /\\\\<CR>
