@@ -7,6 +7,12 @@ export PATH="/usr/local/bin:$PATH"
 
 export PATH="$HOME/.local/bin:$PATH"
 
+export PATH="/home/chris/.nvm/versions/node/v6.10.1/bin:$PATH"
+export NVM_DIR=~/.nvm
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+source /usr/share/autojump/autojump.zsh
+
 # export PATH="/usr/local/texlive/2016/bin/x86_64-darwin:$PATH"
 
 # export PATH="$(yarn global bin):$PATH"
@@ -16,17 +22,13 @@ export PATH="$HOME/.local/bin:$PATH"
 # export GOPATH=$HOME/Dev/go
 # export PATH="$GOPATH/bin:$GOBIN:$PATH"
 
-# export NVM_DIR=~/.nvm
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
 # if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
 # if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
 
 # export WORKON_HOME=$HOME/.virtualenvs
 # export PROJECT_HOME=$HOME/Dev
+# export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
 # source $HOME/.local/bin/virtualenvwrapper.sh
-
-source /usr/share/autojump/autojump.zsh
 
 function cd {
     builtin cd $@
@@ -37,10 +39,19 @@ if [ -f ~/.last_dir ]
     then cd `cat ~/.last_dir`
 fi
 
+function use-monitor {
+    xrandr --output eDP1 --off --output DP1 --auto --primary
+    xrdb -merge ~/.Xresources.monitor
+}
+
+function use-laptop {
+    xrandr --output eDP1 --auto --primary --output DP1 --off
+    xrdb -merge ~/.Xresources.laptop
+}
+
 alias ls="ls -l"
-alias t="cd ~/Dropbox/Notes && nvim t.md"
+alias t="cd ~/Dropbox/Notes && nvim todo.taskpaper"
 alias tma="tmux attach -d"
-alias nombom='echo "\n (╯°□°）╯︵ ┻━┻ \n" && npm cache clear && bower cache clean && rm -rf node_modules bower_components && npm install && bower install'
 alias b="bundle exec"
 alias m="python manage.py"
 alias e="$EDITOR"

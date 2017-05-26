@@ -34,7 +34,7 @@ Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
 Plug 'lervag/vimtex', { 'for': 'tex' }
 Plug 'Raimondi/delimitMate'
-Plug 'editorconfig/editorconfig-vim'
+" Plug 'editorconfig/editorconfig-vim'
 Plug 'reedes/vim-pencil'
 Plug 'junegunn/goyo.vim'
 Plug 'chriskempson/base16-vim'
@@ -46,7 +46,7 @@ call plug#end()
 
 set nowrap
 set number
-set foldmethod=expr
+set foldmethod=indent
 set tabstop=8 softtabstop=0 expandtab shiftwidth=2 smarttab
 set laststatus=1
 

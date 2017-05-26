@@ -166,14 +166,17 @@ new_window pixel 1
 
 exec --no-startup-id feh --bg-fill ~/Downloads/wp.jpg
 
-bindsym XF86AudioRaiseVolume exec --no-startup-id amixer set Master 5%+
-bindsym XF86AudioLowerVolume exec --no-startup-id amixer set Master 5%-
+bindsym XF86AudioRaiseVolume exec --no-startup-id amixer set Master 4%+
+bindsym XF86AudioLowerVolume exec --no-startup-id amixer set Master 4%-
 bindsym XF86AudioMute exec --no-startup-id amixer set Master toggle
 bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -inc 5
 bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -dec 5
 bindsym XF86AudioPlay exec --no-startup-id mpc toggle
 bindsym XF86AudioPrev exec --no-startup-id mpc prev
 bindsym XF86AudioNext exec --no-startup-id mpc next
+bindsym F11 exec --no-startup-id mpc toggle
+bindsym F10 exec --no-startup-id mpc prev
+bindsym F12 exec --no-startup-id mpc next
 bindsym $mod+b exec google-chrome
 bindsym $mod+p exec zathura
 bindsym $mod+i exec passmenu
