@@ -1,6 +1,4 @@
-! vim: set filetype=xdefaults :
-
-URxvt.font: xft:iosevka:regular:size=9
+URxvt.font: xft:Iosevka:regular:size=12
 URxvt.scrollBar: false
 URxvt.urgentOnBell: true
 URxvt.perl-ext: default,matcher,selection-to-clipboard
@@ -11,12 +9,16 @@ URxvt.geometry: 110x30
 URxvt.matcher.rend.0: Uline
 URxvt.colorUL: base05
 
-Xft.dpi: 144
+Xft.dpi: 120
+Xft.autohint: 0
 Xft.lcdfilter: lcddefault
 Xft.hintstyle: hintslight
-Xft.hinting: true
-Xft.antialias: true
+Xft.hinting: 1
+Xft.antialias: 1j
 Xft.rgba: rgb
+
+! Base16 Unikitty Dark
+! Scheme: Josh W Lewis (@joshwlewis)
 
 #define base00 #2e2a31
 #define base01 #4a464d
@@ -36,11 +38,7 @@ Xft.rgba: rgb
 #define base0F #c720ca
 
 *.foreground:   base05
-#ifdef background_opacity
-*.background:   [background_opacity]base00
-#else
 *.background:   base00
-#endif
 *.cursorColor:  base05
 
 *.color0:       base00
@@ -61,295 +59,6 @@ Xft.rgba: rgb
 *.color14:      base0F
 *.color15:      base07
 
-! Vimbrant Colors
+rofi.color-window: base00, base01
+rofi.color-normal: base00,  base05,  base00,  base05,  base00
 
-!urxvt*cursorColor:      #fd971f
-
-!*foreground:#a0a0a0
-!*background:#282c2e
-
-!black
-!*color0:    #1b1d1e
-!*color8:    #505354
-!red
-!*color1:    #f92672
-!*color9:    #ff5995
-!green
-!*color2:    #82b414
-!*color10:   #b6e354
-!yellow
-!*color3:    #fd971f
-!*color11:   #feed6c
-!blue
-!*color4:    #56c2d6
-!*color12:   #8cedff
-!magenta
-!*color5:    #8c54fe
-!*color13:   #9e6ffe
-!cyan
-!*color6:    #465457
-!*color14:   #899ca1
-!*color6:    #56676b
-!*color14:   #899ca1
-!white
-!*color7:    #ccccc6
-!*color15:   #f8f8f2
-!*color7:    #bfbfba
-!*color15:   #ebebe5
-!*color7:    #aaaaaa
-!*color15:   #ffffff
-
-! My Colors
-
-!*foreground: #e5e5e5
-!*background: #0d0d0d
-
-! Artur Colors
-
-!black
-!*color0: #262729
-!*color8: #554444 
-!*color0: #3d352a
-!*color8: #554444
-
-!red
-!*color1: #cd5c5c
-!*color9: #cc5533
-
-!green
-!*color2: #86af80
-!*color10: #88aa22
-
-!yellow
-!*color3: #e8ae5b
-!*color11: #ffa75d
-
-!blue
-!*color4: #6495ed
-!*color12: #87ceeb
-
-!magenta
-!*color5: #deb887
-!*color13: #996600
-
-!cyan
-!*color6: #b0c4de
-!*color14: #b0c4de
-
-!white
-!*color7: #bbaa99
-!*color15: #ddccbb
-
-
-! Tater Colors
-
-!black
-!*color0: #1C1C1C
-!*color8: #4d4d4d
-
-!red
-!*color1: #D81860
-!*color9: #F00060
-
-!green
-!*color2: #B7CE42
-!*color10: #BDE077
-
-!yellow
-!*color3: #FEA63C
-!*color11: #FFE863
-
-!blue
-!*color4: #66AABB
-!*color12: #AACCBB
-
-!magenta
-!*color5: #B7416E
-!*color13: #BB4466
-
-!cyan
-!*color6: #5E7175
-!*color14: #A3BABF
-
-!white
-!*color7: #DDEEDD
-!*color15: #6C887A
-
-
-! Zenburn Colors
-
-!*background:  #3f3f3f
-!*foreground:  #dcdccc
-
-!black
-!*color0:      #3f3f3f
-!*color0:      #1E2320
-!*color8:      #709080
-
-!red
-!*color1:      #705050
-!*color9:      #dca3a3
-
-!green
-!*color2:      #60b48a
-!*color10:     #c3bf9f
-
-!yellow
-!*color3:      #dfaf8f
-!*color11:     #f0dfaf
-
-!blue
-!*color4:      #506070
-!*color12:     #94bff3
-
-!magenta
-!*color5:      #dc8cc3
-!*color13:     #ec93d3
-
-!cyan
-!*color6:      #8cd0d3
-!*color14:     #93e0e3
-
-!white
-!*color7:      #dcdccc
-!*color15:     #ffffff
-
-
-! Thayer Colors
-
-!black
-!*color0: #1B1D1E
-!*color8: #505354
-!*color0: #262729
-!*color8: #554444
- 
-!red
-!*color1: #F92672
-!*color9: #FF669D
-
-!green
-!*color2: #A6E22E
-!*color10: #BEED5F
-
-!yellow
-!*color3: #FD971F
-!*color11: #E6DB74
-
-!blue
-!*color4: #66D9EF
-!*color12: #66D9EF
-
-!magenta
-!*color5: #9E6FFE
-!*color13: #9E6FFE
-
-!cyan
-!*color6: #5E7175
-!*color14: #A3BABF
-
-!white
-!*color7: #CCCCC6
-!*color15: #F8F8F2
-
-
-! Justin Colors
-
-!black
-!*color0: #242424
-!*color8: #cdb5cd
- 
-!red
-!*color1: #bf7979
-!*color9: #f4a45f
- 
-!green
-!*color2: #97b26b
-!*color10: #c5f779
- 
-!yellow
-!*color3: #cdcda1
-!*color11: #ffffaf
- 
-!blue
-!*color4: #86a2be
-!*color12: #98afd9
- 
-!magenta
-!*color5: #d9b798
-!*color13: #d7d998
- 
-!cyan
-!*color6: #a1b5cd
-!*color14: #a1b5cd
- 
-!white
-!*color7: #ffffff
-!*color15: #dedede
-
-! molokai inspired colors
-
-!black
-!*color0:    #1b1d1e
-!*color8:    #505354
-
-!red
-!*color1:    #f92672
-!*color9:    #ff5995
-
-!green
-!*color2:    #82b414
-!*color10:   #b6e354
-
-!yellow
-!*color3:    #fd971f
-!*color11:   #feed6c
-
-!blue
-!*color4:    #56c2d6
-!*color12:   #8cedff
-
-!magenta
-!*color5:    #8c54fe
-!*color13:   #9e6ffe
-
-!cyan
-!*color6:    #465457
-!*color14:   #899ca1
-
-!white
-!*color7:    #ccccc6
-!*color15:   #f8f8f2
-
-! jwr dark
-
-!black
-!*color0:  #333333
-!*color8:  #3D3D3D
-
-!red
-!*color1:  #8C4665
-!*color9:  #BF4D80
-
-!green
-!*color2:  #287373
-!*color10: #53A6A6
-
-!yellow
-!*color3:  #7C7C99
-!*color11: #9E9ECB
-
-!blue
-!*color4:  #395573
-!*color12: #477AB3
-
-!magenta
-!*color5:  #5E468C
-!*color13: #7E62B3
-
-!cyan
-!*color6:  #31658C
-!*color14: #6096BF
-
-!white
-!*color7:  #899CA1
-!*color15: #C0C0C0

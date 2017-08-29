@@ -7,15 +7,19 @@ export PATH="/usr/local/bin:$PATH"
 
 export PATH="$HOME/.local/bin:$PATH"
 
-export PATH="/home/chris/.nvm/versions/node/v6.10.1/bin:$PATH"
-export NVM_DIR=~/.nvm
+export PATH="$HOME/.nvm/versions/node/v6.11.0/bin:$PATH"
+export PATH="$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+export NVM_DIR="$HOME/.nvm"
+
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+export PATH="$HOME/.cargo/bin:$PATH"
 
 source /usr/share/autojump/autojump.zsh
 
-# export PATH="/usr/local/texlive/2016/bin/x86_64-darwin:$PATH"
+eval "$(rbenv init -)"
 
-# export PATH="$(yarn global bin):$PATH"
+# export PATH=/usr/local/texlive/2016/bin/x86_64-darwin:$PATH
 
 # export HOMEBREW_GITHUB_API_TOKEN="fa9e409b28c78229a7e0656eb0b2ed23268b3de9"
 
@@ -25,10 +29,10 @@ source /usr/share/autojump/autojump.zsh
 # if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
 # if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
 
-# export WORKON_HOME=$HOME/.virtualenvs
-# export PROJECT_HOME=$HOME/Dev
-# export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
-# source $HOME/.local/bin/virtualenvwrapper.sh
+export WORKON_HOME=$HOME/.virtualenvs
+export PROJECT_HOME=$HOME/Dev
+export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+source $HOME/.local/bin/virtualenvwrapper.sh
 
 function cd {
     builtin cd $@
@@ -39,22 +43,16 @@ if [ -f ~/.last_dir ]
     then cd `cat ~/.last_dir`
 fi
 
-function use-monitor {
-    xrandr --output eDP1 --off --output DP1 --auto --primary
-    xrdb -merge ~/.Xresources.monitor
-}
-
-function use-laptop {
-    xrandr --output eDP1 --auto --primary --output DP1 --off
-    xrdb -merge ~/.Xresources.laptop
-}
-
 alias ls="ls -l"
-alias t="cd ~/Dropbox/Notes && nvim todo.taskpaper"
+alias t="cd ~/Dropbox/Notes && nvim t.taskpaper"
+alias x="xrandr --output eDP1 --auto --primary --output DP1 --off"
+alias y="xrandr --output eDP1 --off --output DP1 --auto --primary"
+alias z="xrandr --output DP1 --auto "
 alias tma="tmux attach -d"
 alias b="bundle exec"
 alias m="python manage.py"
 alias e="$EDITOR"
+alias f="ranger"
 alias g='git'
 alias gst='git status'
 alias gp='git pull'
