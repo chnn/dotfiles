@@ -23,9 +23,9 @@ battery all {
         format = "%status %percentage"
         integer_battery_capacity = true
         hide_seconds = true
-        status_bat = "Battery"
-        status_chr = "⚡"
-        status_full = "Battery"
+        status_bat = ""
+        status_chr = ""
+        status_full = ""
 }
 
 tztime local {
@@ -33,12 +33,12 @@ tztime local {
 }
 
 load {
-        format = "Load %1min"
+        format = "%1min"
 }
 
 volume master {
-        format = "Volume %volume"
-        format_muted = "Volume Muted"
+        format = "%volume"
+        format_muted = "Muted"
         device = "default"
         mixer = "Master"
         mixer_idx = 0

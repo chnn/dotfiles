@@ -2,7 +2,7 @@ URxvt.font: xft:Iosevka:regular:size=12
 URxvt.scrollBar: false
 URxvt.urgentOnBell: true
 URxvt.perl-ext: default,matcher,selection-to-clipboard
-URxvt.urlLauncher: /usr/bin/chromium
+URxvt.urlLauncher: /home/chris/.local/bin/firefox
 URxvt.letterSpace: -1
 URxvt.matcher.button:  1 
 URxvt.geometry: 110x30
@@ -17,28 +17,32 @@ Xft.hinting: 1
 Xft.antialias: 1j
 Xft.rgba: rgb
 
-! Base16 Unikitty Dark
-! Scheme: Josh W Lewis (@joshwlewis)
+! Base16 Tomorrow Night
+! Scheme: Chris Kempson (http://chriskempson.com)
 
-#define base00 #2e2a31
-#define base01 #4a464d
-#define base02 #666369
-#define base03 #838085
-#define base04 #9f9da2
-#define base05 #bcbabe
-#define base06 #d8d7da
-#define base07 #f5f4f7
-#define base08 #d8137f
-#define base09 #d65407
-#define base0A #dc8a0e
-#define base0B #17ad98
-#define base0C #149bda
-#define base0D #796af5
-#define base0E #bb60ea
-#define base0F #c720ca
+#define base00 #1d1f21
+#define base01 #282a2e
+#define base02 #373b41
+#define base03 #969896
+#define base04 #b4b7b4
+#define base05 #c5c8c6
+#define base06 #e0e0e0
+#define base07 #ffffff
+#define base08 #cc6666
+#define base09 #de935f
+#define base0A #f0c674
+#define base0B #b5bd68
+#define base0C #8abeb7
+#define base0D #81a2be
+#define base0E #b294bb
+#define base0F #a3685a
 
 *.foreground:   base05
+#ifdef background_opacity
+*.background:   [background_opacity]base00
+#else
 *.background:   base00
+#endif
 *.cursorColor:  base05
 
 *.color0:       base00
@@ -58,6 +62,7 @@ Xft.rgba: rgb
 *.color13:      base06
 *.color14:      base0F
 *.color15:      base07
+
 
 rofi.color-window: base00, base01
 rofi.color-normal: base00,  base05,  base00,  base05,  base00

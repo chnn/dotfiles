@@ -1,23 +1,22 @@
 bindkey -e
 
 export TERM="xterm-256color"
-export EDITOR="nvim"
+export EDITOR="vim"
 export SHELL="/bin/zsh"
-export PATH="/usr/local/bin:$PATH"
-
-export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
 
 export PATH="$HOME/.nvm/versions/node/v6.11.0/bin:$PATH"
 export PATH="$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export NVM_DIR="$HOME/.nvm"
-
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
 export PATH="$HOME/.cargo/bin:$PATH"
 
 source /usr/share/autojump/autojump.zsh
 
-eval "$(rbenv init -)"
+# source $(pew shell_config)
+
+# eval "$(rbenv init -)"
 
 # export PATH=/usr/local/texlive/2016/bin/x86_64-darwin:$PATH
 
@@ -26,13 +25,16 @@ eval "$(rbenv init -)"
 # export GOPATH=$HOME/Dev/go
 # export PATH="$GOPATH/bin:$GOBIN:$PATH"
 
-# if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
-# if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+if command -v pyenv 1>/dev/null 2>&1; then
+    eval "$(pyenv init -)"
+fi
 
-export WORKON_HOME=$HOME/.virtualenvs
-export PROJECT_HOME=$HOME/Dev
-export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
-source $HOME/.local/bin/virtualenvwrapper.sh
+# export WORKON_HOME=$HOME/.virtualenvs
+# export PROJECT_HOME=$HOME/Dev
+# export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+# source $HOME/.local/bin/virtualenvwrapper.sh
 
 function cd {
     builtin cd $@
@@ -44,7 +46,7 @@ if [ -f ~/.last_dir ]
 fi
 
 alias ls="ls -l"
-alias t="cd ~/Dropbox/Notes && nvim t.taskpaper"
+alias t="cd ~/Dropbox/Notes && $EDITOR t.taskpaper"
 alias x="xrandr --output eDP1 --auto --primary --output DP1 --off"
 alias y="xrandr --output eDP1 --off --output DP1 --auto --primary"
 alias z="xrandr --output DP1 --auto "

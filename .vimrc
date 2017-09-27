@@ -1,6 +1,7 @@
 call plug#begin('~/.vim/plugged')
 
 " Our lord and savior
+Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-surround'
@@ -13,15 +14,22 @@ Plug 'tpope/vim-markdown'
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'othree/html5.vim'
-Plug 'groenewege/vim-less', { 'for': 'less' }
 Plug 'kien/ctrlp.vim'
-Plug 'Jelera/vim-javascript-syntax'
-Plug 'mustache/vim-mustache-handlebars'
-Plug 'ap/vim-css-color'
 Plug 'neomake/neomake'
 Plug 'rking/ag.vim'
 Plug 'Valloric/YouCompleteMe'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+Plug 'reedes/vim-pencil'
+Plug 'junegunn/goyo.vim'
+Plug 'chriskempson/base16-vim'
+Plug 'altercation/vim-colors-solarized'
+Plug 'godlygeek/tabular'
+Plug 'mustache/vim-mustache-handlebars'
+Plug 'ap/vim-css-color'
+Plug 'Jelera/vim-javascript-syntax', { 'for': 'javascript' }
+Plug 'othree/html5.vim', { 'for': 'html' }
+Plug 'groenewege/vim-less', { 'for': 'less' }
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 Plug 'racer-rust/vim-racer', { 'for': 'rust' }
 Plug 'raichoo/haskell-vim', { 'for': 'haskell' }
@@ -32,26 +40,17 @@ Plug 'tpope/vim-sexp-mappings-for-regular-people', { 'for': 'clojure' }
 Plug 'guns/vim-sexp', { 'for': 'clojure' }
 Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
-Plug 'lervag/vimtex', { 'for': 'tex' }
-" Plug 'Raimondi/delimitMate'
-" Plug 'editorconfig/editorconfig-vim'
-Plug 'reedes/vim-pencil'
-Plug 'junegunn/goyo.vim'
-Plug 'chriskempson/base16-vim'
-Plug 'altercation/vim-colors-solarized'
-Plug 'godlygeek/tabular'
+Plug 'lervag/vimtex'
 Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
 
 call plug#end()
 
 set nowrap
 set number
-set foldmethod=indent
-set tabstop=8 softtabstop=0 expandtab shiftwidth=2 smarttab
-set laststatus=1
+" set foldmethod=indent
 
 set background=dark
-colorscheme base16-unikitty-dark
+colorscheme base16-tomorrow-night
 
 " vim-airline
 let g:airline_theme='base16'
@@ -92,26 +91,36 @@ let g:neomake_warning_sign = {
 
 " VimTex options
 let g:vimtex_latexmk_options = '-pdf -shell-escape'
+let g:vimtex_compiler_latexmk = {                                                          
+\ 'backend': 'jobs',
+\ 'background' : 1,                                                                        
+\ 'build_dir' : '',                                                                        
+\ 'callback' : 1,                                                                          
+\ 'continuous' : 1,                                                                        
+\ 'executable' : 'latexmk',                                                                
+\ 'options' : [                                                                            
+\   '-pdf',                                                                                
+\   '-verbose',                                                                            
+\   '-file-line-error',                                                                    
+\   '-synctex=0',                                                                          
+\   '-interaction=nonstopmode',                                                            
+\   '-shell-escape',
+\ ],                                                                                       
+\}  
 let g:vimtex_indent_enabled = 0
 let g:vimtex_index_show_help = 0
 let g:vimtex_toc_show_numbers = 0
 let g:vimtex_quickfix_mode = 1
 let g:vimtex_quickfix_open_on_warning = 0
 let g:vimtex_view_method="zathura"
-
-" Workaround to enable clientserver support (for the vimtex quickfix window).
-" This requires the `neovim-remote` package from PyPi.
-let g:vimtex_latexmk_progname = 'nvr'  
+if !exists('g:ycm_semantic_triggers')                                                                                        
+  let g:ycm_semantic_triggers = {}                                                                                           
+endif                                                                                                                        
+let g:ycm_semantic_triggers.tex = g:vimtex#re#youcompleteme 
 
 " vim-pencil options
 let g:pencil#textwidth = 79
 let g:pencil#conceallevel = 0
-
-" For using neovim pip package in virtualenvs
-let g:python_host_prog = '/usr/local/bin/python'
-
-" Exit NeoVim terminal mode with esc key
-tnoremap <Esc> <C-\><C-n>
 
 " I just want to be a wizard
 function! Incr()
@@ -126,6 +135,15 @@ vnoremap <C-i> :call Incr()<CR>
 
 " YCM
 let g:ycm_python_binary_path = 'python'
+let g:ycm_min_num_of_chars_for_completion = 3
+let g:ycm_max_num_candidates = 10 
+let g:ycm_max_num_identifier_candidates = 10 
+let g:ycm_key_list_select_completion=[]
+let g:ycm_key_list_previous_completion=[]
+
+" UltiSnips
+let g:UltiSnipsJumpForwardTrigger = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 
 nnoremap <leader>d :YcmCompleter GoToDefinition<CR>
 nnoremap <leader>r :YcmCompleter GoToReferences<CR>
@@ -135,5 +153,5 @@ nnoremap <leader>n :noh<CR>
 nnoremap <C-t> :CtrlP<CR>
 nnoremap <F2> :set nonumber!<CR>:set foldcolumn=0<CR>
 nnoremap <leader>w :SoftPencil<CR>:Goyo<CR>
-nnoremap <leader>lw :VimtexCompile<CR>:SoftPencil<CR>
+nnoremap <leader>lw :set laststatus=1<CR>:VimtexCompile<CR>:SoftPencil<CR>
 vnoremap <C-a> :Tab /&<CR> :Tab /\\\\<CR>
