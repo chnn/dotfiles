@@ -1,60 +1,46 @@
 bindkey -e
 
 export TERM="xterm-256color"
-export EDITOR="vim"
+export EDITOR="nvim"
+export NOTES="$HOME/Documents/Notes"
 export SHELL="/bin/zsh"
 export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
+export GPG_TTY=$(tty)
 
-export PATH="$HOME/.nvm/versions/node/v6.11.0/bin:$PATH"
-export PATH="$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+# Node
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -f /usr/local/opt/nvm/nvm.sh ] && . /usr/local/opt/nvm/nvm.sh
 
+# Rust
 export PATH="$HOME/.cargo/bin:$PATH"
 
-source /usr/share/autojump/autojump.zsh
+# TeX
+export PATH="/Library/TeX/texbin:$PATH"
 
-# source $(pew shell_config)
-
-# eval "$(rbenv init -)"
-
-# export PATH=/usr/local/texlive/2016/bin/x86_64-darwin:$PATH
-
-# export HOMEBREW_GITHUB_API_TOKEN="fa9e409b28c78229a7e0656eb0b2ed23268b3de9"
-
-# export GOPATH=$HOME/Dev/go
-# export PATH="$GOPATH/bin:$GOBIN:$PATH"
-
+# Python
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 if command -v pyenv 1>/dev/null 2>&1; then
     eval "$(pyenv init -)"
 fi
 
-# export WORKON_HOME=$HOME/.virtualenvs
-# export PROJECT_HOME=$HOME/Dev
-# export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
-# source $HOME/.local/bin/virtualenvwrapper.sh
+# Go
+export GOPATH="$HOME/Dev/Go"
+export GOBIN="$GOPATH/bin"
+export PATH="$GOBIN:$PATH"
 
-function cd {
-    builtin cd $@
-    pwd > ~/.last_dir
-}
+# autojump
+[ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
 
-if [ -f ~/.last_dir ]
-    then cd `cat ~/.last_dir`
-fi
-
-alias ls="ls -l"
-alias t="cd ~/Dropbox/Notes && $EDITOR t.taskpaper"
-alias x="xrandr --output eDP1 --auto --primary --output DP1 --off"
-alias y="xrandr --output eDP1 --off --output DP1 --auto --primary"
-alias z="xrandr --output DP1 --auto "
-alias tma="tmux attach -d"
+alias ls="ls -l -h"
+alias n="cd $NOTES && $EDITOR"
+alias t="cd $NOTES && $EDITOR t.taskpaper"
 alias b="bundle exec"
 alias m="python manage.py"
+alias pe="pipenv run"
 alias e="$EDITOR"
 alias f="ranger"
+alias p="pass -c"
 alias g='git'
 alias gst='git status'
 alias gp='git pull'
@@ -70,6 +56,7 @@ alias glog='git log --oneline --decorate --color --graph'
 alias gss='git status -s'
 alias ga='git add'
 alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
+alias gmc='git log --pretty=format: --name-only | sort | uniq -c | sort -rg | head -10'
 
 HISTFILE=~/.zsh_history
 HISTSIZE=100000
@@ -79,4 +66,4 @@ setopt INC_APPEND_HISTORY  # append history incrementally
 setopt SHARE_HISTORY  # share history
 autoload -U compinit; compinit -i
 
-PROMPT="%~ $ "
+PROMPT="%2~ $ "
