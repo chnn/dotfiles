@@ -1,15 +1,10 @@
 bindkey -e
 
-export TERM="xterm-256color"
 export EDITOR="nvim"
 export NOTES="$HOME/Documents/Notes"
 export SHELL="/bin/zsh"
 export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
 export GPG_TTY=$(tty)
-
-# Node
-export NVM_DIR="$HOME/.nvm"
-[ -f /usr/local/opt/nvm/nvm.sh ] && . /usr/local/opt/nvm/nvm.sh
 
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
@@ -24,17 +19,32 @@ if command -v pyenv 1>/dev/null 2>&1; then
     eval "$(pyenv init -)"
 fi
 
+# Ansible
+export PATH="/usr/local/opt/ansible@1.9/bin:$PATH"
+
 # Go
+[[ -s "/Users/chris/.gvm/scripts/gvm" ]] && source "/Users/chris/.gvm/scripts/gvm"
 export GOPATH="$HOME/Dev/Go"
 export GOBIN="$GOPATH/bin"
 export PATH="$GOBIN:$PATH"
 
-# autojump
-[ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
+# z
+[ -f /usr/local/etc/profile.d/autojump.sh ] && source /usr/local/etc/profile.d/autojump.sh
+
+# FZF
+export FZF_DEFAULT_COMMAND='rg --files --hidden'
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+j() {
+  [ $# -gt 0 ] && cd $(autojump "$*") && return
+  local dir
+  dir="$(cat ~/Library/autojump/autojump.txt | sort -nr | awk '{print $2}' | fzf +s)" && cd "${dir}" || return 1
+}
+
+PROMPT="%2~ $ "
 
 alias ls="ls -l -h"
-alias n="cd $NOTES && $EDITOR"
-alias t="cd $NOTES && $EDITOR t.taskpaper"
+alias t="cd $NOTES && $EDITOR t.md"
 alias b="bundle exec"
 alias m="python manage.py"
 alias pe="pipenv run"
@@ -61,9 +71,10 @@ alias gmc='git log --pretty=format: --name-only | sort | uniq -c | sort -rg | he
 HISTFILE=~/.zsh_history
 HISTSIZE=100000
 SAVEHIST=100000
-setopt APPEND_HISTORY  # append history to history file as opposed to overwriting it
-setopt INC_APPEND_HISTORY  # append history incrementally
-setopt SHARE_HISTORY  # share history
-autoload -U compinit; compinit -i
+setopt APPEND_HISTORY
+setopt INC_APPEND_HISTORY
+setopt SHARE_HISTORY
 
-PROMPT="%2~ $ "
+autoload -Uz compinit
+compinit
+zstyle ':completion:*' menu select

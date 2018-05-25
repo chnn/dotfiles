@@ -5,12 +5,12 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-vinegar'
 
-Plug 'kien/ctrlp.vim'
+Plug 'ctrlpvim/ctrlp.vim'
 Plug 'jremmen/vim-ripgrep'
 Plug 'Valloric/YouCompleteMe'
 Plug 'SirVer/ultisnips'
@@ -19,12 +19,15 @@ Plug 'honza/vim-snippets'
 Plug 'reedes/vim-pencil'
 Plug 'junegunn/goyo.vim'
 Plug 'ajh17/Spacegray.vim'
+Plug 'altercation/vim-colors-solarized'
+Plug 'chriskempson/base16-vim'
 Plug 'godlygeek/tabular'
+Plug 'vitaly/vim-gitignore'
 Plug 'mustache/vim-mustache-handlebars'
 Plug 'ap/vim-css-color'
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 Plug 'mxw/vim-jsx', { 'for': 'javascript' }
-Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
+Plug 'leafgarland/typescript-vim'
 Plug 'othree/html5.vim', { 'for': 'html' }
 Plug 'groenewege/vim-less', { 'for': 'less' }
 Plug 'lervag/vimtex'
@@ -54,12 +57,12 @@ set incsearch
 set laststatus=1
 set ruler
 set wildmenu
-set background=dark
 
-colorscheme spacegray
+set background=light
+colorscheme base16-solarized-light
 
 " Keybindings
-nnoremap <leader>d :YcmCompleter GoTo<CR>
+nnoremap <leader>d :YcmCompleter GoToDefinition<CR>
 nnoremap <leader>r :YcmCompleter GoToReferences<CR>
 nnoremap <leader>k :YcmCompleter GetDoc<CR>
 nnoremap <leader>w :SoftPencil<CR>:Goyo<CR>
@@ -92,31 +95,15 @@ endfunction
 
 vnoremap <C-i> :call Incr()<CR>
 
-" CtrlP
-set wildignore+=*/build/**
-set wildignore+=*/tmp/**
-set wildignore+=*/dist/**
-set wildignore+=*/bower_components/**
-set wildignore+=*/node_modules/**
-set wildignore+=*/docs/**
-set wildignore+=*/staticfiles/**
-set wildignore+=*.pyc
-set wildignore+=*/_site/**
-set wildignore+=*.bbl
-set wildignore+=*.blg
-set wildignore+=*.bcf
-set wildignore+=*.fdb_latexmk
-set wildignore+=*.fls
-set wildignore+=*.log
-set wildignore+=*.out
-set wildignore+=*.run.xml
-set wildignore+=*.aux
-set wildignore+=*.synctex.gz
+let g:ctrlp_working_path_mode = 'c'
 
 " Ale
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_enter = 0
-let g:ale_fixers = {'javascript': ['eslint']}
+let g:ale_fix_on_save = 1
+let g:ale_javascript_prettier_use_local_config = 1
+let g:ale_fixers = {'typescript': ['tslint'], 'javascript': ['eslint', 'prettier'], 'go': ['goimports']}
+let g:ale_linters = {'typescript': ['tslint'], 'javascript': ['eslint', 'prettier'], 'python': ['flake8'], 'go': ['gometalinter']}
 
 " Rust
 let g:rustfmt_autosave = 0
@@ -133,12 +120,13 @@ let g:jsx_ext_required = 0
 
 " YCM
 let g:ycm_python_binary_path = 'python'
-let g:ycm_min_num_of_chars_for_completion = 3
+let g:ycm_min_num_of_chars_for_completion = 4
 let g:ycm_max_num_candidates = 10 
 let g:ycm_max_num_identifier_candidates = 10 
 let g:ycm_key_list_select_completion = []
 let g:ycm_key_list_previous_completion = []
 let g:ycm_autoclose_preview_window_after_completion = 1
+let g:ycm_global_ycm_extra_conf = "~/Dev/.ycm_extra_conf.py"
 
 " UltiSnips
 let g:UltiSnipsJumpForwardTrigger = "<tab>"
@@ -147,6 +135,13 @@ let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 " vim-pencil
 let g:pencil#textwidth = 79
 let g:pencil#conceallevel = 0
+
+" CtrlP
+set wildignore+=*/node_modules/**
+set wildignore+=*/_site/**
+set wildignore+=*/tmp/**
+set wildignore+=*/dist/**
+set wildignore+=*/build/**
 
 " VimTex
 let g:vimtex_latexmk_options = '-pdf -shell-escape'
