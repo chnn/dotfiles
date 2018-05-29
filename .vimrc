@@ -54,6 +54,9 @@ colorscheme base16-solarized-light
 nnoremap <leader>d :YcmCompleter GoToDefinition<CR>
 nnoremap <leader>r :YcmCompleter GoToReferences<CR>
 nnoremap <leader>k :YcmCompleter GetDoc<CR>
+nnoremap gd :YcmCompleter GoToDefinition<CR>
+nnoremap gr :YcmCompleter GoToReferences<CR>
+nnoremap gk :YcmCompleter GetDoc<CR>
 nnoremap <leader>w :SoftPencil<CR>:Goyo<CR>
 nnoremap <leader>lw :VimtexCompile<CR>:SoftPencil<CR>
 vnoremap <C-a> :Tab /&<CR> :Tab /\\\\<CR>
