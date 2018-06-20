@@ -11,8 +11,6 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-vinegar'
 
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 Plug 'jremmen/vim-ripgrep'
 Plug 'Valloric/YouCompleteMe'
 Plug 'w0rp/ale'
@@ -21,6 +19,7 @@ Plug 'junegunn/goyo.vim'
 Plug 'chriskempson/base16-vim'
 Plug 'godlygeek/tabular'
 Plug 'vitaly/vim-gitignore'
+Plug 'joukevandermaas/vim-ember-hbs' { 'for': 'handlebars' }
 Plug 'ap/vim-css-color', { 'for': 'css' }
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 Plug 'mxw/vim-jsx', { 'for': 'javascript' }
@@ -45,6 +44,7 @@ set smarttab
 set incsearch
 set laststatus=1
 set ruler
+set hlsearch
 set wildmenu
 
 set background=light
@@ -60,21 +60,19 @@ nnoremap gk :YcmCompleter GetDoc<CR>
 nnoremap <leader>w :SoftPencil<CR>:Goyo<CR>
 nnoremap <leader>lw :VimtexCompile<CR>:SoftPencil<CR>
 vnoremap <C-a> :Tab /&<CR> :Tab /\\\\<CR>
-tnoremap <ESC> <C-\><C-n><C-w><C-p>
-nnoremap <leader>t :terminal<CR>:set nonumber<CR>i
-nnoremap <leader>p :vsplit term://pipenv run ipython -i %<CR>:set nonumber<CR>i
+tnoremap <Esc> <C-W>N
+nnoremap <leader>t :terminal ++curwin<CR>
+nnoremap <leader>p :vsplit term://pipenv run ipython -i %
 vmap <F7> :w !pbcopy<CR><CR> 
 nmap <F8> <Plug>(ale_fix)
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 " Keep selected text selected when fixing indentation
 vnoremap < <gv
 vnoremap > >gv
 
 :command PandocPDF :!pandoc -o %:r.pdf %
-
-if maparg('<C-L>', 'n') ==# ''
-  nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
-endif
 
 function! Incr()
   let a = line('.') - line("'<")
@@ -84,13 +82,12 @@ function! Incr()
   endif
   normal `<
 endfunction
-
 vnoremap <C-i> :call Incr()<CR>
 
 " Ale
-let g:ale_lint_delay = 400
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_save = 1
 let g:ale_fix_on_save = 1
-let g:ale_javascript_prettier_use_local_config = 1
 let g:ale_fixers = {
 \   'typescript': ['tslint'],
 \   'javascript': ['eslint'],
@@ -111,7 +108,7 @@ let g:ale_rust_cargo_check_all_targets = 0
 
 " YCM
 let g:ycm_python_binary_path = 'python'
-let g:ycm_min_num_of_chars_for_completion = 4
+let g:ycm_min_num_of_chars_for_completion = 2
 let g:ycm_max_num_candidates = 10 
 let g:ycm_max_num_identifier_candidates = 10 
 let g:ycm_key_list_select_completion = []
@@ -122,11 +119,8 @@ let g:ycm_autoclose_preview_window_after_completion = 1
 let g:pencil#textwidth = 79
 let g:pencil#conceallevel = 0
 
-" vim-airline
-let g:airline_theme = 'base16'
-
 " CtrlP
-let g:ctrlp_working_path_mode = 'c'
+let g:ctrlp_working_path_mode = 'a'
 set wildignore+=*/node_modules/**
 set wildignore+=*/_site/**
 set wildignore+=*/tmp/**

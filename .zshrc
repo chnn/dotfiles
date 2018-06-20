@@ -9,9 +9,6 @@ export GPG_TTY=$(tty)
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
 
-# TeX
-export PATH="/Library/TeX/texbin:$PATH"
-
 # Python
 if command -v pyenv 1>/dev/null 2>&1; then
     export PYENV_ROOT="$HOME/.pyenv"
@@ -67,6 +64,7 @@ alias gss='git status -s'
 alias ga='git add'
 alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
 alias gmc='git log --pretty=format: --name-only | sort | uniq -c | sort -rg | head -10'
+alias hb='hub browse'
 
 HISTFILE=~/.zsh_history
 HISTSIZE=100000
