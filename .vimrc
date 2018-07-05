@@ -19,13 +19,12 @@ Plug 'junegunn/goyo.vim'
 Plug 'chriskempson/base16-vim'
 Plug 'godlygeek/tabular'
 Plug 'vitaly/vim-gitignore'
-Plug 'joukevandermaas/vim-ember-hbs' { 'for': 'handlebars' }
+Plug 'joukevandermaas/vim-ember-hbs', { 'for': 'handlebars' }
 Plug 'ap/vim-css-color', { 'for': 'css' }
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 Plug 'mxw/vim-jsx', { 'for': 'javascript' }
 Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
-Plug 'racer-rust/vim-racer', { 'for': 'rust' }
 Plug 'fatih/vim-go', { 'for': 'go' }
 
 call plug#end()
@@ -47,26 +46,18 @@ set ruler
 set hlsearch
 set wildmenu
 
-set background=light
-colorscheme base16-solarized-light
+set background=dark
+colorscheme base16-oceanicnext
 
 " Keybindings
-nnoremap <leader>d :YcmCompleter GoToDefinition<CR>
-nnoremap <leader>r :YcmCompleter GoToReferences<CR>
-nnoremap <leader>k :YcmCompleter GetDoc<CR>
-nnoremap gd :YcmCompleter GoToDefinition<CR>
-nnoremap gr :YcmCompleter GoToReferences<CR>
-nnoremap gk :YcmCompleter GetDoc<CR>
-nnoremap <leader>w :SoftPencil<CR>:Goyo<CR>
-nnoremap <leader>lw :VimtexCompile<CR>:SoftPencil<CR>
-vnoremap <C-a> :Tab /&<CR> :Tab /\\\\<CR>
-tnoremap <Esc> <C-W>N
-nnoremap <leader>t :terminal ++curwin<CR>
-nnoremap <leader>p :vsplit term://pipenv run ipython -i %
-vmap <F7> :w !pbcopy<CR><CR> 
-nmap <F8> <Plug>(ale_fix)
-nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-nmap <silent> <C-j> <Plug>(ale_next_wrap)
+nnoremap <silent> gd :YcmCompleter GoToDefinition<CR>
+nnoremap <silent> gr :YcmCompleter GoToReferences<CR>
+nnoremap <silent> gk :YcmCompleter GetDoc<CR>
+nnoremap <silent> <leader>w :SoftPencil<CR>:Goyo<CR>
+tnoremap <Esc> <C-\><C-n>
+nnoremap <silent> <leader>t :terminal<CR>
+vnoremap <silent> <F7> :w !pbcopy<CR><CR> 
+nnoremap <silent> <leader>r :Rg <C-R><C-W><CR>
 
 " Keep selected text selected when fixing indentation
 vnoremap < <gv
@@ -85,29 +76,27 @@ endfunction
 vnoremap <C-i> :call Incr()<CR>
 
 " Ale
-let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_text_changed = 'always'
 let g:ale_lint_on_save = 1
 let g:ale_fix_on_save = 1
+let g:ale_linters = {
+\   'typescript': ['tsserver'],
+\   'javascript': ['eslint'],
+\   'python': ['flake8'],
+\   'go': ['gometalinter']
+\}
 let g:ale_fixers = {
 \   'typescript': ['tslint'],
 \   'javascript': ['eslint'],
 \   'go': ['goimports']
 \}
-let g:ale_linters = {
-\   'typescript': ['tslint'],
-\   'javascript': ['eslint'],
-\   'python': ['flake8'],
-\   'go': ['gometalinter']
-\}
-
-" Rust
-let g:rustfmt_autosave = 0
-let g:racer_cmd = "~/.cargo/bin/racer"
-let g:racer_experimental_completer = 1
-let g:ale_rust_cargo_check_all_targets = 0
+nnoremap <silent> <F8> <Plug>(ale_fix)
+nnoremap <silent> <leader>d <Plug>(ale_detail)
+nnoremap <silent> <C-j> <Plug>(ale_next)
+nnoremap <silent> <C-k> <Plug>(ale_previous)
+hi SpellBad ctermbg=green ctermfg=white
 
 " YCM
-let g:ycm_python_binary_path = 'python'
 let g:ycm_min_num_of_chars_for_completion = 2
 let g:ycm_max_num_candidates = 10 
 let g:ycm_max_num_identifier_candidates = 10 
@@ -121,8 +110,7 @@ let g:pencil#conceallevel = 0
 
 " CtrlP
 let g:ctrlp_working_path_mode = 'a'
-set wildignore+=*/node_modules/**
-set wildignore+=*/_site/**
-set wildignore+=*/tmp/**
-set wildignore+=*/dist/**
 set wildignore+=*/build/**
+set wildignore+=*/tmp/**
+set wildignore+=*/node_modules/**
+set wildignore+=*/vendor/**

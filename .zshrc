@@ -1,6 +1,6 @@
 bindkey -e
 
-export EDITOR="vim"
+export EDITOR="nvim"
 export NOTES="$HOME/Documents/Notes"
 export SHELL="/bin/zsh"
 export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
@@ -52,6 +52,7 @@ alias g='git'
 alias gst='git status'
 alias gp='git pull'
 alias gc='git commit'
+alias gcf='git add -A && git commit -v'
 alias gco='git checkout'
 alias gb='git branch'
 alias gba='git branch -a'
