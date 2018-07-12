@@ -47,7 +47,7 @@ set hlsearch
 set wildmenu
 
 set background=dark
-colorscheme base16-oceanicnext
+colorscheme base16-material
 
 " Keybindings
 nnoremap <silent> gd :YcmCompleter GoToDefinition<CR>
@@ -77,7 +77,8 @@ vnoremap <C-i> :call Incr()<CR>
 
 " Ale
 let g:ale_lint_on_text_changed = 'always'
-let g:ale_lint_on_save = 1
+let g:ale_lint_delay = 400
+let g:ale_lint_on_save = 0
 let g:ale_fix_on_save = 1
 let g:ale_linters = {
 \   'typescript': ['tsserver'],
@@ -90,10 +91,10 @@ let g:ale_fixers = {
 \   'javascript': ['eslint'],
 \   'go': ['goimports']
 \}
-nnoremap <silent> <F8> <Plug>(ale_fix)
-nnoremap <silent> <leader>d <Plug>(ale_detail)
-nnoremap <silent> <C-j> <Plug>(ale_next)
-nnoremap <silent> <C-k> <Plug>(ale_previous)
+nmap <F8> <Plug>(ale_fix)
+nmap <leader>d <Plug>(ale_detail)
+nmap <C-j> <Plug>(ale_next)
+nmap <C-k> <Plug>(ale_previous)
 hi SpellBad ctermbg=green ctermfg=white
 
 " YCM
