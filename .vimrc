@@ -12,13 +12,15 @@ Plug 'tpope/vim-vinegar'
 
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'jremmen/vim-ripgrep'
-Plug 'Valloric/YouCompleteMe'
 Plug 'w0rp/ale'
 Plug 'reedes/vim-pencil'
 Plug 'junegunn/goyo.vim'
 Plug 'chriskempson/base16-vim'
 Plug 'godlygeek/tabular'
 Plug 'vitaly/vim-gitignore'
+Plug 'rizzatti/dash.vim'
+Plug 'Valloric/YouCompleteMe'
+Plug 'SirVer/ultisnips'
 Plug 'joukevandermaas/vim-ember-hbs', { 'for': 'handlebars' }
 Plug 'ap/vim-css-color', { 'for': 'css' }
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
@@ -53,11 +55,13 @@ colorscheme base16-material
 nnoremap <silent> gd :YcmCompleter GoToDefinition<CR>
 nnoremap <silent> gr :YcmCompleter GoToReferences<CR>
 nnoremap <silent> gk :YcmCompleter GetDoc<CR>
+nnoremap <silent> gh :YcmCompleter GetType<CR>
 nnoremap <silent> <leader>w :SoftPencil<CR>:Goyo<CR>
 tnoremap <Esc> <C-\><C-n>
 nnoremap <silent> <leader>t :terminal<CR>
 vnoremap <silent> <F7> :w !pbcopy<CR><CR> 
 nnoremap <silent> <leader>r :Rg <C-R><C-W><CR>
+vnoremap <silent> <leader>r "sy :Rg <C-R>s<CR>
 
 " Keep selected text selected when fixing indentation
 vnoremap < <gv
@@ -77,7 +81,7 @@ vnoremap <C-i> :call Incr()<CR>
 
 " Ale
 let g:ale_lint_on_text_changed = 'always'
-let g:ale_lint_delay = 400
+let g:ale_lint_delay = 300
 let g:ale_lint_on_save = 0
 let g:ale_fix_on_save = 1
 let g:ale_linters = {
@@ -99,8 +103,8 @@ hi SpellBad ctermbg=green ctermfg=white
 
 " YCM
 let g:ycm_min_num_of_chars_for_completion = 2
-let g:ycm_max_num_candidates = 10 
-let g:ycm_max_num_identifier_candidates = 10 
+let g:ycm_max_num_candidates = 10
+let g:ycm_max_num_identifier_candidates = 5
 let g:ycm_key_list_select_completion = []
 let g:ycm_key_list_previous_completion = []
 let g:ycm_autoclose_preview_window_after_completion = 1
@@ -115,3 +119,8 @@ set wildignore+=*/build/**
 set wildignore+=*/tmp/**
 set wildignore+=*/node_modules/**
 set wildignore+=*/vendor/**
+
+" UltiSnips
+let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim-snippets']
+let g:UltiSnipsJumpForwardTrigger = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"

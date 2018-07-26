@@ -1,0 +1,33 @@
+snippet sfc
+import React, {SFC} from 'react'
+
+interface Props {}
+
+const ${1:MyComponent}: SFC<Props> = (props) => {
+  return ${0: null}
+}
+
+export default $1
+endsnippet
+
+snippet pure
+import React, {PureComponent} from 'react'
+
+interface Props {}
+
+interface State {}
+
+class ${0:MyClass} extends PureComponent<Props, State> {
+  constructor(props) {
+    super(props)
+
+    this.state = {}
+  }
+
+  public render() {
+    return null
+  }
+}
+
+export default $0
+endsnippet
