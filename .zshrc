@@ -38,10 +38,15 @@ j() {
   dir="$(cat ~/Library/autojump/autojump.txt | sort -nr | awk '{print $2}' | fzf +s)" && cd "${dir}" || return 1
 }
 
+note() {
+  cd $NOTES
+  [ $# -gt 0 ] && $EDITOR "$*" && return
+  $EDITOR "$(fd . . | fzf)"
+}
+
 PROMPT="%2~ $ "
 
 alias ls="ls -l -h"
-alias t="cd $NOTES && $EDITOR t.md"
 alias b="bundle exec"
 alias bs="brew services"
 alias m="python manage.py"
@@ -49,7 +54,7 @@ alias y="yarn run"
 alias pe="pipenv run"
 alias e="$EDITOR"
 alias f="ranger"
-alias p="pass -c"
+alias bs="brew services"
 alias g='git'
 alias gst='git status'
 alias gp='git pull'
