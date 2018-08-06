@@ -38,10 +38,10 @@ j() {
   dir="$(cat ~/Library/autojump/autojump.txt | sort -nr | awk '{print $2}' | fzf +s)" && cd "${dir}" || return 1
 }
 
-note() {
+ns() {
   cd $NOTES
   [ $# -gt 0 ] && $EDITOR "$*" && return
-  $EDITOR "$(fd . . | fzf)"
+  $EDITOR "$(fd . . | fzf --reverse)"
 }
 
 PROMPT="%2~ $ "

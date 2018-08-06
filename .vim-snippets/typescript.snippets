@@ -1,10 +1,12 @@
 snippet sfc
 import React, {SFC} from 'react'
 
-interface Props {}
+interface Props {
+  ${0}
+}
 
 const ${1:MyComponent}: SFC<Props> = (props) => {
-  return ${0: null}
+  return null
 }
 
 export default $1
@@ -13,11 +15,13 @@ endsnippet
 snippet pure
 import React, {PureComponent} from 'react'
 
-interface Props {}
+interface Props {
+  ${0}
+}
 
 interface State {}
 
-class ${0:MyClass} extends PureComponent<Props, State> {
+class ${1:MyClass} extends PureComponent<Props, State> {
   constructor(props) {
     super(props)
 
@@ -29,5 +33,5 @@ class ${0:MyClass} extends PureComponent<Props, State> {
   }
 }
 
-export default $0
+export default $1
 endsnippet
