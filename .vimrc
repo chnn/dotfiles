@@ -12,6 +12,7 @@ Plug 'tpope/vim-vinegar'
 
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'jremmen/vim-ripgrep'
+Plug 'justinmk/vim-sneak'
 Plug 'w0rp/ale'
 Plug 'reedes/vim-pencil'
 Plug 'junegunn/goyo.vim'
@@ -42,20 +43,19 @@ set backspace=indent,eol,start
 set complete-=i
 set smarttab
 set incsearch
-set laststatus=1
+set laststatus=2
 set ruler
 set hlsearch
 set wildmenu
 
 set background=dark
-colorscheme base16-material
+colorscheme base16-oceanicnext
 
 " Keybindings
 inoremap <C-j> <Esc>
 nnoremap <silent> gd :YcmCompleter GoToDefinition<CR>
 nnoremap <silent> gr :YcmCompleter GoToReferences<CR>
 nnoremap <silent> gk :YcmCompleter GetDoc<CR>
-nnoremap <silent> gh :YcmCompleter GetType<CR>
 nnoremap <silent> <leader>w :SoftPencil<CR>:Goyo<CR>
 vnoremap <silent> <F7> :w !pbcopy<CR><CR> 
 nnoremap <silent> <leader>r :Rg <C-R><C-W><CR>
@@ -83,7 +83,7 @@ vnoremap <C-i> :call Incr()<CR>
 
 " Ale
 let g:ale_lint_on_text_changed = 'always'
-let g:ale_lint_delay = 300
+let g:ale_lint_delay = 400
 let g:ale_lint_on_save = 0
 let g:ale_fix_on_save = 1
 let g:ale_linters = {
@@ -99,9 +99,11 @@ let g:ale_fixers = {
 \}
 nmap <F8> <Plug>(ale_fix)
 nmap <leader>d <Plug>(ale_detail)
-nmap <C-j> <Plug>(ale_next)
-nmap <C-k> <Plug>(ale_previous)
-hi SpellBad ctermbg=green ctermfg=white
+nmap <C-j> <Plug>(ale_next_wrap)
+nmap <C-k> <Plug>(ale_previous_wrap)
+nmap gh <Plug>(ale_hover)
+hi SpellBad ctermbg=NONE ctermfg=NONE cterm=underline
+hi error ctermbg=10 ctermfg=1
 
 " YCM
 let g:ycm_min_num_of_chars_for_completion = 2
@@ -110,6 +112,7 @@ let g:ycm_max_num_identifier_candidates = 5
 let g:ycm_key_list_select_completion = []
 let g:ycm_key_list_previous_completion = []
 let g:ycm_autoclose_preview_window_after_completion = 1
+let g:ycm_show_diagnostics_ui = 0
 
 " vim-go
 let g:go_fmt_autosave = 0

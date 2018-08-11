@@ -35,3 +35,35 @@ class ${1:MyClass} extends PureComponent<Props, State> {
 
 export default $1
 endsnippet
+
+snippet test
+import React from 'react'
+import {shallow} from 'enzyme'
+
+import ${1:MyComponent} from './$1'
+
+describe('$1', () => {
+  test('it renders', () => {
+    const props = {}
+    const wrapper = shallow(<$1 {...props} />)
+$0
+    expect(wrapper).toBeTruthy()
+  })
+})
+endsnippet
+
+snippet testdeep
+import React from 'react'
+import {mount} from 'enzyme'
+
+import ${1:MyComponent} from './$1'
+
+describe('$1', () => {
+  test('it renders', () => {
+    const props = {}
+    const wrapper = mount(<$1 {...props} />)
+$0
+    expect(wrapper).toBeTruthy()
+  })
+})
+endsnippet
