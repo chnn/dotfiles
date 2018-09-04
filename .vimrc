@@ -22,10 +22,11 @@ Plug 'vitaly/vim-gitignore'
 Plug 'rizzatti/dash.vim'
 Plug 'Valloric/YouCompleteMe'
 Plug 'SirVer/ultisnips'
-Plug 'joukevandermaas/vim-ember-hbs', { 'for': 'handlebars' }
+Plug 'joukevandermaas/vim-ember-hbs', { 'for': 'html.handlebars' }
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 Plug 'mxw/vim-jsx', { 'for': 'javascript' }
 Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
+Plug 'Vimjas/vim-python-pep8-indent', { 'for': 'python' }
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 Plug 'fatih/vim-go', { 'for': 'go' }
 
@@ -34,7 +35,7 @@ call plug#end()
 filetype plugin indent on
 
 set nowrap
-set number
+set nonumber
 set foldmethod=indent
 set directory=~/.vim-tmp
 set backupdir=~/.vim-tmp
@@ -43,7 +44,7 @@ set backspace=indent,eol,start
 set complete-=i
 set smarttab
 set incsearch
-set laststatus=2
+set laststatus=1
 set ruler
 set hlsearch
 set wildmenu
@@ -57,10 +58,11 @@ nnoremap <silent> gd :YcmCompleter GoToDefinition<CR>
 nnoremap <silent> gr :YcmCompleter GoToReferences<CR>
 nnoremap <silent> gk :YcmCompleter GetDoc<CR>
 nnoremap <silent> <leader>w :SoftPencil<CR>:Goyo<CR>
+nnoremap <silent> <F2> :set number!<CR>
 vnoremap <silent> <F7> :w !pbcopy<CR><CR> 
 nnoremap <silent> <leader>r :Rg <C-R><C-W><CR>
 vnoremap <silent> <leader>r "sy :Rg <C-R>s<CR>
-
+nnoremap <silent> <leader>c :terminal cargo run -q<CR>
 nnoremap <silent> <leader>t :terminal<CR>
 tnoremap <Esc> <C-\><C-n>
 au TermOpen * setlocal nonumber
@@ -70,6 +72,15 @@ vnoremap < <gv
 vnoremap > >gv
 
 :command PandocPDF :!pandoc -o %:r.pdf %
+
+" Status Line
+set statusline=
+set statusline+=%n\ 
+set statusline+=%f\ 
+set statusline+=%h%m%r%w
+set statusline+=%=
+set statusline+=%-(%l,%c%)\ 
+set statusline+=[%{strlen(&ft)?&ft:'none'}]
 
 function! Incr()
   let a = line('.') - line("'<")
@@ -83,19 +94,21 @@ vnoremap <C-i> :call Incr()<CR>
 
 " Ale
 let g:ale_lint_on_text_changed = 'always'
-let g:ale_lint_delay = 400
 let g:ale_lint_on_save = 0
 let g:ale_fix_on_save = 1
+let g:ale_rust_rls_toolchain = 'stable'
 let g:ale_linters = {
 \   'typescript': ['tsserver'],
 \   'javascript': ['eslint'],
-\   'python': ['flake8'],
-\   'go': ['gometalinter']
+\   'python': ['pyls'],
+\   'go': ['gometalinter'],
+\   'rust': ['rls']
 \}
 let g:ale_fixers = {
 \   'typescript': ['tslint'],
 \   'javascript': ['eslint'],
-\   'go': ['gofmt']
+\   'go': ['gofmt'],
+\   'rust': ['rustfmt']
 \}
 nmap <F8> <Plug>(ale_fix)
 nmap <leader>d <Plug>(ale_detail)
@@ -103,7 +116,7 @@ nmap <C-j> <Plug>(ale_next_wrap)
 nmap <C-k> <Plug>(ale_previous_wrap)
 nmap gh <Plug>(ale_hover)
 hi SpellBad ctermbg=NONE ctermfg=NONE cterm=underline
-hi error ctermbg=10 ctermfg=1
+hi ALEWarning ctermbg=NONE ctermfg=NONE cterm=underline
 
 " YCM
 let g:ycm_min_num_of_chars_for_completion = 2
@@ -128,6 +141,7 @@ set wildignore+=*/build/**
 set wildignore+=*/tmp/**
 set wildignore+=*/node_modules/**
 set wildignore+=*/vendor/**
+set wildignore+=*/_site/**
 
 " UltiSnips
 let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim-snippets']
