@@ -11,7 +11,7 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-vinegar'
 
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'jremmen/vim-ripgrep'
+Plug 'mileszs/ack.vim'
 Plug 'justinmk/vim-sneak'
 Plug 'w0rp/ale'
 Plug 'reedes/vim-pencil'
@@ -44,7 +44,7 @@ set backspace=indent,eol,start
 set complete-=i
 set smarttab
 set incsearch
-set laststatus=1
+set laststatus=2
 set ruler
 set hlsearch
 set wildmenu
@@ -52,17 +52,11 @@ set wildmenu
 set background=dark
 colorscheme base16-oceanicnext
 
-" Keybindings
-inoremap <C-j> <Esc>
-nnoremap <silent> gd :YcmCompleter GoToDefinition<CR>
-nnoremap <silent> gr :YcmCompleter GoToReferences<CR>
-nnoremap <silent> gk :YcmCompleter GetDoc<CR>
-nnoremap <silent> <leader>w :SoftPencil<CR>:Goyo<CR>
-nnoremap <silent> <F2> :set number!<CR>
-vnoremap <silent> <F7> :w !pbcopy<CR><CR> 
-nnoremap <silent> <leader>r :Rg <C-R><C-W><CR>
-vnoremap <silent> <leader>r "sy :Rg <C-R>s<CR>
-nnoremap <silent> <leader>c :terminal cargo run -q<CR>
+" Search for word under cursor or visual selection using ripgrep
+nnoremap <silent> <leader>r :Ack "<C-R><C-W>"<CR>
+vnoremap <silent> <leader>r "sy :Ack "<C-R>s"<CR>
+
+" NeoVim terminal settings
 nnoremap <silent> <leader>t :terminal<CR>
 tnoremap <Esc> <C-\><C-n>
 au TermOpen * setlocal nonumber
@@ -71,16 +65,14 @@ au TermOpen * setlocal nonumber
 vnoremap < <gv
 vnoremap > >gv
 
-:command PandocPDF :!pandoc -o %:r.pdf %
+" Misc bindings
+inoremap <C-j> <Esc>
+nnoremap <silent> <leader>w :SoftPencil<CR>:Goyo<CR>
+nnoremap <silent> <F2> :set number!<CR>
+vnoremap <silent> <F7> :w !pbcopy<CR><CR> 
+nnoremap <silent> <leader>c :terminal cargo run -q<CR>
 
-" Status Line
-set statusline=
-set statusline+=%n\ 
-set statusline+=%f\ 
-set statusline+=%h%m%r%w
-set statusline+=%=
-set statusline+=%-(%l,%c%)\ 
-set statusline+=[%{strlen(&ft)?&ft:'none'}]
+:command PandocPDF :!pandoc -o %:r.pdf %
 
 function! Incr()
   let a = line('.') - line("'<")
@@ -92,16 +84,24 @@ function! Incr()
 endfunction
 vnoremap <C-i> :call Incr()<CR>
 
+" Pretty status line
+set statusline=
+set statusline+=%n\ 
+set statusline+=%f\ 
+set statusline+=%h%m%r%w
+set statusline+=%=
+set statusline+=%-(%l,%c%)\ 
+set statusline+=[%{strlen(&ft)?&ft:'none'}]
+
 " Ale
 let g:ale_lint_on_text_changed = 'always'
 let g:ale_lint_on_save = 0
 let g:ale_fix_on_save = 1
-let g:ale_rust_rls_toolchain = 'stable'
 let g:ale_linters = {
 \   'typescript': ['tsserver'],
 \   'javascript': ['eslint'],
 \   'python': ['pyls'],
-\   'go': ['gometalinter'],
+\   'go': ['golangserver', 'gometalinter'],
 \   'rust': ['rls']
 \}
 let g:ale_fixers = {
@@ -114,6 +114,7 @@ nmap <F8> <Plug>(ale_fix)
 nmap <leader>d <Plug>(ale_detail)
 nmap <C-j> <Plug>(ale_next_wrap)
 nmap <C-k> <Plug>(ale_previous_wrap)
+nmap gd <Plug>(ale_go_to_definition)
 nmap gh <Plug>(ale_hover)
 hi SpellBad ctermbg=NONE ctermfg=NONE cterm=underline
 hi ALEWarning ctermbg=NONE ctermfg=NONE cterm=underline
@@ -147,3 +148,6 @@ set wildignore+=*/_site/**
 let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim-snippets']
 let g:UltiSnipsJumpForwardTrigger = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+
+" ack.vim
+let g:ackprg = 'rg --vimgrep'
