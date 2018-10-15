@@ -58,6 +58,13 @@ set statusline+=%-(%l,%c%)
 vnoremap < <gv
 vnoremap > >gv
 
+" Quick window navigation
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+nnoremap <C-_> <C-W><C-_>
+
 " Misc bindings
 vnoremap <silent> <F7> :w !pbcopy<CR><CR> 
 
