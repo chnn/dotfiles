@@ -15,9 +15,7 @@ endsnippet
 snippet pure
 import React, {PureComponent} from 'react'
 
-interface Props {
-  ${0}
-}
+interface Props {}
 
 interface State {}
 
@@ -29,7 +27,7 @@ class ${1:MyClass} extends PureComponent<Props, State> {
   }
 
   public render() {
-    return null
+    return null${0}
   }
 }
 

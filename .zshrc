@@ -49,7 +49,7 @@ autoload -Uz vcs_info
 precmd () { vcs_info }
 setopt prompt_subst
 zstyle ':vcs_info:git*' formats " %{$fg[magenta]%}%b%{$reset_color%}"
-PROMPT='%{$fg[blue]%}%2~%{$reset_color%}${vcs_info_msg_0_} $ '
+PROMPT='%{$fg[blue]%}%3~%{$reset_color%}${vcs_info_msg_0_} $ '
 
 alias ls="ls -l -h"
 alias b="bundle exec"
