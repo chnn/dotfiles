@@ -7,9 +7,9 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
+Plug 'tpope/vim-sleuth'
 
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'mileszs/ack.vim'
 Plug 'w0rp/ale'
 Plug 'reedes/vim-pencil'
 Plug 'junegunn/goyo.vim'
@@ -30,7 +30,7 @@ call plug#end()
 
 filetype plugin indent on
 set nowrap
-set nonumber
+set number
 set foldmethod=indent
 set directory=~/.vim-tmp
 set backupdir=~/.vim-tmp
@@ -139,11 +139,11 @@ let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim-snippets']
 let g:UltiSnipsJumpForwardTrigger = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 
-" ack.vim
-let g:ackprg = 'rg --vimgrep'
+" ripgrep
+set grepprg=rg\ --vimgrep
 
-nnoremap <silent> <leader>r :Ack "<C-R><C-W>"<CR>
-vnoremap <silent> <leader>r "sy :Ack "<C-R>s"<CR>
+nnoremap <silent> <leader>r :silent grep "<C-R><C-W>"<CR>:copen<CR>
+vnoremap <silent> <leader>r "sy :silent grep "<C-R>s"<CR>:copen<CR>
 
 " dash.vim
 nnoremap <silent> K :Dash!<CR>
