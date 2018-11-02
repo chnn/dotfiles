@@ -120,6 +120,9 @@ let g:ale_fixers = {
 let g:go_fmt_autosave = 0
 autocmd Filetype go setlocal tabstop=2
 
+" rust
+autocmd Filetype rust setlocal signcolumn=yes
+
 " vim-pencil
 let g:pencil#textwidth = 79
 let g:pencil#conceallevel = 0
@@ -133,6 +136,7 @@ set wildignore+=*/tmp/**
 set wildignore+=*/node_modules/**
 set wildignore+=*/vendor/**
 set wildignore+=*/_site/**
+set wildignore+=*/target/**
 
 " UltiSnips
 let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim-snippets']
