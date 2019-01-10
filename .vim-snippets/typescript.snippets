@@ -12,6 +12,84 @@ const ${1:MyComponent}: SFC<Props> = (props) => {
 export default $1
 endsnippet
 
+snippet reduxsfc
+// Libraries
+import React, {SFC} from 'react'
+import {connect} from 'react-redux'
+
+// Types
+import {AppState} from 'src/types/v2'
+
+interface StateProps {
+}
+
+interface DispatchProps {
+}
+
+interface OwnProps {}
+
+type Props = StateProps & DispatchProps & OwnProps
+
+const ${1:MyComponent}: SFC<Props> = (props) => {
+  return null
+}
+
+const mstp = (state: AppState) => {
+  ${0}
+
+  return {}
+}
+
+const mdtp = {}
+
+export default connect<StateProps, DispatchProps, OwnProps>(
+  mstp,
+  mdtp
+)($1)
+endsnippet
+
+snippet reduxpure
+// Libraries
+import React, {PureComponent} from 'react'
+import {connect} from 'react-redux'
+
+// Types
+import {AppState} from 'src/types/v2'
+
+interface StateProps {
+}
+
+interface DispatchProps {
+}
+
+interface OwnProps {}
+
+type Props = StateProps & DispatchProps & OwnProps
+
+interface State {}
+
+class ${1:MyClass} extends PureComponent<Props, State> {
+  public state: State = {}
+
+  public render() {
+    return null${0}
+  }
+}
+
+const mstp = (state: AppState) => {
+  ${0}
+
+  return {}
+}
+
+const mdtp = {}
+
+export default connect<StateProps, DispatchProps, OwnProps>(
+  mstp,
+  mdtp
+)($1)
+endsnippet
+
 snippet pure
 import React, {PureComponent} from 'react'
 
@@ -20,12 +98,6 @@ interface Props {}
 interface State {}
 
 class ${1:MyClass} extends PureComponent<Props, State> {
-  constructor(props) {
-    super(props)
-
-    this.state = {}
-  }
-
   public render() {
     return null${0}
   }

@@ -16,14 +16,11 @@ if command -v pyenv 1>/dev/null 2>&1; then
     eval "$(pyenv init -)"
 fi
 
-# Ansible
-export PATH="/usr/local/opt/ansible@1.9/bin:$PATH"
-
 # Go
-[[ -s "/Users/chris/.gvm/scripts/gvm" ]] && source "/Users/chris/.gvm/scripts/gvm"
 export GOPATH="$HOME/Dev/Go"
 export GOBIN="$GOPATH/bin"
 export PATH="$GOBIN:$PATH"
+export GO111MODULE=on
 
 # z
 [ -f /usr/local/etc/profile.d/autojump.sh ] && source /usr/local/etc/profile.d/autojump.sh

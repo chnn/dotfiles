@@ -9,7 +9,8 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-sleuth'
 
-Plug 'ctrlpvim/ctrlp.vim'
+Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf.vim'
 Plug 'w0rp/ale'
 Plug 'reedes/vim-pencil'
 Plug 'junegunn/goyo.vim'
@@ -44,7 +45,7 @@ set hlsearch
 set wildmenu
 
 set background=dark
-colorscheme base16-oceanicnext
+colorscheme base16-tomorrow-night
 
 " Pretty status line
 set statusline=
@@ -87,6 +88,9 @@ if has('nvim')
   au TermOpen * setlocal nonumber
 endif
 
+" FZF
+nnoremap <silent> <C-p> :Files<CR>
+
 " ALE
 let g:ale_lint_on_save = 0
 let g:ale_fix_on_save = 1
@@ -105,7 +109,7 @@ let g:ale_linters = {
 \   'typescript': ['tsserver'],
 \   'javascript': ['eslint'],
 \   'python': ['pyls'],
-\   'go': ['golangserver', 'gometalinter'],
+\   'go': ['govet', 'staticcheck'],
 \   'rust': ['rls']
 \}
 
@@ -122,6 +126,7 @@ autocmd Filetype go setlocal tabstop=2
 
 " rust
 autocmd Filetype rust setlocal signcolumn=yes
+let g:ale_rust_rls_toolchain = 'stable'
 
 " vim-pencil
 let g:pencil#textwidth = 79
@@ -148,6 +153,9 @@ set grepprg=rg\ --vimgrep
 
 nnoremap <silent> <leader>r :silent grep "<C-R><C-W>"<CR>:copen<CR>
 vnoremap <silent> <leader>r "sy :silent grep "<C-R>s"<CR>:copen<CR>
+
+autocmd QuickFixCmdPost [^l]* nested cwindow
+autocmd QuickFixCmdPost    l* nested lwindow
 
 " dash.vim
 nnoremap <silent> K :Dash!<CR>
