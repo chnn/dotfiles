@@ -9,12 +9,12 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-sleuth'
 
-Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
 Plug 'w0rp/ale'
 Plug 'reedes/vim-pencil'
 Plug 'junegunn/goyo.vim'
-Plug 'chriskempson/base16-vim'
+Plug 'danielwe/base16-vim'
 Plug 'godlygeek/tabular'
 Plug 'vitaly/vim-gitignore'
 Plug 'rizzatti/dash.vim'
@@ -25,7 +25,10 @@ Plug 'mxw/vim-jsx', { 'for': 'javascript' }
 Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
 Plug 'Vimjas/vim-python-pep8-indent', { 'for': 'python' }
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
-Plug 'fatih/vim-go', { 'for': 'go' }
+Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoUpdateBinaries' }
+Plug 'elixir-editors/vim-elixir', { 'for': 'elixir' }
+Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
+Plug 'lervag/vimtex', { 'for': 'tex' }
 
 call plug#end()
 
@@ -59,27 +62,8 @@ set statusline+=%-(%l,%c%)
 vnoremap < <gv
 vnoremap > >gv
 
-" Quick window navigation
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
-nnoremap <C-_> <C-W><C-_>
-
 " Misc bindings
 vnoremap <silent> <F7> :w !pbcopy<CR><CR> 
-
-" Increment a list of numbers with Ctrl-I
-function! Incr()
-  let a = line('.') - line("'<")
-  let c = virtcol("'<")
-  if a > 0
-    execute 'normal! '.c.'|'.a."\<C-a>"
-  endif
-  normal `<
-endfunction
-
-vnoremap <C-i> :call Incr()<CR>
 
 " NeoVim terminal settings
 if has('nvim')
@@ -90,11 +74,14 @@ endif
 
 " FZF
 nnoremap <silent> <C-p> :Files<CR>
+nnoremap <silent> <leader>f :Buffers<CR>
+inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files --hidden')
 
 " ALE
 let g:ale_lint_on_save = 0
 let g:ale_fix_on_save = 1
 let g:ale_completion_enabled = 1
+let g:ale_lint_delay = 100
 
 nmap <leader>d <Plug>(ale_detail)
 nmap ]r <Plug>(ale_next_wrap)
@@ -107,15 +94,16 @@ hi ALEWarning ctermbg=NONE ctermfg=NONE cterm=underline
 
 let g:ale_linters = {
 \   'typescript': ['tsserver'],
-\   'javascript': ['eslint'],
 \   'python': ['pyls'],
-\   'go': ['govet', 'staticcheck'],
-\   'rust': ['rls']
+\   'go': ['govet'],
+\   'rust': ['rls'],
 \}
 
 let g:ale_fixers = {
-\   'typescript': ['tslint'],
-\   'javascript': ['eslint'],
+\   'typescript': ['prettier'],
+\   'html': [],
+\   'css': ['prettier'],
+\   'scss': ['prettier'],
 \   'go': ['gofmt'],
 \   'rust': ['rustfmt']
 \}
@@ -142,6 +130,7 @@ set wildignore+=*/node_modules/**
 set wildignore+=*/vendor/**
 set wildignore+=*/_site/**
 set wildignore+=*/target/**
+set wildignore+=*/_build/**
 
 " UltiSnips
 let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim-snippets']
@@ -159,3 +148,9 @@ autocmd QuickFixCmdPost    l* nested lwindow
 
 " dash.vim
 nnoremap <silent> K :Dash!<CR>
+
+" vimtex
+let g:vimtex_view_method="skim"
+
+" elixir
+let g:alchemist_tag_map = 'gd'
