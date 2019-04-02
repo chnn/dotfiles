@@ -1,0 +1,5 @@
+Library
+Music
+node_modules
+**/pkg/mod
+vendor
