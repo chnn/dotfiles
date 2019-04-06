@@ -26,17 +26,20 @@ if command -v rbenv 1>/dev/null 2>&1; then
   eval "$(rbenv init -)"
 fi
 
-# z
+# autojump 
 [ -f /usr/local/etc/profile.d/autojump.sh ] && source /usr/local/etc/profile.d/autojump.sh
+[ -f /etc/profile.d/autojump.zsh ] && source /etc/profile.d/autojump.zsh
 
 # FZF
 export FZF_DEFAULT_COMMAND='rg --files --hidden'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
+[ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/key-bindings.zsh
 
 j() {
   [ $# -gt 0 ] && cd $(autojump "$*") && return
   local dir
-  dir="$(cat ~/Library/autojump/autojump.txt | sort -nr | awk '{print $2}' | fzf +s)" && cd "${dir}" || return 1
+  dir="$(cat ~/.local/share/autojump/autojump.txt | sort -nr | awk '{print $2}' | fzf +s)" && cd "${dir}" || return 1
 }
 
 autoload -U colors && colors
@@ -48,7 +51,6 @@ PROMPT='%{$fg[blue]%}%3~%{$reset_color%}${vcs_info_msg_0_} $ '
 
 alias e="$EDITOR"
 alias f="nnn"
-
 alias nn="cd $NOTES && $EDITOR"
 alias dr="cd ~ && fd --ignore-file .searchignore -t d | fzf --print0 | xargs -0 open"
 alias fr="cd ~ && fd --ignore-file .searchignore | fzf --print0 | xargs -0 open -R"

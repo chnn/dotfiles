@@ -1,4 +1,4 @@
-URxvt.font: xft:Iosevka:regular:size=12
+URxvt.font: xft:Iosevka:regular:size=10
 URxvt.scrollBar: false
 URxvt.urgentOnBell: true
 URxvt.perl-ext: default,matcher,selection-to-clipboard
@@ -9,7 +9,7 @@ URxvt.geometry: 110x30
 URxvt.matcher.rend.0: Uline
 URxvt.colorUL: base05
 
-Xft.dpi: 120
+Xft.dpi: 144
 Xft.autohint: 0
 Xft.lcdfilter: lcddefault
 Xft.hintstyle: hintslight
