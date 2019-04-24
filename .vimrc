@@ -27,7 +27,6 @@ Plug 'Vimjas/vim-python-pep8-indent', { 'for': 'python' }
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoUpdateBinaries' }
 Plug 'elixir-editors/vim-elixir', { 'for': 'elixir' }
-Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
 Plug 'lervag/vimtex', { 'for': 'tex' }
 
 call plug#end()
@@ -36,6 +35,7 @@ filetype plugin indent on
 set nowrap
 set number
 set foldmethod=indent
+set foldlevel=10
 set directory=~/.vim-tmp
 set backupdir=~/.vim-tmp
 set autoindent
@@ -49,6 +49,9 @@ set wildmenu
 
 set background=dark
 colorscheme base16-tomorrow-night
+
+" Space as leader
+let mapleader = "\<Space>" 
 
 " Pretty status line
 set statusline=
@@ -74,7 +77,9 @@ endif
 
 " FZF
 nnoremap <silent> <C-p> :Files<CR>
-nnoremap <silent> <leader>f :Buffers<CR>
+nnoremap <silent> <leader>p :Files<CR>
+nnoremap <silent> <leader>l :Rg<CR>
+nnoremap <silent> <expr> <leader>f i fzf#vim#complete#path('rg --files --hidden')
 inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files --hidden')
 
 " ALE
@@ -93,18 +98,22 @@ hi SpellBad ctermbg=NONE ctermfg=NONE cterm=underline
 hi ALEWarning ctermbg=NONE ctermfg=NONE cterm=underline
 
 let g:ale_linters = {
+\   'javascript': [],
 \   'typescript': ['tsserver'],
 \   'python': ['pyls'],
 \   'go': ['govet'],
 \   'rust': ['rls'],
+\   'elixir': ['elixir-ls']
 \}
 
 let g:ale_fixers = {
+\   'javascript': ['prettier'],
 \   'typescript': ['prettier'],
 \   'html': [],
-\   'css': ['prettier'],
-\   'scss': ['prettier'],
+\   'css': [],
+\   'scss': [],
 \   'go': ['gofmt'],
+\   'elixir': ['mix_format'],
 \   'rust': ['rustfmt']
 \}
 
@@ -140,17 +149,17 @@ let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 " ripgrep
 set grepprg=rg\ --vimgrep
 
-nnoremap <silent> <leader>r :silent grep "<C-R><C-W>"<CR>:copen<CR>
-vnoremap <silent> <leader>r "sy :silent grep "<C-R>s"<CR>:copen<CR>
+nnoremap <silent> <leader>g :silent grep "<C-R><C-W>"<CR>:copen<CR>
+vnoremap <silent> <leader>g "sy :silent grep "<C-R>s"<CR>:copen<CR>
 
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
 
 " dash.vim
-nnoremap <silent> K :Dash!<CR>
+nnoremap <silent> <leader>k :Dash!<CR>
 
 " vimtex
 let g:vimtex_view_method="skim"
 
 " elixir
-let g:alchemist_tag_map = 'gd'
+let g:ale_elixir_elixir_ls_release = $HOME.'/.local/bin/elixir-ls'
