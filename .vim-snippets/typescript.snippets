@@ -1,24 +1,25 @@
-snippet sfc
-import React, {SFC} from 'react'
+snippet fc
+// Libraries
+import React, {FunctionComponent} from 'react'
 
 interface Props {
   ${0}
 }
 
-const ${1:MyComponent}: SFC<Props> = (props) => {
+const ${1:MyComponent}: FunctionComponent<Props> = ({}) => {
   return null
 }
 
 export default $1
 endsnippet
 
-snippet reduxsfc
+snippet reduxfc
 // Libraries
-import React, {SFC} from 'react'
+import React, {FunctionComponent} from 'react'
 import {connect} from 'react-redux'
 
 // Types
-import {AppState} from 'src/types/v2'
+import {AppState} from 'src/types'
 
 interface StateProps {
 }
@@ -26,11 +27,12 @@ interface StateProps {
 interface DispatchProps {
 }
 
-interface OwnProps {}
+interface OwnProps {
+}
 
 type Props = StateProps & DispatchProps & OwnProps
 
-const ${1:MyComponent}: SFC<Props> = (props) => {
+const ${1:MyComponent}: FunctionComponent<Props> = ({}) => {
   return null
 }
 
@@ -40,7 +42,8 @@ const mstp = (state: AppState) => {
   return {}
 }
 
-const mdtp = {}
+const mdtp = {
+}
 
 export default connect<StateProps, DispatchProps, OwnProps>(
   mstp,
