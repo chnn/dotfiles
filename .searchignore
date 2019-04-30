@@ -3,3 +3,15 @@ Music
 node_modules
 **/pkg/mod
 vendor
+Dev/Go
+.cache
+target
+bower_components
+tmp
+build
+dist
+_build
+vendor
+_site
+.DS_Store
+.git
