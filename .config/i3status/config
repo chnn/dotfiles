@@ -17,10 +17,12 @@ general {
 order += "battery all"
 order += "load"
 order += "volume master"
+# order += "wireless wlp2s0"
+order += "path_exists wireguard"
 order += "tztime local"
 
 battery all {
-        format = "%status %percentage"
+        format = "B: %percentage"
         integer_battery_capacity = true
         hide_seconds = true
         status_bat = ""
@@ -32,12 +34,23 @@ tztime local {
         format = "%Y-%m-%d %H:%M"
 }
 
+wireless wlp2s0 {
+        format_up = "%essid"
+        format_down = "down"
+}
+
+path_exists wireguard {
+        path = "/proc/sys/net/ipv4/conf/us15"
+        format = "us15"
+        format_down = "down"
+}
+
 load {
-        format = "%1min"
+        format = "L: %1min"
 }
 
 volume master {
-        format = "%volume"
+        format = "V: %volume"
         format_muted = "Muted"
         device = "default"
         mixer = "Master"

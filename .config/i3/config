@@ -1,14 +1,15 @@
-set $mod Mod4
+set $mod Mod1
 
-font pango:Iosevka 12
+font pango:Iosevka 10
 
 floating_modifier $mod
 
-bindsym $mod+Return exec --no-startup-id rxvt-unicode
+bindsym $mod+Return exec --no-startup-id alacritty
 
 bindsym $mod+Shift+q kill
 
-bindsym $mod+d exec --no-startup-id dmenu_run
+bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
+bindsym $mod+Shift+d exec --no-startup-id dmenu_run
 # bindsym $mod+d exec --no-startup-id rofi -font "Iosevka 14" -matching fuzzy -show run
 
 bindsym $mod+j focus down
@@ -74,6 +75,7 @@ mode "resize" {
         bindsym k resize shrink height 10 px or 10 ppt
         bindsym l resize grow width 10 px or 10 ppt
 
+        bindsym $mod+r mode "default"
         bindsym Return mode "default"
         bindsym Escape mode "default"
 }
@@ -102,50 +104,35 @@ bar {
         tray_output primary
         separator_symbol " "
 
-        colors {
-                background $base00
-                separator  $base00
-                statusline $base04
+	colors {
+	    background $base00
+	    separator  $base00
+	    statusline $base04
 
-                # State             Border  BG      Text
-                focused_workspace   $base0C $base0C $base00
-                active_workspace    $base03 $base03 $base00
-                inactive_workspace  $base01 $base01 $base05
-                urgent_workspace    $base0C $base0C $base00
-                binding_mode        $base00 $base0A $base00
-        }
+            # State             Border  BG      Text
+	    focused_workspace   $base0C $base0C $base00
+	    active_workspace    $base0B $base0B $base00
+	    inactive_workspace  $base00 $base00 $base04
+	    urgent_workspace    $base08 $base08 $base00
+	    binding_mode        $base0A $base0k $base00
+	}
 }
 
-# state                 border  bg      text    ind     child_border
-client.focused          $base0C $base0C $base00 $base0C $base0C
-client.focused_inactive $base00 $base00 $base05 $base03 $base00
-client.unfocused        $base00 $base00 $base05 $base01 $base00
-client.urgent           $base0C $base0C $base00 $base0C $base0C
+# Property Name         Border  BG      Text    Indicator Child Border
+client.focused          $base05 $base0C $base00 $base0A $base0C
+client.focused_inactive $base01 $base01 $base05 $base01 $base01
+client.unfocused        $base01 $base00 $base05 $base01 $base01
+client.urgent           $base08 $base08 $base00 $base08 $base08
 client.placeholder      $base00 $base00 $base05 $base00 $base00
-client.background       $base07
+client.background $base07
 
 new_window pixel 2
+smart_borders on
 
-# gaps inner 30
-# smart_borders on
-
-exec --no-startup-id feh --bg-fill ~/Downloads/wp.jpg
+exec --no-startup-id feh --randomize --bg-fill ~/Documents/Wallpapers/*
 
 bindsym XF86AudioRaiseVolume exec --no-startup-id amixer set Master 4%+
 bindsym XF86AudioLowerVolume exec --no-startup-id amixer set Master 4%-
 bindsym XF86AudioMute exec --no-startup-id amixer set Master toggle
 bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -inc 5
 bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -dec 5
-bindsym XF86AudioPlay exec --no-startup-id mpc toggle
-bindsym XF86AudioPrev exec --no-startup-id mpc prev
-bindsym XF86AudioNext exec --no-startup-id mpc next
-bindsym F11 exec --no-startup-id mpc toggle
-bindsym F10 exec --no-startup-id mpc prev
-bindsym F12 exec --no-startup-id mpc next
-bindsym $mod+b exec firefox
-bindsym $mod+p exec zathura
-bindsym $mod+i exec passmenu
-bindsym $mod+Tab exec --no-startup-id rofi -font "Iosevka 14" -matching fuzzy -show window
-
-assign [class="^Firefox$"] 1
-assign [class="^Slack$"] 4

@@ -1,7 +1,7 @@
 bindkey -e
 
 export EDITOR="vim"
-export NOTES="$HOME/Documents/Influx/Notes"
+export NOTES="$HOME/Documents/Notes"
 export SHELL="/bin/zsh"
 export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
 export GPG_TTY=$(tty)
@@ -25,6 +25,10 @@ export PATH="$GOBIN:$PATH"
 if command -v rbenv 1>/dev/null 2>&1; then
   eval "$(rbenv init -)"
 fi
+
+# nvm
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
 # autojump 
 [ -f /usr/local/etc/profile.d/autojump.sh ] && source /usr/local/etc/profile.d/autojump.sh
@@ -65,6 +69,8 @@ alias m="python manage.py"
 alias y="yarn run"
 alias nr="yarn run"
 alias pe="pipenv run"
+alias sd="systemctl"
+alias sdu="systemctl --user"
 
 alias g='git'
 alias gst='git status'

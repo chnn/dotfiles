@@ -1,3 +1,9 @@
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
 call plug#begin('~/.vim/plugged')
 
 " Our lord and savior
@@ -38,6 +44,7 @@ set foldmethod=indent
 set foldlevel=10
 set directory=~/.vim-tmp
 set backupdir=~/.vim-tmp
+set backupcopy=yes
 set autoindent
 set backspace=indent,eol,start
 set smarttab
@@ -67,6 +74,7 @@ vnoremap > >gv
 
 " Misc bindings
 vnoremap <silent> <F7> :w !pbcopy<CR><CR> 
+vnoremap <silent> <leader>c :w !xclip -sel clipboard<CR><CR>
 
 " NeoVim terminal settings
 if has('nvim')
