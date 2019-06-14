@@ -1,6 +1,6 @@
 set $mod Mod1
 
-font pango:Iosevka 10
+font pango:Iosevka 9
 
 floating_modifier $mod
 
@@ -129,10 +129,12 @@ client.background $base07
 new_window pixel 2
 smart_borders on
 
-exec --no-startup-id feh --randomize --bg-fill ~/Documents/Wallpapers/*
+exec --no-startup-id feh --bg-fill ~/Documents/Wallpapers/wp
+exec --no-startup-id dunst
 
 bindsym XF86AudioRaiseVolume exec --no-startup-id amixer set Master 4%+
 bindsym XF86AudioLowerVolume exec --no-startup-id amixer set Master 4%-
 bindsym XF86AudioMute exec --no-startup-id amixer set Master toggle
 bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -inc 5
 bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -dec 5
+bindsym Print exec --no-startup-id ffcast -s png ~/Downloads/"Screenshot $(date +%FT%T)".png
