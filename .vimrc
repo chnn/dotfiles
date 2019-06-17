@@ -22,14 +22,10 @@ Plug 'reedes/vim-pencil'
 Plug 'junegunn/goyo.vim'
 Plug 'danielwe/base16-vim'
 Plug 'godlygeek/tabular'
-Plug 'vitaly/vim-gitignore'
-Plug 'rizzatti/dash.vim'
 Plug 'SirVer/ultisnips'
-Plug 'joukevandermaas/vim-ember-hbs', { 'for': 'html.handlebars' }
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 Plug 'mxw/vim-jsx', { 'for': 'javascript' }
 Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
-Plug 'Vimjas/vim-python-pep8-indent', { 'for': 'python' }
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoUpdateBinaries' }
 Plug 'elixir-editors/vim-elixir', { 'for': 'elixir' }
@@ -54,8 +50,8 @@ set ruler
 set hlsearch
 set wildmenu
 
-set background=dark
-colorscheme base16-tomorrow-night
+set background=light
+colorscheme base16-solarized-light
 
 " Space as leader
 let mapleader = "\<Space>" 
@@ -72,9 +68,20 @@ set statusline+=%-(%l,%c%)
 vnoremap < <gv
 vnoremap > >gv
 
+" Quick window navigation
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+nnoremap <C-_> <C-W><C-_>
+
 " Misc bindings
-vnoremap <silent> <F7> :w !pbcopy<CR><CR> 
-vnoremap <silent> <leader>c :w !xclip -sel clipboard<CR><CR>
+
+if system('uname') == "Linux\n"
+  vnoremap <silent> <leader>c :w !xclip -sel clipboard<CR><CR>
+else
+  vnoremap <silent> <leader>c :w !pbcopy<CR><CR> 
+endif
 
 " NeoVim terminal settings
 if has('nvim')
@@ -131,23 +138,12 @@ autocmd Filetype go setlocal tabstop=2
 
 " rust
 autocmd Filetype rust setlocal signcolumn=yes
-let g:ale_rust_rls_toolchain = 'stable'
 
 " vim-pencil
 let g:pencil#textwidth = 79
 let g:pencil#conceallevel = 0
 
 nnoremap <silent> <leader>w :SoftPencil<CR>:Goyo<CR>
-
-" ctrlp.vim
-let g:ctrlp_working_path_mode = 'a'
-set wildignore+=*/build/**
-set wildignore+=*/tmp/**
-set wildignore+=*/node_modules/**
-set wildignore+=*/vendor/**
-set wildignore+=*/_site/**
-set wildignore+=*/target/**
-set wildignore+=*/_build/**
 
 " UltiSnips
 let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim-snippets']
@@ -167,7 +163,11 @@ autocmd QuickFixCmdPost    l* nested lwindow
 nnoremap <silent> <leader>k :Dash!<CR>
 
 " vimtex
-let g:vimtex_view_method="skim"
+if system('uname') == "Linux\n"
+  let g:vimtex_view_method="zathura"
+else
+  let g:vimtex_view_method="skim"
+endif
 
 " elixir
 let g:ale_elixir_elixir_ls_release = $HOME.'/.local/bin/elixir-ls'
