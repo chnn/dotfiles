@@ -8,35 +8,60 @@ scrolling:
 font:
   size: 9
   normal:
-    family: Iosevka
+    family: Iosevka Medium
   offset:
     x: -1
     y: 0
 colors:
   primary:
-    background: '0x1d1f21'
-    foreground: '0xc5c8c6'
+    background: '0xfdf6e3'
+    foreground: '0x586e75'
   cursor:
-    text: '0x1d1f21'
-    cursor: '0xc5c8c6'
+    text: '0xfdf6e3'
+    cursor: '0x586e75'
   normal:
-    black:   '0x1d1f21'
-    red:     '0xcc6666'
-    green:   '0xb5bd68'
-    yellow:  '0xf0c674'
-    blue:    '0x81a2be'
-    magenta: '0xb294bb'
-    cyan:    '0x8abeb7'
-    white:   '0xc5c8c6'
+    black:   '0xfdf6e3'
+    red:     '0xdc322f'
+    green:   '0x859900'
+    yellow:  '0xb58900'
+    blue:    '0x268bd2'
+    magenta: '0x6c71c4'
+    cyan:    '0x2aa198'
+    white:   '0x586e75'
   bright:
-    black:   '0x969896'
-    red:     '0xde935f'
-    green:   '0x282a2e'
-    yellow:  '0x373b41'
-    blue:    '0xb4b7b4'
-    magenta: '0xe0e0e0'
-    cyan:    '0xa3685a'
-    white:   '0xffffff'
+    black:   '0x839496'
+    red:     '0xcb4b16'
+    green:   '0xeee8d5'
+    yellow:  '0x93a1a1'
+    blue:    '0x657b83'
+    magenta: '0x073642'
+    cyan:    '0xd33682'
+    white:   '0x002b36'
+# colors:
+#   primary:
+#     background: '0x1d1f21'
+#     foreground: '0xc5c8c6'
+#   cursor:
+#     text: '0x1d1f21'
+#     cursor: '0xc5c8c6'
+#   normal:
+#     black:   '0x1d1f21'
+#     red:     '0xcc6666'
+#     green:   '0xb5bd68'
+#     yellow:  '0xf0c674'
+#     blue:    '0x81a2be'
+#     magenta: '0xb294bb'
+#     cyan:    '0x8abeb7'
+#     white:   '0xc5c8c6'
+#   bright:
+#     black:   '0x969896'
+#     red:     '0xde935f'
+#     green:   '0x282a2e'
+#     yellow:  '0x373b41'
+#     blue:    '0xb4b7b4'
+#     magenta: '0xe0e0e0'
+#     cyan:    '0xa3685a'
+#     white:   '0xffffff'
 visual_bell:
   duration: 0
 background_opacity: 1.0
