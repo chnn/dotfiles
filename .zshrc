@@ -50,7 +50,7 @@ export FZF_DEFAULT_COMMAND='rg --files'
 j() {
   [ $# -gt 0 ] && cd $(autojump "$*") && return
   local dir
-  dir="$(cat ~/.local/share/autojump/autojump.txt | sort -nr | awk '{print $2}' | fzf +s)" && cd "${dir}" || return 1
+  dir="$(cat ~/Library/autojump/autojump.txt | sort -nr | awk '{print $2}' | fzf +s)" && cd "${dir}" || return 1
 }
 
 autoload -U colors && colors
@@ -72,7 +72,8 @@ alias ezsh="$EDITOR ~/.zshrc && source ~/.zshrc"
 
 alias b="bundle exec"
 alias bs="brew services"
-alias m="source .env && mix"
+# alias m="source .env && mix"
+alias m="python manage.py"
 alias y="yarn run"
 alias pe="pipenv run"
 alias sd="systemctl"
@@ -86,6 +87,7 @@ alias g='git'
 alias gst='git status -sb'
 alias gca='git add -A && git commit -v'
 alias gb='git branch --sort=-committerdate'
+alias gcb='git checkout $(git branch --sort=-committerdate | fzf)'
 alias gba='git branch -a'
 alias gco="git checkout"
 alias glg='git log --stat --max-count=10'
@@ -94,11 +96,17 @@ alias glgga='git log --graph --decorate --all'
 alias glo='git log --oneline --decorate --color'
 alias glog='git log --oneline --decorate --color --graph'
 alias hb='hub browse'
-alias wipf="git add -A && git commit --no-gpg-sign --fixup HEAD"
 
 wip() {
-  [ $# -gt 0 ] && git add -A && git commit --no-gpg-sign -m "wip: $1" && return
-  git add -A && git commit --no-gpg-sign -m "wip"
+  if [ $# -gt 0 ]; then
+    git add -A && git commit --no-gpg-sign -m "wip: $1" 
+  else
+    git add -A && git commit --no-gpg-sign -m "wip"
+  fi
+}
+
+wipf() {
+  git add -A && git commit --no-gpg-sign --fixup $(git log --oneline master.. | grep "wip:" | tail -n 1 | cut -c 1-7)
 }
 
 HISTFILE=~/.zsh_history

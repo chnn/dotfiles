@@ -27,7 +27,6 @@ Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 Plug 'mxw/vim-jsx', { 'for': 'javascript' }
 Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
-Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoUpdateBinaries' }
 Plug 'elixir-editors/vim-elixir', { 'for': 'elixir' }
 Plug 'lervag/vimtex', { 'for': 'tex' }
 
@@ -93,8 +92,8 @@ endif
 " FZF
 nnoremap <silent> <C-p> :Files<CR>
 nnoremap <silent> <leader>p :Files<CR>
+nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <leader>l :Rg<CR>
-nnoremap <silent> <expr> <leader>f i fzf#vim#complete#path('rg --files --hidden')
 inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files --hidden')
 
 " ALE
@@ -115,10 +114,10 @@ hi ALEWarning ctermbg=NONE ctermfg=NONE cterm=underline
 let g:ale_linters = {
 \   'javascript': [],
 \   'typescript': ['tsserver'],
-\   'python': ['pyls'],
-\   'go': ['govet'],
+\   'go': ['gopls'],
 \   'rust': ['rls'],
-\   'elixir': ['elixir-ls']
+\   'elixir': ['elixir-ls'],
+\   'python': ['pyls']
 \}
 
 let g:ale_fixers = {
@@ -129,12 +128,18 @@ let g:ale_fixers = {
 \   'scss': [],
 \   'go': ['gofmt'],
 \   'elixir': ['mix_format'],
-\   'rust': ['rustfmt']
+\   'rust': ['rustfmt'],
+\   'python': ['black']
 \}
 
 " vim-go
 let g:go_fmt_autosave = 0
+let g:go_def_mapping_enabled = 0
+let g:go_doc_keywordprg_enabled = 0
 autocmd Filetype go setlocal tabstop=2
+
+" typescript
+autocmd FileType typescript :set makeprg=tsc\ --noEmit
 
 " rust
 autocmd Filetype rust setlocal signcolumn=yes
