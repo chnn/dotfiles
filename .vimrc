@@ -1,6 +1,5 @@
 if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
@@ -27,7 +26,6 @@ Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 Plug 'mxw/vim-jsx', { 'for': 'javascript' }
 Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
-Plug 'elixir-editors/vim-elixir', { 'for': 'elixir' }
 Plug 'lervag/vimtex', { 'for': 'tex' }
 
 call plug#end()
@@ -48,6 +46,7 @@ set laststatus=2
 set ruler
 set hlsearch
 set wildmenu
+set cursorline
 
 set background=light
 colorscheme base16-solarized-light
@@ -75,7 +74,6 @@ nnoremap <C-H> <C-W><C-H>
 nnoremap <C-_> <C-W><C-_>
 
 " Misc bindings
-
 if system('uname') == "Linux\n"
   vnoremap <silent> <leader>c :w !xclip -sel clipboard<CR><CR>
 else
@@ -116,7 +114,6 @@ let g:ale_linters = {
 \   'typescript': ['tsserver'],
 \   'go': ['gopls'],
 \   'rust': ['rls'],
-\   'elixir': ['elixir-ls'],
 \   'python': ['pyls']
 \}
 
@@ -127,19 +124,12 @@ let g:ale_fixers = {
 \   'css': [],
 \   'scss': [],
 \   'go': ['gofmt'],
-\   'elixir': ['mix_format'],
 \   'rust': ['rustfmt'],
 \   'python': ['black']
 \}
 
-" vim-go
-let g:go_fmt_autosave = 0
-let g:go_def_mapping_enabled = 0
-let g:go_doc_keywordprg_enabled = 0
-autocmd Filetype go setlocal tabstop=2
-
 " typescript
-autocmd FileType typescript :set makeprg=tsc\ --noEmit
+autocmd FileType typescript :set makeprg=tsc\ -p\ ./tsconfig.json\ --noEmit
 
 " rust
 autocmd Filetype rust setlocal signcolumn=yes
@@ -164,15 +154,9 @@ vnoremap <silent> <leader>g "sy :silent grep "<C-R>s"<CR>:copen<CR>
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
 
-" dash.vim
-nnoremap <silent> <leader>k :Dash!<CR>
-
 " vimtex
 if system('uname') == "Linux\n"
   let g:vimtex_view_method="zathura"
 else
   let g:vimtex_view_method="skim"
 endif
-
-" elixir
-let g:ale_elixir_elixir_ls_release = $HOME.'/.local/bin/elixir-ls'
