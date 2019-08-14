@@ -1,0 +1,34 @@
+#!/bin/bash
+
+set -e
+
+if [[ $1 == "monitor" ]]; then
+  FONT_SIZE=11
+  I3_MOD="Mod4"
+  xrandr --output DP1 --preferred --primary
+  xrandr --output eDP1 --off
+elif [[ $1 == "laptop" ]]; then
+  FONT_SIZE=9
+  I3_MOD="Mod1"
+  xrandr --output eDP1 --preferred --primary
+  xrandr --output DP1 --off
+else
+  echo "Must supply -o or -s"
+  exit 1
+fi
+
+# set keyboard rate for external keyboard
+xset r rate 250 50
+
+# set natural scroll direction on external mouse
+xinput --set-prop 16 'libinput Natural Scrolling Enabled' 1
+
+# resize wallpaper
+feh --bg-fill ~/Documents/Wallpapers/wp
+
+# Change alacritty font size
+sed -i "s/size\: .*/size\: ${FONT_SIZE}/" $HOME/.config/alacritty/alacritty.yml
+
+# Change i3 key mapping
+sed -i "s/set \$mod .*/set \$mod ${I3_MOD}/" $HOME/.config/i3/config
+i3-msg reload

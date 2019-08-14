@@ -1,8 +1,9 @@
 bindkey -e
 
 export EDITOR="nvim"
-export NOTES="$HOME/Documents/Notes"
+export PAGER="bat -p"
 export SHELL="/bin/zsh"
+export NOTES="$HOME/Documents/Notes"
 export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
 export GPG_TTY=$(tty)
 
@@ -26,7 +27,8 @@ export GOPATH="$HOME/Dev/Go"
 export GOBIN="$GOPATH/bin"
 export PATH="$GOBIN:$PATH"
 
-# rbenv
+# Ruby
+export PATH="$HOME/.gem/ruby/2.6.0/bin:$PATH"
 if command -v rbenv 1>/dev/null 2>&1; then
   eval "$(rbenv init -)"
   export PATH="$HOME/.rbenv/bin:$PATH"
@@ -56,7 +58,7 @@ zstyle ':vcs_info:git*' formats " %{$fg[magenta]%}%b%{$reset_color%}"
 PROMPT='%{$fg[blue]%}%3~%{$reset_color%}${vcs_info_msg_0_} $ '
 
 alias e="$EDITOR"
-alias ls="ls -la -h"
+alias ls="exa -lab --time-style=iso"
 alias f="ranger"
 alias nn="cd $NOTES && $EDITOR"
 alias dr="cd ~ && fd --ignore-file .searchignore -t d | fzf --print0 | xargs -0 open"
