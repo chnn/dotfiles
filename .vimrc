@@ -47,9 +47,13 @@ set ruler
 set hlsearch
 set wildmenu
 set cursorline
+set completeopt+=noinsert
 
 set background=light
 colorscheme base16-solarized-light
+
+set list
+hi NonText ctermfg=11
 
 " Space as leader
 let mapleader = "\<Space>" 
@@ -98,7 +102,6 @@ inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files --hidden')
 let g:ale_lint_on_save = 0
 let g:ale_fix_on_save = 1
 let g:ale_completion_enabled = 1
-let g:ale_lint_delay = 100
 
 nmap <leader>d <Plug>(ale_detail)
 nmap ]r <Plug>(ale_next_wrap)
@@ -106,11 +109,17 @@ nmap [r <Plug>(ale_previous_wrap)
 nmap gd <Plug>(ale_go_to_definition)
 nmap gh <Plug>(ale_hover)
 
-hi SpellBad ctermbg=NONE ctermfg=NONE cterm=underline
-hi ALEWarning ctermbg=NONE ctermfg=NONE cterm=underline
+hi clear ALEWarning
+hi clear ALEWarningSign
+hi clear ALEError
+hi clear ALEErrorSign
+hi link ALEWarning Error
+hi link ALEWarningSign Error
+hi link ALEError Error
+hi link ALEErrorSign Error
 
 let g:ale_linters = {
-\   'javascript': [],
+\   'javascript': ['tsserver'],
 \   'typescript': ['tsserver'],
 \   'go': ['gopls'],
 \   'rust': ['rls'],
@@ -121,7 +130,7 @@ let g:ale_fixers = {
 \   'javascript': ['prettier'],
 \   'typescript': ['prettier'],
 \   'html': [],
-\   'css': [],
+\   'css': ['prettier'],
 \   'scss': [],
 \   'go': ['gofmt'],
 \   'rust': ['rustfmt'],
@@ -133,6 +142,10 @@ autocmd FileType typescript :set makeprg=tsc\ -p\ ./tsconfig.json\ --noEmit
 
 " rust
 autocmd Filetype rust setlocal signcolumn=yes
+
+" go
+autocmd Filetype go setlocal ts=4
+hi clear goSpaceError
 
 " vim-pencil
 let g:pencil#textwidth = 79

@@ -15,12 +15,12 @@ export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
 [ -s "$VOLTA_HOME/load.sh" ] && . "$VOLTA_HOME/load.sh"
 
-# # Python
-# if command -v pyenv 1>/dev/null 2>&1; then
-#   export PYENV_ROOT="$HOME/.pyenv"
-#   export PATH="$PYENV_ROOT/bin:$PATH"
-#   eval "$(pyenv init -)"
-# fi
+# Python
+if command -v pyenv 1>/dev/null 2>&1; then
+  export PYENV_ROOT="$HOME/.pyenv"
+  export PATH="$PYENV_ROOT/bin:$PATH"
+  eval "$(pyenv init -)"
+fi
 
 # Go
 export GOPATH="$HOME/Dev/Go"
@@ -60,6 +60,7 @@ PROMPT='%{$fg[blue]%}%3~%{$reset_color%}${vcs_info_msg_0_} $ '
 alias e="$EDITOR"
 alias ls="exa -lab --time-style=iso"
 alias f="ranger"
+alias tma="tmux attach -d || tmux"
 alias nn="cd $NOTES && $EDITOR"
 alias dr="cd ~ && fd --ignore-file .searchignore -t d | fzf --print0 | xargs -0 open"
 alias fr="cd ~ && fd --ignore-file .searchignore | fzf --print0 | xargs -0 open -R"
