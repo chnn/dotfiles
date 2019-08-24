@@ -113,9 +113,9 @@ hi clear ALEWarning
 hi clear ALEWarningSign
 hi clear ALEError
 hi clear ALEErrorSign
-hi link ALEWarning Error
+hi ALEWarning cterm=underline
 hi link ALEWarningSign Error
-hi link ALEError Error
+hi ALEError cterm=underline
 hi link ALEErrorSign Error
 
 let g:ale_linters = {
