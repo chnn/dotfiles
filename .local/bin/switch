@@ -7,13 +7,18 @@ if [[ $1 == "monitor" ]]; then
   I3_MOD="Mod4"
   xrandr --output DP1 --preferred --primary
   xrandr --output eDP1 --off
+elif [[ $1 == "dual" ]]; then
+  FONT_SIZE=11
+  I3_MOD="Mod4"
+  xrandr --output DP1 --preferred --primary
+  xrandr --output eDP1 --preferred --left-of DP1
 elif [[ $1 == "laptop" ]]; then
   FONT_SIZE=9
   I3_MOD="Mod1"
   xrandr --output eDP1 --preferred --primary
   xrandr --output DP1 --off
 else
-  echo "Must supply -o or -s"
+  echo "missing argument"
   exit 1
 fi
 
@@ -21,7 +26,8 @@ fi
 xset r rate 250 50
 
 # set natural scroll direction on external mouse
-xinput --set-prop 16 'libinput Natural Scrolling Enabled' 1
+MOUSE_ID=$(xinput | grep 'Mouse.*pointer' | head -n 1 | sed 's/.*id=\([0-9]\+\).*/\1/')
+xinput --set-prop $MOUSE_ID 'libinput Natural Scrolling Enabled' 1
 
 # resize wallpaper
 feh --bg-fill ~/Documents/Wallpapers/wp
