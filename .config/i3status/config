@@ -52,7 +52,5 @@ load {
 volume master {
         format = "V: %volume"
         format_muted = "Muted"
-        device = "default"
-        mixer = "Master"
-        mixer_idx = 0
+        device = "pulse:0"
 }
