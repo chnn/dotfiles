@@ -50,6 +50,10 @@ j() {
   dir="$(cat ~/Library/autojump/autojump.txt | sort -nr | awk '{print $2}' | fzf +s)" && cd "${dir}" || return 1
 }
 
+nj() {
+  cd $NOTES/Journal && $EDITOR "$(date '+%F %H:%M') $1.md"
+}
+
 autoload -U colors && colors
 autoload -Uz vcs_info
 precmd () { vcs_info }
