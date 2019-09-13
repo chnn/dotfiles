@@ -52,5 +52,5 @@ load {
 volume master {
         format = "V: %volume"
         format_muted = "Muted"
-        device = "pulse:0"
+        device = "pulse"
 }
