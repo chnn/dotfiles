@@ -19,7 +19,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'w0rp/ale'
 Plug 'reedes/vim-pencil'
 Plug 'junegunn/goyo.vim'
-Plug 'danielwe/base16-vim'
+Plug 'chriskempson/base16-vim'
 Plug 'godlygeek/tabular'
 Plug 'SirVer/ultisnips'
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
@@ -42,7 +42,7 @@ set autoindent
 set backspace=indent,eol,start
 set smarttab
 set incsearch
-set laststatus=2
+set laststatus=1
 set ruler
 set hlsearch
 set wildmenu
@@ -50,7 +50,7 @@ set cursorline
 set completeopt+=noinsert
 
 set background=light
-colorscheme base16-solarized-light
+colorscheme base16-atelier-seaside
 
 set list
 hi NonText ctermfg=11

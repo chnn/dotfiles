@@ -11,7 +11,7 @@ elif [[ $1 == "dual" ]]; then
   FONT_SIZE=11
   I3_MOD="Mod4"
   xrandr --output DP1 --preferred --primary
-  xrandr --output eDP1 --preferred --left-of DP1
+  xrandr --output eDP1 --preferred --right-of DP1
 elif [[ $1 == "laptop" ]]; then
   FONT_SIZE=9
   I3_MOD="Mod1"
@@ -22,19 +22,19 @@ else
   exit 1
 fi
 
-# set keyboard rate for external keyboard
-xset r rate 250 50
-
-# set natural scroll direction on external mouse
-MOUSE_ID=$(xinput | grep 'Mouse.*pointer' | head -n 1 | sed 's/.*id=\([0-9]\+\).*/\1/')
-xinput --set-prop $MOUSE_ID 'libinput Natural Scrolling Enabled' 1
-
-# resize wallpaper
-feh --bg-fill ~/Documents/Wallpapers/wp
-
 # Change alacritty font size
 sed -i "s/size\: .*/size\: ${FONT_SIZE}/" $HOME/.config/alacritty/alacritty.yml
 
 # Change i3 key mapping
 sed -i "s/set \$mod .*/set \$mod ${I3_MOD}/" $HOME/.config/i3/config
 i3-msg reload
+
+# resize wallpaper
+feh --bg-fill ~/Documents/Wallpapers/wp
+
+# set natural scroll direction on external mouse
+MOUSE_ID=$(xinput | grep 'Mouse.*pointer' | head -n 1 | sed 's/.*id=\([0-9]\+\).*/\1/')
+xinput --set-prop $MOUSE_ID 'libinput Natural Scrolling Enabled' 1
+
+# set keyboard rate for external keyboard
+xset r rate 250 50
