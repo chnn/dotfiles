@@ -33,7 +33,7 @@ i3-msg reload
 feh --bg-fill ~/Documents/Wallpapers/wp
 
 # set natural scroll direction on external mouse
-MOUSE_ID=$(xinput | grep 'Mouse.*pointer' | head -n 1 | sed 's/.*id=\([0-9]\+\).*/\1/')
+MOUSE_ID=$(xinput | grep 'Logitech G403 Prodigy Gaming Mouse\s*id' | head -n 1 | sed 's/.*id=\([0-9]\+\).*/\1/')
 xinput --set-prop $MOUSE_ID 'libinput Natural Scrolling Enabled' 1
 
 # set keyboard rate for external keyboard

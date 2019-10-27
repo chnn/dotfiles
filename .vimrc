@@ -16,15 +16,16 @@ Plug 'tpope/vim-sleuth'
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
-Plug 'w0rp/ale'
+Plug 'dense-analysis/ale'
 Plug 'reedes/vim-pencil'
 Plug 'junegunn/goyo.vim'
 Plug 'chriskempson/base16-vim'
 Plug 'godlygeek/tabular'
 Plug 'SirVer/ultisnips'
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
-Plug 'mxw/vim-jsx', { 'for': 'javascript' }
 Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
+Plug 'maxmellon/vim-jsx-pretty'
+Plug 'joukevandermaas/vim-ember-hbs'
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 Plug 'lervag/vimtex', { 'for': 'tex' }
 
@@ -42,7 +43,7 @@ set autoindent
 set backspace=indent,eol,start
 set smarttab
 set incsearch
-set laststatus=1
+set laststatus=2
 set ruler
 set hlsearch
 set wildmenu
@@ -51,6 +52,7 @@ set completeopt+=noinsert
 
 set background=light
 colorscheme base16-atelier-seaside
+hi StatusLine ctermbg=10
 
 set list
 hi NonText ctermfg=11
@@ -77,7 +79,7 @@ nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 nnoremap <C-_> <C-W><C-_>
 
-" Misc bindings
+" Clipboard bindings
 if system('uname') == "Linux\n"
   vnoremap <silent> <leader>c :w !xclip -sel clipboard<CR><CR>
 else
@@ -91,18 +93,11 @@ if has('nvim')
   au TermOpen * setlocal nonumber
 endif
 
-" FZF
-nnoremap <silent> <C-p> :Files<CR>
-nnoremap <silent> <leader>p :Files<CR>
-nnoremap <silent> <leader>b :Buffers<CR>
-nnoremap <silent> <leader>l :Rg<CR>
-inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files --hidden')
+" Edit vimrc keybindings
+nnoremap <leader>ev :vsplit ~/.vimrc<cr>
+nnoremap <leader>sv :source $MYVIMRC<cr>
 
 " ALE
-let g:ale_lint_on_save = 0
-let g:ale_fix_on_save = 1
-let g:ale_completion_enabled = 1
-
 nmap <leader>d <Plug>(ale_detail)
 nmap ]r <Plug>(ale_next_wrap)
 nmap [r <Plug>(ale_previous_wrap)
@@ -137,8 +132,20 @@ let g:ale_fixers = {
 \   'python': ['black']
 \}
 
+" FZF
+nnoremap <silent> <C-p> :Files<CR>
+nnoremap <silent> <leader>p :Files<CR>
+nnoremap <silent> <leader>b :Buffers<CR>
+nnoremap <silent> <leader>l :Rg<CR>
+inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files --hidden')
+
 " typescript
 autocmd FileType typescript :set makeprg=tsc\ -p\ ./tsconfig.json\ --noEmit
+
+" Make 'maxmellon/vim-jsx-pretty' recognize the new 'javascriptreact' and
+" 'typescriptreact' filetypes
+autocmd bufnewfile,bufread *.jsx set filetype=javascript.jsx
+autocmd bufnewfile,bufread *.tsx set filetype=typescript.tsx
 
 " rust
 autocmd Filetype rust setlocal signcolumn=yes
@@ -150,7 +157,6 @@ hi clear goSpaceError
 " vim-pencil
 let g:pencil#textwidth = 79
 let g:pencil#conceallevel = 0
-
 nnoremap <silent> <leader>w :SoftPencil<CR>:Goyo<CR>
 
 " UltiSnips
@@ -160,7 +166,6 @@ let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 
 " ripgrep
 set grepprg=rg\ --vimgrep
-
 nnoremap <silent> <leader>g :silent grep "<C-R><C-W>"<CR>:copen<CR>
 vnoremap <silent> <leader>g "sy :silent grep "<C-R>s"<CR>:copen<CR>
 
