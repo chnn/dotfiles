@@ -13,21 +13,26 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-repeat'
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
-Plug 'dense-analysis/ale'
-Plug 'reedes/vim-pencil'
 Plug 'junegunn/goyo.vim'
+Plug 'junegunn/vim-peekaboo'
+Plug 'w0rp/ale'
+Plug 'reedes/vim-pencil'
 Plug 'chriskempson/base16-vim'
 Plug 'godlygeek/tabular'
 Plug 'SirVer/ultisnips'
+Plug 'rstacruz/vim-closer'
+Plug 'rstacruz/vim-hyperstyle', { 'for': 'css' }
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
+Plug 'mxw/vim-jsx', { 'for': 'javascript' }
 Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
-Plug 'maxmellon/vim-jsx-pretty'
-Plug 'joukevandermaas/vim-ember-hbs'
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 Plug 'lervag/vimtex', { 'for': 'tex' }
+" Plug 'Galooshi/vim-import-js'
 
 call plug#end()
 
@@ -42,6 +47,7 @@ set backupcopy=yes
 set autoindent
 set backspace=indent,eol,start
 set smarttab
+set ts=4
 set incsearch
 set laststatus=2
 set ruler
@@ -50,9 +56,9 @@ set wildmenu
 set cursorline
 set completeopt+=noinsert
 
-set background=light
-colorscheme base16-atelier-seaside
-hi StatusLine ctermbg=10
+set background=dark
+colorscheme base16-ia-dark
+hi VertSplit ctermbg=10 ctermfg=10
 
 set list
 hi NonText ctermfg=11
@@ -79,7 +85,11 @@ nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 nnoremap <C-_> <C-W><C-_>
 
-" Clipboard bindings
+" Edit vimrc keybindings
+nnoremap <leader>ev :vsplit ~/.vimrc<cr>
+nnoremap <leader>sv :source $MYVIMRC<cr>
+
+" Misc bindings
 if system('uname') == "Linux\n"
   vnoremap <silent> <leader>c :w !xclip -sel clipboard<CR><CR>
 else
@@ -93,11 +103,18 @@ if has('nvim')
   au TermOpen * setlocal nonumber
 endif
 
-" Edit vimrc keybindings
-nnoremap <leader>ev :vsplit ~/.vimrc<cr>
-nnoremap <leader>sv :source $MYVIMRC<cr>
+" FZF
+nnoremap <silent> <C-p> :Files<CR>
+nnoremap <silent> <leader>p :Files<CR>
+nnoremap <silent> <leader>b :Buffers<CR>
+nnoremap <silent> <leader>l :Rg<CR>
+inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files --hidden')
 
 " ALE
+let g:ale_lint_on_save = 0
+let g:ale_fix_on_save = 1
+let g:ale_completion_enabled = 1
+
 nmap <leader>d <Plug>(ale_detail)
 nmap ]r <Plug>(ale_next_wrap)
 nmap [r <Plug>(ale_previous_wrap)
@@ -114,7 +131,7 @@ hi ALEError cterm=underline
 hi link ALEErrorSign Error
 
 let g:ale_linters = {
-\   'javascript': ['tsserver'],
+\   'javascript': ['flow-language-server', 'eslint'],
 \   'typescript': ['tsserver'],
 \   'go': ['gopls'],
 \   'rust': ['rls'],
@@ -122,22 +139,16 @@ let g:ale_linters = {
 \}
 
 let g:ale_fixers = {
-\   'javascript': ['prettier'],
+\   'javascript': ['eslint'],
 \   'typescript': ['prettier'],
 \   'html': [],
 \   'css': ['prettier'],
 \   'scss': [],
 \   'go': ['gofmt'],
 \   'rust': ['rustfmt'],
+\   'ruby': [],
 \   'python': ['black']
 \}
-
-" FZF
-nnoremap <silent> <C-p> :Files<CR>
-nnoremap <silent> <leader>p :Files<CR>
-nnoremap <silent> <leader>b :Buffers<CR>
-nnoremap <silent> <leader>l :Rg<CR>
-inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files --hidden')
 
 " typescript
 autocmd FileType typescript :set makeprg=tsc\ -p\ ./tsconfig.json\ --noEmit
@@ -147,6 +158,9 @@ autocmd FileType typescript :set makeprg=tsc\ -p\ ./tsconfig.json\ --noEmit
 autocmd bufnewfile,bufread *.jsx set filetype=javascript.jsx
 autocmd bufnewfile,bufread *.tsx set filetype=typescript.tsx
 
+" flow
+let g:javascript_plugin_flow = 1
+
 " rust
 autocmd Filetype rust setlocal signcolumn=yes
 
@@ -154,9 +168,14 @@ autocmd Filetype rust setlocal signcolumn=yes
 autocmd Filetype go setlocal ts=4
 hi clear goSpaceError
 
+" vim-peekaboo
+let g:peekaboo_delay = 200
+let g:peekaboo_window = "vert bo 40new"
+
 " vim-pencil
 let g:pencil#textwidth = 79
 let g:pencil#conceallevel = 0
+
 nnoremap <silent> <leader>w :SoftPencil<CR>:Goyo<CR>
 
 " UltiSnips
@@ -166,6 +185,7 @@ let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 
 " ripgrep
 set grepprg=rg\ --vimgrep
+
 nnoremap <silent> <leader>g :silent grep "<C-R><C-W>"<CR>:copen<CR>
 vnoremap <silent> <leader>g "sy :silent grep "<C-R>s"<CR>:copen<CR>
 
@@ -177,4 +197,9 @@ if system('uname') == "Linux\n"
   let g:vimtex_view_method="zathura"
 else
   let g:vimtex_view_method="skim"
+endif
+
+" stripe-specific settings
+if filereadable(expand('~/.vim/stripe.vim'))
+  source ~/.vim/stripe.vim
 endif
