@@ -29,6 +29,7 @@ Plug 'SirVer/ultisnips'
 Plug 'rstacruz/vim-hyperstyle', { 'for': 'css' }
 Plug 'francoiscabrol/ranger.vim'
 Plug 'rbgrouleff/bclose.vim'
+Plug 'AndrewRadev/splitjoin.vim'
 
 " FML
 Plug 'pangloss/vim-javascript'
@@ -112,12 +113,26 @@ if has('nvim')
 endif
 
 " FZF
-nnoremap <silent> <C-p> :Files<CR>
-nnoremap <silent> <leader>p :Files<CR>
 nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <leader>l :Rg<CR>
+" nnoremap <silent> <C-p> :Files<CR>
+" nnoremap <silent> <leader>p :Files<CR>
 inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files --hidden')
 let g:fzf_preview_window = ''
+
+function! g:FzfFilesSource()
+  let l:base = fnamemodify(expand('%'), ':h:.:S')
+  let l:proximity_sort_path = $HOME . '/.cargo/bin/proximity-sort'
+
+  if base == '.'
+    return 'rg --files --hidden'
+  else
+    return printf('rg --files --hidden | %s %s', l:proximity_sort_path, expand('%'))
+  endif
+endfunction
+
+noremap <silent> <C-p> :call fzf#vim#files('', { 'source': g:FzfFilesSource(), 'options': '--tiebreak=index'})<CR>
+noremap <silent> <leader>p :call fzf#vim#files('', { 'source': g:FzfFilesSource(), 'options': '--tiebreak=index'})<CR>
 
 " TypeScript
 autocmd FileType typescript :set makeprg=tsc\ -p\ ./tsconfig.json\ --noEmit

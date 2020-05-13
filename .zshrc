@@ -36,15 +36,15 @@ export FZF_DEFAULT_COMMAND='rg --files --hidden'
 # Edit current command with ^E
 autoload -U edit-command-line
 zle -N edit-command-line
-bindkey '^E' edit-command-line
+bindkey '^J' edit-command-line
 
 # Prompt
 autoload -U colors && colors
 autoload -Uz vcs_info
 precmd () { vcs_info }
 setopt prompt_subst
-zstyle ':vcs_info:git*' formats " %{$fg[magenta]%}%b%{$reset_color%}"
-PROMPT='%{$fg[blue]%}%3~%{$reset_color%}${vcs_info_msg_0_} $ '
+zstyle ':vcs_info:git*' formats "%F{magenta}%b%f "
+PROMPT='%F{blue}%3~%f ${vcs_info_msg_0_}$ '
 
 # History
 HISTFILE=~/.zsh_history
@@ -81,6 +81,7 @@ alias dc="docker container"
 alias di="docker image"
 alias g='git'
 alias gst='git status -sb'
+alias gp='git pull'
 alias gca='git add -A && git commit -v'
 alias gb='git branch --sort=-committerdate'
 alias gcb='git checkout $(git branch --sort=-committerdate | fzf)'
