@@ -1,0 +1,16 @@
+{
+  "diagnostic.errorSign": ">>",
+  "diagnostic.warningSign": "--",
+  "diagnostic.infoSign": "--",
+  "coc.preferences.formatOnSaveFiletypes": [
+    "typescript",
+    "typescriptreact",
+    "typescript.tsx",
+    "javascript",
+    "javascriptreact",
+    "javascript.jsx",
+    "css",
+    "json",
+    "markdown"
+  ]
+}

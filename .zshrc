@@ -6,6 +6,7 @@ export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export SHELL="/bin/zsh"
 export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
 export GPG_TTY=$(tty)
+export TERM="xterm-256color"
 
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
@@ -14,16 +15,15 @@ export PATH="$HOME/.cargo/bin:$PATH"
 [ -f "$HOME/.stripe.zsh" ] && . "$HOME/.stripe.zsh"
 
 # JavaScript
-export VOLTA_HOME="$HOME/.volta"
+export VOLTA_HOME="/home/chris/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
-[ -s "$VOLTA_HOME/load.sh" ] && . "$VOLTA_HOME/load.sh"
 
 # Go
 export GOPATH="$HOME/stripe/go"
 export GOBIN="$GOPATH/bin"
 export PATH="$GOBIN:$PATH"
 
-# autojump 
+# autojump
 [ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
 [ -f /etc/profile.d/autojump.zsh ] && . /etc/profile.d/autojump.zsh
 
@@ -37,6 +37,19 @@ export FZF_DEFAULT_COMMAND='rg --files --hidden'
 autoload -U edit-command-line
 zle -N edit-command-line
 bindkey '^J' edit-command-line
+
+# Wayland
+export MOZ_ENABLE_WAYLAND=1
+
+j() {
+  [ $# -gt 0 ] && cd $(autojump "$*") && return
+  local dir
+  dir="$(cat ~/Library/autojump/autojump.txt | sort -nr | awk '{print $2}' | fzf +s)" && cd "${dir}" || return 1
+}
+
+nj() {
+  cd $NOTES/Journal && $EDITOR "$(date '+%F %H:%M') $1.md"
+}
 
 # Prompt
 autoload -U colors && colors
@@ -79,6 +92,17 @@ alias pe="pipenv run"
 alias d="docker"
 alias dc="docker container"
 alias di="docker image"
+
+alias sc="systemctl"
+alias scu="systemctl --user"
+alias jc="journalctl"
+alias jcu="journalctl --user"
+
+alias d="sudo docker"
+alias dc="sudo docker container"
+alias dr="sudo docker run"
+alias di="sudo docker image"
+
 alias g='git'
 alias gst='git status -sb'
 alias gp='git pull'
@@ -112,6 +136,10 @@ wip() {
   fi
 }
 
+mov2mp4() {
+  ffmpeg -i "$1" -vcodec h264 "$(echo $1 | rev | cut -c 5- | rev).mp4"
+}
+
 # Convert an input file to a GIF. Requires `ffmpeg` and `gifsicle` to be
 # installed (use Homebrew).
 #
@@ -132,14 +160,4 @@ movs2gifs() {
     trash "$f"
   done
   cd -
-}
-
-mov2mp4() {
-  ffmpeg -i "$1" -vcodec h264 "$(echo $1 | rev | cut -c 5- | rev).mp4"
-}
-
-j() {
-  [ $# -gt 0 ] && cd $(autojump "$*") && return
-  local dir
-  dir="$(cat ~/Library/autojump/autojump.txt | sort -nr | sd '\d+\.\d+\s+(.*)' '$1' | fzf +s)" && cd "${dir}" || return 1
 }

@@ -19,9 +19,10 @@ Plug 'tpope/vim-repeat'
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'reedes/vim-pencil'
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/vim-peekaboo'
-Plug 'w0rp/ale'
 Plug 'reedes/vim-pencil'
 Plug 'chriskempson/base16-vim'
 Plug 'godlygeek/tabular'
@@ -35,9 +36,6 @@ Plug 'AndrewRadev/splitjoin.vim'
 Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim'
 Plug 'maxmellon/vim-jsx-pretty'
-" Plug 'yuezk/vim-js'
-" Plug 'HerringtonDarkholme/yats.vim'
-" Plug 'maxmellon/vim-jsx-pretty'
 
 call plug#end()
 
@@ -97,6 +95,16 @@ nnoremap <C-_> <C-W><C-_>
 " Only makes sense on the weirdo ErgoDox layout
 nnoremap <C-I> <C-W><C-_>
 
+" Copy to system clipboard
+vnoremap <leader>c "+y
+
+" NeoVim terminal settings
+if has('nvim')
+  nnoremap <silent> <leader>t :terminal<CR>
+  tnoremap <Esc> <C-\><C-n>
+  au TermOpen * setlocal nonumber
+endif
+
 " Edit vimrc keybindings
 nnoremap <leader>ev :vsplit ~/.vimrc<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
@@ -116,26 +124,25 @@ if has('nvim')
 endif
 
 " FZF
+nnoremap <silent> <leader>p :Files<CR>
 nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <leader>l :Rg<CR>
-" nnoremap <silent> <C-p> :Files<CR>
-" nnoremap <silent> <leader>p :Files<CR>
 inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files --hidden')
 let g:fzf_preview_window = ''
+let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.6, 'border': 'sharp' } }
 
-function! g:FzfFilesSource()
-  let l:base = fnamemodify(expand('%'), ':h:.:S')
-  let l:proximity_sort_path = $HOME . '/.cargo/bin/proximity-sort'
+" function! g:FzfFilesSource()
+"   let l:base = fnamemodify(expand('%'), ':h:.:S')
+"   let l:proximity_sort_path = $HOME . '/.cargo/bin/proximity-sort'
 
-  if base == '.'
-    return 'rg --files --hidden'
-  else
-    return printf('rg --files --hidden | %s %s', l:proximity_sort_path, expand('%'))
-  endif
-endfunction
-
-noremap <silent> <C-p> :call fzf#vim#files('', { 'source': g:FzfFilesSource(), 'options': '--tiebreak=index'})<CR>
-noremap <silent> <leader>p :call fzf#vim#files('', { 'source': g:FzfFilesSource(), 'options': '--tiebreak=index'})<CR>
+"   if base == '.'
+"     return 'rg --files --hidden'
+"   else
+"     return printf('rg --files --hidden | %s %s', l:proximity_sort_path, expand('%'))
+"   endif
+" endfunction
+" noremap <silent> <C-p> :call fzf#vim#files('', { 'source': g:FzfFilesSource(), 'options': '--tiebreak=index'})<CR>
+" noremap <silent> <leader>p :call fzf#vim#files('', { 'source': g:FzfFilesSource(), 'options': '--tiebreak=index'})<CR>
 
 " TypeScript
 autocmd FileType typescript :set makeprg=tsc\ -p\ ./tsconfig.json\ --noEmit
@@ -143,9 +150,6 @@ autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescript.tsx
 
 " Flow
 let g:javascript_plugin_flow = 1
-
-" Rust
-autocmd Filetype rust setlocal signcolumn=yes
 
 " Go
 autocmd Filetype go setlocal ts=4
@@ -158,69 +162,63 @@ let g:peekaboo_window = "vert bo 40new"
 " vim-pencil
 let g:pencil#textwidth = 79
 let g:pencil#conceallevel = 0
-
 nnoremap <silent> <leader>w :SoftPencil<CR>:Goyo<CR>
 
 " Support comments in JSON
 autocmd FileType json syntax match Comment +\/\/.\+$+
 
-" UltiSnips
-let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim-snippets']
-let g:UltiSnipsJumpForwardTrigger = "<tab>"
-let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
-
 " ripgrep
 set grepprg=rg\ --vimgrep\ --hidden
 
+" <leader>g to grep for visual selection or word under cursor
 nnoremap <silent> <leader>g :silent grep "<C-R><C-W>"<CR>:copen<CR>
 vnoremap <silent> <leader>g "sy :silent grep "<C-R>s"<CR>:copen<CR>
 
+" Automatically open the quickfix window on grep
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
-
-" ALE
-let g:ale_lint_on_save = 0
-let g:ale_fix_on_save = 1
-let g:ale_completion_enabled = 1
-let g:ale_completion_tsserver_autoimport = 1
-
-nmap <leader>d <Plug>(ale_detail)
-nmap ]r <Plug>(ale_next_wrap)
-nmap [r <Plug>(ale_previous_wrap)
-nmap gd <Plug>(ale_go_to_definition)
-nmap gh <Plug>(ale_hover)
-
-hi clear ALEWarning
-hi clear ALEWarningSign
-hi clear ALEError
-hi clear ALEErrorSign
-hi ALEWarning cterm=none
-hi ALEWarningSign ctermfg=3 ctermbg=10
-hi ALEError cterm=underline
-hi ALEErrorSign ctermfg=9 ctermbg=10
-hi link ALEErrorSign Error
-
-let g:ale_linters = {
-\   'javascript': ['eslint'],
-\   'typescript': ['tsserver', 'eslint'],
-\   'go': ['gopls'],
-\   'python': ['pyls']
-\}
-
-let g:ale_fixers = {
-\   'javascript': ['prettier'],
-\   'typescript': ['prettier'],
-\   'markdown': ['prettier'],
-\   'html': ['prettier'],
-\   'css': ['prettier'],
-\   'scss': [],
-\   'go': ['gofmt'],
-\   'rust': ['rustfmt'],
-\   'ruby': [],
-\   'python': ['black']
-\}
 
 " Stripe-specific settings
 if filereadable(expand('~/.vim/stripe.vim'))
   source ~/.vim/stripe.vim
+endif
+
+" coc.nvim
+set updatetime=300
+set shortmess+=c
+set signcolumn=yes
+
+hi CocErrorSign ctermfg=1 ctermbg=10
+hi CocWarningSign ctermfg=3 ctermbg=10
+hi CocInfoSign ctermfg=12 ctermbg=10
+
+nmap <silent> [r <Plug>(coc-diagnostic-prev)
+nmap <silent> ]r <Plug>(coc-diagnostic-next)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> <leader>a <Plug>(coc-codeaction)
+nnoremap <silent> gh :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Use <Tab> to trigger coc.nvim completion
+inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<Tab>" : coc#refresh()
+inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <CR> to confirm coc.nvim completion
+if exists('*complete_info')
+  inoremap <expr> <CR> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+else
+  inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 endif

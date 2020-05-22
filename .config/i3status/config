@@ -28,8 +28,8 @@ tztime local {
 }
 
 path_exists wireguard {
-        path = "/proc/sys/net/ipv4/conf/us15"
-        format = " us15"
+        path = "/proc/sys/net/ipv4/conf/us5"
+        format = " us5"
         format_down = " down"
 }
 
