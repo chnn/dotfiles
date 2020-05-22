@@ -101,6 +101,9 @@ nnoremap <C-I> <C-W><C-_>
 nnoremap <leader>ev :vsplit ~/.vimrc<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 
+" Search for visual selection with //
+vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
+
 " Keybindings to copy to system clipboard
 nnoremap <silent> <leader>c "+yy
 vnoremap <silent> <leader>c "+y
