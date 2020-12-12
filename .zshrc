@@ -1,55 +1,34 @@
 set -o emacs
 
 export EDITOR="nvim"
-export PAGER="bat -p"
-export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export SHELL="/bin/zsh"
 export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
-export GPG_TTY=$(tty)
 export TERM="xterm-256color"
+export NOTES="$HOME/Documents/Notes"
+export JOURNAL="$HOME/Documents/Journal"
 
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
 
-# Stripe
-[ -f "$HOME/.stripe.zsh" ] && . "$HOME/.stripe.zsh"
-
 # JavaScript
-export VOLTA_HOME="/home/chris/.volta"
+export VOLTA_HOME="/Users/christopher/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
 
-# Go
-export GOPATH="$HOME/stripe/go"
-export GOBIN="$GOPATH/bin"
-export PATH="$GOBIN:$PATH"
-
 # autojump
-[ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
-[ -f /etc/profile.d/autojump.zsh ] && . /etc/profile.d/autojump.zsh
+export AUTOJUMP_DB="$HOME/Library/autojump/autojump.txt"
+[ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh # macOS
 
 # FZF
 export FZF_DEFAULT_COMMAND='rg --files --hidden'
 [ -f ~/.fzf.zsh ] && . ~/.fzf.zsh
-[ -f /usr/share/fzf/key-bindings.zsh ] && . /usr/share/fzf/key-bindings.zsh
-[ -f /usr/share/fzf/completion.zsh ] && . /usr/share/fzf/key-bindings.zsh
+
+# Stripe
+[ -f "$HOME/.stripe.zsh" ] && . "$HOME/.stripe.zsh"
 
 # Edit current command with ^E
 autoload -U edit-command-line
 zle -N edit-command-line
-bindkey '^J' edit-command-line
-
-# Wayland
-export MOZ_ENABLE_WAYLAND=1
-
-j() {
-  [ $# -gt 0 ] && cd $(autojump "$*") && return
-  local dir
-  dir="$(cat ~/Library/autojump/autojump.txt | sort -nr | awk '{print $2}' | fzf +s)" && cd "${dir}" || return 1
-}
-
-nj() {
-  cd $NOTES/Journal && $EDITOR "$(date '+%F %H:%M') $1.md"
-}
+bindkey '^E' edit-command-line
 
 # Prompt
 autoload -U colors && colors
@@ -67,14 +46,9 @@ setopt APPEND_HISTORY
 setopt INC_APPEND_HISTORY
 setopt SHARE_HISTORY
 
-# Completion
-autoload -Uz compinit
-compinit
-zstyle ':completion:*' menu select
-
 # Alias'
 alias e="$EDITOR"
-alias ls="exa -lab --time-style=iso"
+alias ls="ls -laG"
 alias f="ranger"
 alias t="cd '$NOTES' && $EDITOR '$NOTES/todo.md'"
 alias tma="tmux attach -d || tmux"
@@ -84,25 +58,7 @@ alias fr="cd ~ && fd --ignore-file .searchignore | fzf --print0 | xargs -0 open 
 alias fe="cd ~ && fd --ignore-file .searchignore | fzf --print0 | xargs -0 $EDITOR"
 alias fo="cd ~ && fd --ignore-file .searchignore | fzf --print0 | xargs -0 open"
 alias ezsh="$EDITOR ~/.zshrc && . ~/.zshrc"
-alias b="bundle exec"
-alias bs="brew services"
-alias m="python manage.py"
-alias y="yarn run"
-alias pe="pipenv run"
-alias d="docker"
-alias dc="docker container"
-alias di="docker image"
-
-alias sc="systemctl"
-alias scu="systemctl --user"
-alias jc="journalctl"
-alias jcu="journalctl --user"
-
-alias d="sudo docker"
-alias dc="sudo docker container"
-alias dr="sudo docker run"
-alias di="sudo docker image"
-
+alias pjs="cat package.json | jq '.scripts'"
 alias g='git'
 alias gst='git status -sb'
 alias gp='git pull'
@@ -111,18 +67,19 @@ alias gb='git branch --sort=-committerdate'
 alias gcb='git checkout $(git branch --sort=-committerdate | fzf)'
 alias gba='git branch -a'
 alias gco="git checkout"
-alias glg='git log --stat --max-count=10'
-alias glgg='git log --graph --max-count=10'
-alias glgga='git log --graph --decorate --all'
-alias glo='git log --oneline --decorate --color'
-alias glog='git log --oneline --decorate --color --graph'
-alias gpuoh='git push -u origin head'
 alias gplease='git push --force-with-lease'
 alias hb='hub browse'
 alias hpr=$'hub pr show $(hub pr list | fzf | sd \'\w*#(\d+).*\' \'$1\')'
-alias sit='echo $(date +"%Y-%m-%d %H:%M"), sit >> $NOTES/transitions.md'
-alias stand='echo $(date +"%Y-%m-%d %H:%M"), stand >> $NOTES/transitions.md'
-alias pjs="cat package.json | jq '.scripts'"
+
+j() {
+  [ $# -gt 0 ] && cd $(autojump "$*") && return
+  local dir
+  dir="$(cat $AUTOJUMP_DB | sort -nr | awk '{print $2}' | fzf +s)" && cd "${dir}" || return 1
+}
+
+nj() {
+  cd $JOURNAL && $EDITOR "$(date '+%F') $1.md"
+}
 
 grbi() {
   git rebase -i HEAD~$1
