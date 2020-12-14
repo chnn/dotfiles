@@ -14,23 +14,19 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-sleuth'
-Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-rsi'
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'reedes/vim-pencil'
 Plug 'junegunn/goyo.vim'
-Plug 'junegunn/vim-peekaboo'
 Plug 'reedes/vim-pencil'
 Plug 'chriskempson/base16-vim'
 Plug 'godlygeek/tabular'
-Plug 'SirVer/ultisnips'
-Plug 'rstacruz/vim-hyperstyle', { 'for': 'css' }
-Plug 'francoiscabrol/ranger.vim'
-Plug 'rbgrouleff/bclose.vim'
 Plug 'AndrewRadev/splitjoin.vim'
+Plug 'neoclide/jsonc.vim'
 
 " FML
 Plug 'pangloss/vim-javascript'
@@ -92,18 +88,8 @@ nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 nnoremap <C-_> <C-W><C-_>
 
-" Only makes sense on the weirdo ErgoDox layout
-nnoremap <C-I> <C-W><C-_>
-
 " Copy to system clipboard
 vnoremap <leader>c "+y
-
-" NeoVim terminal settings
-if has('nvim')
-  nnoremap <silent> <leader>t :terminal<CR>
-  tnoremap <Esc> <C-\><C-n>
-  au TermOpen * setlocal nonumber
-endif
 
 " Edit vimrc keybindings
 nnoremap <leader>ev :vsplit ~/.vimrc<cr>
@@ -124,29 +110,32 @@ if has('nvim')
 endif
 
 " FZF
-nnoremap <silent> <leader>p :Files<CR>
+" nnoremap <silent> <leader>p :Files<CR>
 nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <leader>l :Rg<CR>
 inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files --hidden')
 let g:fzf_preview_window = ''
 let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.6, 'border': 'sharp' } }
 
-" function! g:FzfFilesSource()
-"   let l:base = fnamemodify(expand('%'), ':h:.:S')
-"   let l:proximity_sort_path = $HOME . '/.cargo/bin/proximity-sort'
+function! g:FzfFilesSource()
+  let l:base = fnamemodify(expand('%'), ':h:.:S')
+  let l:proximity_sort_path = $HOME . '/.cargo/bin/proximity-sort'
 
-"   if base == '.'
-"     return 'rg --files --hidden'
-"   else
-"     return printf('rg --files --hidden | %s %s', l:proximity_sort_path, expand('%'))
-"   endif
-" endfunction
-" noremap <silent> <C-p> :call fzf#vim#files('', { 'source': g:FzfFilesSource(), 'options': '--tiebreak=index'})<CR>
-" noremap <silent> <leader>p :call fzf#vim#files('', { 'source': g:FzfFilesSource(), 'options': '--tiebreak=index'})<CR>
+  if base == '.'
+    return "rg --files --hidden -g '!.git'"
+  else
+    return printf("rg --files --hidden -g '!.git' | %s %s", l:proximity_sort_path, expand('%'))
+  endif
+endfunction
+noremap <silent> <leader>p :call fzf#vim#files('', { 'source': g:FzfFilesSource(), 'options': '--tiebreak=index'})<CR>
 
 " TypeScript
 autocmd FileType typescript :set makeprg=tsc\ -p\ ./tsconfig.json\ --noEmit
 autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescript.tsx
+autocmd BufNewFile,BufRead tsconfig.json set filetype=jsonc
+
+" Don't wrap text when creating pull requests with `hub`
+autocmd BufNewFile,BufRead .git/PULLREQ_EDITMSG set tw=0
 
 " Flow
 let g:javascript_plugin_flow = 1
@@ -167,6 +156,9 @@ nnoremap <silent> <leader>w :SoftPencil<CR>:Goyo<CR>
 " Support comments in JSON
 autocmd FileType json syntax match Comment +\/\/.\+$+
 
+" Treat XHTML as HTML
+au BufRead,BufNewFile *.html set filetype=html
+
 " ripgrep
 set grepprg=rg\ --vimgrep\ --hidden
 
@@ -186,7 +178,7 @@ endif
 " coc.nvim
 set updatetime=300
 set shortmess+=c
-set signcolumn=yes
+set signcolumn=auto
 
 hi CocErrorSign ctermfg=1 ctermbg=10
 hi CocWarningSign ctermfg=3 ctermbg=10
@@ -207,18 +199,5 @@ function! s:show_documentation()
   endif
 endfunction
 
-" Use <Tab> to trigger coc.nvim completion
-inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<Tab>" : coc#refresh()
-inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-" Use <CR> to confirm coc.nvim completion
-if exists('*complete_info')
-  inoremap <expr> <CR> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-else
-  inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-endif
+" Enter confirms completion in pop up menu
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"

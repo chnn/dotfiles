@@ -81,6 +81,31 @@ nj() {
   cd $JOURNAL && $EDITOR "$(date '+%F') $1.md"
 }
 
+# Explore a JSON file using Node.
+#
+# Usage:
+#
+#     nq <node expression> <file>
+#     nq <file>
+#
+# Examples:
+#
+#     # Evaluate a JavaScript expression with `$` substituted for the parsed
+#     # `data.json`
+#     nq '$.filter(d => !!d).map(d => d.length)' data.json
+#
+#     # Launch an interactive node REPL with the `$` variable assigned to the
+#     # parsed `data.json`
+#     nq 'data.json'
+#
+nq() {
+  if [ $# -gt 1 ]; then
+    node -e "const $ = JSON.parse(require('fs').readFileSync('$2')); console.log($1)"
+  else
+    node -i -e "const $ = JSON.parse(require('fs').readFileSync('$1'))"
+  fi
+}
+
 grbi() {
   git rebase -i HEAD~$1
 }

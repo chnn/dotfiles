@@ -1,6 +1,9 @@
 {
   "diagnostic.errorSign": ">>",
   "diagnostic.warningSign": "--",
+  "tsserver.enable": false,
+  "eslint.enable": false,
+  "typescript.showUnused": false,
   "diagnostic.infoSign": "--",
   "coc.preferences.formatOnSaveFiletypes": [
     "typescript",
@@ -12,5 +15,6 @@
     "css",
     "json",
     "markdown"
-  ]
+  ],
+  "coc.preferences.extensionUpdateCheck": "daily"
 }
