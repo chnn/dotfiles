@@ -22,9 +22,6 @@ export AUTOJUMP_DB="$HOME/Library/autojump/autojump.txt"
 export FZF_DEFAULT_COMMAND='rg --files --hidden'
 [ -f ~/.fzf.zsh ] && . ~/.fzf.zsh
 
-# Stripe
-[ -f "$HOME/.stripe.zsh" ] && . "$HOME/.stripe.zsh"
-
 # Edit current command with ^E
 autoload -U edit-command-line
 zle -N edit-command-line
@@ -143,3 +140,6 @@ movs2gifs() {
   done
   cd -
 }
+
+# Stripe
+[ -f "$HOME/.stripe.zsh" ] && . "$HOME/.stripe.zsh"
