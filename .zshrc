@@ -22,10 +22,13 @@ export AUTOJUMP_DB="$HOME/Library/autojump/autojump.txt"
 export FZF_DEFAULT_COMMAND='rg --files --hidden'
 [ -f ~/.fzf.zsh ] && . ~/.fzf.zsh
 
-# Edit current command with ^E
+# Stripe
+[ -f "$HOME/.stripe.zsh" ] && . "$HOME/.stripe.zsh"
+
+# Edit current command with ^J
 autoload -U edit-command-line
 zle -N edit-command-line
-bindkey '^E' edit-command-line
+bindkey '^J' edit-command-line
 
 # Prompt
 autoload -U colors && colors
@@ -58,6 +61,7 @@ alias ezsh="$EDITOR ~/.zshrc && . ~/.zshrc"
 alias pjs="cat package.json | jq '.scripts'"
 alias g='git'
 alias gst='git status -sb'
+alias glo='git log --oneline'
 alias gp='git pull'
 alias gca='git add -A && git commit -v'
 alias gb='git branch --sort=-committerdate'
@@ -140,6 +144,3 @@ movs2gifs() {
   done
   cd -
 }
-
-# Stripe
-[ -f "$HOME/.stripe.zsh" ] && . "$HOME/.stripe.zsh"
