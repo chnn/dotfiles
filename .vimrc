@@ -17,7 +17,7 @@ Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-rsi'
 
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
+Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'reedes/vim-pencil'
@@ -27,6 +27,8 @@ Plug 'chriskempson/base16-vim'
 Plug 'godlygeek/tabular'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'neoclide/jsonc.vim'
+Plug 'rizzatti/dash.vim'
+Plug 'svermeulen/vim-yoink'
 
 " FML
 Plug 'pangloss/vim-javascript'
@@ -68,6 +70,9 @@ hi NonText ctermfg=11
 
 " Space as leader
 let mapleader = "\<Space>" 
+
+" Allow folding markdown
+let g:markdown_folding = 1
 
 " Pretty status line
 set statusline=
@@ -137,9 +142,6 @@ autocmd BufNewFile,BufRead tsconfig.json set filetype=jsonc
 " Don't wrap text when creating pull requests with `hub`
 autocmd BufNewFile,BufRead .git/PULLREQ_EDITMSG set tw=0
 
-" Flow
-let g:javascript_plugin_flow = 1
-
 " Go
 autocmd Filetype go setlocal ts=4
 hi clear goSpaceError
@@ -170,6 +172,16 @@ vnoremap <silent> <leader>g "sy :silent grep "<C-R>s"<CR>:copen<CR>
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
 
+" Open docs in Dash with K
+nmap <silent> K <Plug>DashSearch
+
+" vim-yoink
+let g:yoinkIncludeDeleteOperations = 1
+nmap <c-n> <plug>(YoinkPostPasteSwapBack)
+nmap <c-p> <plug>(YoinkPostPasteSwapForward)
+nmap p <plug>(YoinkPaste_p)
+nmap P <plug>(YoinkPaste_P)
+
 " Stripe-specific settings
 if filereadable(expand('~/.vim/stripe.vim'))
   source ~/.vim/stripe.vim
@@ -183,6 +195,7 @@ set signcolumn=auto
 hi CocErrorSign ctermfg=1 ctermbg=10
 hi CocWarningSign ctermfg=3 ctermbg=10
 hi CocInfoSign ctermfg=12 ctermbg=10
+hi CocHintSign ctermfg=11
 
 nmap <silent> [r <Plug>(coc-diagnostic-prev)
 nmap <silent> ]r <Plug>(coc-diagnostic-next)
@@ -200,4 +213,4 @@ function! s:show_documentation()
 endfunction
 
 " Enter confirms completion in pop up menu
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+" inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"

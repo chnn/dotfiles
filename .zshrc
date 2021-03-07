@@ -2,7 +2,7 @@ set -o emacs
 
 export EDITOR="nvim"
 export SHELL="/bin/zsh"
-export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
+export PATH="$HOME/.local/bin:/usr/local/bin:/usr/local/sbin:$PATH"
 export TERM="xterm-256color"
 export NOTES="$HOME/Documents/Notes"
 export JOURNAL="$HOME/Documents/Journal"
@@ -11,7 +11,7 @@ export JOURNAL="$HOME/Documents/Journal"
 export PATH="$HOME/.cargo/bin:$PATH"
 
 # JavaScript
-export VOLTA_HOME="/Users/christopher/.volta"
+export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
 
 # autojump
@@ -48,7 +48,7 @@ setopt SHARE_HISTORY
 
 # Alias'
 alias e="$EDITOR"
-alias ls="ls -laG"
+alias ls="exa -l"
 alias f="ranger"
 alias t="cd '$NOTES' && $EDITOR '$NOTES/todo.md'"
 alias tma="tmux attach -d || tmux"
