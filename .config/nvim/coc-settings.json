@@ -3,6 +3,7 @@
   "diagnostic.warningSign": "--",
   "tsserver.enable": false,
   "eslint.enable": false,
+  "eslint.run": "onSave",
   "typescript.showUnused": false,
   "diagnostic.infoSign": "--",
   "rust-analyzer.lens.enable": false,

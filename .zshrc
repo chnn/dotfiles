@@ -5,7 +5,6 @@ export SHELL="/bin/zsh"
 export PATH="$HOME/.local/bin:/usr/local/bin:/usr/local/sbin:$PATH"
 export TERM="xterm-256color"
 export NOTES="$HOME/Documents/Notes"
-export JOURNAL="$HOME/Documents/Journal"
 
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
@@ -63,6 +62,7 @@ alias g='git'
 alias gst='git status -sb'
 alias glo='git log --oneline'
 alias gp='git pull'
+alias glo='git log --oneline'
 alias gca='git add -A && git commit -v'
 alias gb='git branch --sort=-committerdate'
 alias gcb='git checkout $(git branch --sort=-committerdate | fzf)'
