@@ -49,7 +49,6 @@ setopt SHARE_HISTORY
 alias e="$EDITOR"
 alias ls="exa -l"
 alias f="ranger"
-alias t="cd '$NOTES' && $EDITOR '$NOTES/todo.md'"
 alias tma="tmux attach -d || tmux"
 alias ns='cd "$NOTES" && $EDITOR'
 alias dr="cd ~ && fd --ignore-file .searchignore -t d | fzf --print0 | xargs -0 open"
@@ -66,9 +65,10 @@ alias glo='git log --oneline'
 alias gca='git add -A && git commit -v'
 alias gb='git branch --sort=-committerdate'
 alias gcb='git checkout $(git branch --sort=-committerdate | fzf)'
-alias gba='git branch -a'
+alias gba='git branch -a --sort=-committerdate'
 alias gco="git checkout"
 alias gplease='git push --force-with-lease'
+alias gri='git rebase --autosquash -i'
 alias hb='hub browse'
 alias hpr=$'hub pr show $(hub pr list | fzf | sd \'\w*#(\d+).*\' \'$1\')'
 
@@ -107,8 +107,8 @@ nq() {
   fi
 }
 
-grbi() {
-  git rebase -i HEAD~$1
+grin() {
+  git rebase --autosquash -i HEAD~$1
 }
 
 wip() {
@@ -120,7 +120,7 @@ wip() {
 }
 
 mov2mp4() {
-  ffmpeg -i "$1" -vcodec h264 "$(echo $1 | rev | cut -c 5- | rev).mp4"
+  ffmpeg -i "$1" -vcodec h264 -acodec aac "$(echo $1 | rev | cut -c 5- | rev).mp4"
 }
 
 # Convert an input file to a GIF. Requires `ffmpeg` and `gifsicle` to be
