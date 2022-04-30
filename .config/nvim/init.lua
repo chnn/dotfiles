@@ -1,5 +1,91 @@
 --[[
 
+  Basic editor settings
+  =====================
+
+--]]
+
+-- Pane settings
+vim.o.wrap = false
+vim.o.number = true
+vim.o.laststatus = 2
+vim.o.ruler = true
+vim.o.cursorline = true
+vim.o.signcolumn = 'yes'
+vim.o.showmode = false
+
+-- Show whitespace
+vim.o.list = true
+vim.cmd [[hi NonText ctermfg=11]]
+
+-- Folds
+vim.o.foldmethod = 'indent'
+vim.o.foldlevel = 10
+vim.g.markdown_folding = 1
+
+-- Backup and undo settings
+-- vim.o.directory = '~/.vim-tmp'
+-- vim.o.backupdir = '~/.vim-tmp'
+-- vim.o.backupcopy = 'yes'
+-- vim.o.undofile = true
+-- vim.o.undodir = '~/.vim/undodir'
+vim.o.hidden = true
+
+-- Identation
+vim.o.shiftwidth = 2
+vim.o.tabstop = 2
+vim.o.expandtab = true
+
+-- Search
+vim.o.incsearch = true
+vim.o.hlsearch = true
+
+-- Colors
+vim.o.background = 'dark'
+vim.o.termguicolors = true -- Use nicer colors (may require Neovim and fancy terminal)
+vim.cmd [[colorscheme base16-ia-dark]]
+
+-- Use ripgrep for :grep
+vim.o.grepprg = 'rg --vimgrep --hidden'
+
+--[[
+
+  Keybindings
+  ===========
+
+--]]
+
+-- Use space as leader
+vim.g.mapleader = ' '
+
+-- Keep selected text selected when fixing indentation
+vim.keymap.set('v', '<', '<gv')
+vim.keymap.set('v', '>', '>gv')
+
+-- Quick window navigation
+vim.keymap.set('n', '<C-J>', '<C-W><C-J>')
+vim.keymap.set('n', '<C-K>', '<C-W><C-K>')
+vim.keymap.set('n', '<C-L>', '<C-W><C-L>')
+vim.keymap.set('n', '<C-H>', '<C-W><C-H>')
+vim.keymap.set('n', '<C-_>', '<C-W><C-_>')
+
+-- Edit vimrc keybindings
+vim.keymap.set('n', '<leader>ev', ':vsplit $MYVIMRC<cr>')
+vim.keymap.set('n', '<leader>sv', ':source $MYVIMRC<cr>')
+
+-- Make the current fold the only fold showing ("z This")
+vim.keymap.set('n', 'zT', 'zMzvzczO', { silent = true})
+
+-- Copy to the system clipboard
+vim.keymap.set('n', '<leader>c', '"+yy', { silent = true})
+vim.keymap.set('v', '<leader>c', '"+y', { silent = true})
+
+-- <leader>g to grep for visual selection or word under cursor
+vim.keymap.set('n', '<leader>g', ':silent grep "<C-R><C-W>"<CR>:copen<CR>', {silent = true})
+vim.keymap.set('v', '<leader>g', '"sy :silent grep "<C-R>s"<CR>:copen<CR>', {silent = true})
+
+--[[
+
   Plugins
   =======
 
@@ -87,84 +173,6 @@ end)
 
 --[[
 
-  Basic editor settings
-  =====================
-
---]]
-
--- Pane settings
-vim.o.wrap = false
-vim.o.number = true
-vim.o.laststatus = 2
-vim.o.ruler = true
-vim.o.cursorline = true
-vim.o.signcolumn = 'yes'
-
--- Show whitespace
-vim.o.list = true
-vim.cmd [[hi NonText ctermfg=11]]
-
--- Folds
-vim.o.foldmethod = 'indent'
-vim.o.foldlevel = 10
-vim.g.markdown_folding = 1
-
--- Backup and undo settings
-vim.o.directory = '~/.vim-tmp'
-vim.o.backupdir = '~/.vim-tmp'
-vim.o.backupcopy = 'yes'
-vim.o.undofile = true
-vim.o.undodir = '~/.vim/undodir'
-vim.o.hidden = true
-
--- Identation
-vim.o.shiftwidth = 2
-vim.o.tabstop = 2
-vim.o.expandtab = true
-
--- Search
-vim.o.incsearch = true
-vim.o.hlsearch = true
-
--- Colors
-vim.o.background = 'dark'
-vim.o.termguicolors = true -- Use nicer colors (may require Neovim and fancy terminal)
-vim.cmd [[colorscheme base16-ia-dark]]
-
---[[
-
-  Keybindings
-  ===========
-
---]]
-
--- Use space as leader
-vim.g.mapleader = ' '
-
--- Keep selected text selected when fixing indentation
-vim.keymap.set('v', '<', '<gv')
-vim.keymap.set('v', '>', '>gv')
-
--- Quick window navigation
-vim.keymap.set('n', '<C-J>', '<C-W><C-J>')
-vim.keymap.set('n', '<C-K>', '<C-W><C-K>')
-vim.keymap.set('n', '<C-L>', '<C-W><C-L>')
-vim.keymap.set('n', '<C-H>', '<C-W><C-H>')
-vim.keymap.set('n', '<C-_>', '<C-W><C-_>')
-
--- Edit vimrc keybindings
-vim.keymap.set('n', '<leader>ev', ':vsplit $MYVIMRC<cr>')
-vim.keymap.set('n', '<leader>sv', ':source $MYVIMRC<cr>')
-
--- Make the current fold the only fold showing ("z This")
-vim.keymap.set('n', 'zT', 'zMzvzczO', { silent = true})
-
--- Copy to the system clipboard
-vim.keymap.set('n', '<leader>c', '"+yy', { silent = true})
-vim.keymap.set('v', '<leader>c', '"+y', { silent = true})
-
---[[
-
   Completion settings
   ===================
 
@@ -172,7 +180,9 @@ vim.keymap.set('v', '<leader>c', '"+y', { silent = true})
 
 local cmp = require'cmp'
 
-vim.o.completeopt = 'menuone,noselect' -- noinsert, nopreview
+vim.o.completeopt = 'menu,menuone'
+vim.o.shortmess = vim.o.shortmess .. 'c'
+vim.o.updatetime = 300
 
 cmp.setup({
   snippet = {
@@ -181,11 +191,13 @@ cmp.setup({
     end,
   },
   mapping = {
-    ['<C-e>'] = cmp.mapping({
-      i = cmp.mapping.abort(),
-      c = cmp.mapping.close(),
-    }),
+    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    -- ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.abort(),
     ['<CR>'] = cmp.mapping.confirm({ select = true }),
+    ['<C-n>'] = cmp.mapping(cmp.mapping.select_next_item()),
+    ['<C-p>'] = cmp.mapping(cmp.mapping.select_prev_item()),
   },
   sources = cmp.config.sources(
     {{ name = 'nvim_lsp' }},
@@ -205,7 +217,6 @@ cmp.setup.cmdline(':', {
   )
 })
 
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 --[[
 
@@ -230,38 +241,28 @@ vim.diagnostic.config({
   severity_sort = false,
 })
 
+vim.keymap.set('n', 'gd', vim.lsp.buf.definition)
+vim.keymap.set('n', 'gh', vim.lsp.buf.hover)
+vim.keymap.set('n', 'gr', vim.lsp.buf.references)
+vim.keymap.set('n', '[r', function() vim.diagnostic.goto_prev({severity = {min = vim.diagnostic.severity.WARN}}) end)
+vim.keymap.set('n', ']r', function() vim.diagnostic.goto_next({severity = {min = vim.diagnostic.severity.WARN}}) end)
+vim.keymap.set('n', '<space>f', vim.lsp.buf.formatting)
+vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename)
+vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action)
+
 local nvim_lsp = require('lspconfig')
 local null_ls = require("null-ls")
 
-local on_attach = function(client, bufnr)
-  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
-  local opts = { noremap=true, silent=true }
-
-  -- Enable completion triggered by <c-x><c-o>
-  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-  buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  buf_set_keymap('n', 'gh', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  buf_set_keymap('n', '[r', '<cmd>lua vim.diagnostic.goto_prev({severity = {min = vim.diagnostic.severity.WARN}})<CR>', opts)
-  buf_set_keymap('n', ']r', '<cmd>lua vim.diagnostic.goto_next({severity = {min = vim.diagnostic.severity.WARN}})<CR>', opts)
-  buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
-  buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-end
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 nvim_lsp.flow.setup{
   capabilities = capabilities,
-  on_attach = on_attach,
   filetypes = { "javascript", "javascriptreact", "javascript.jsx" },
   flags = { debounce_text_changes = 100, },
 }
 
 nvim_lsp.tsserver.setup{
   capabilities = capabilities,
-  on_attach = on_attach,
   filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
   flags = { debounce_text_changes = 100, },
 }
@@ -303,7 +304,15 @@ vim.keymap.set('n', '<leader>j', ':Trouble<cr>', {silent = true})
 require('lualine').setup({
   options = {
     icons_enabled = false,
-    globalstatus = true
+    globalstatus = true,
+    section_separators = { left = '', right = '' },
+    component_separators = { left = '', right = '' }
+  },
+  sections = {
+    lualine_b = {'branch', 'diff'},
+    lualine_c = {{'filename', path = 1}},
+    lualine_x = {'diagnostics'},
+    lualine_y = {'filetype'}
   }
 })
 
@@ -357,16 +366,6 @@ nnoremap <silent> <leader>w :SoftPencil<CR>:Goyo<CR>
 " Support comments in JSON
 autocmd FileType json syntax match Comment +\/\/.\+$+
 
-" Treat XHTML as HTML
-au BufRead,BufNewFile *.html set filetype=html
-
-" ripgrep
-set grepprg=rg\ --vimgrep\ --hidden
-
-" <leader>g to grep for visual selection or word under cursor
-nnoremap <silent> <leader>g :silent grep "<C-R><C-W>"<CR>:copen<CR>
-vnoremap <silent> <leader>g "sy :silent grep "<C-R>s"<CR>:copen<CR>
-
 " Automatically open the quickfix window on grep
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
@@ -374,17 +373,5 @@ autocmd QuickFixCmdPost    l* nested lwindow
 " Open docs in Dash with K
 nmap <silent> K <Plug>DashSearch
 
-set updatetime=300
-set shortmess+=c
-
 autocmd CompleteDone * pclose
-
-" highlight LspDiagnosticsDefaultError ctermfg=9
-" highlight LspDiagnosticsSignError ctermfg=9 ctermbg=10
-" highlight LspDiagnosticsDefaultHint ctermfg=11
-" highlight LspDiagnosticsSignHint ctermfg=11 ctermbg=10
-" highlight LspDiagnosticsDefaultInfo ctermfg=12
-" highlight LspDiagnosticsSignInfo ctermfg=12 ctermbg=10
-" highlight LspDiagnosticsDefaultWarning ctermfg=3
-" highlight LspDiagnosticsSignWarning ctermfg=3 ctermbg=10
 ]])
