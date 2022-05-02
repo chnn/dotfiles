@@ -6,6 +6,7 @@ vim.o.ruler = true
 vim.o.cursorline = true
 vim.o.signcolumn = 'yes'
 vim.o.showmode = false
+vim.cmd(':set fillchars+=vert:\\ ')
 
 -- Folds
 vim.o.foldmethod = 'indent'
@@ -32,7 +33,6 @@ vim.o.hlsearch = true
 -- Colors
 vim.o.background = 'dark'
 vim.o.termguicolors = true -- Use nicer colors (may require Neovim and fancy terminal)
-vim.cmd [[colorscheme afterglow]]
 
 -- LSP and diagnostics
 vim.diagnostic.config({
@@ -94,8 +94,8 @@ vim.keymap.set('n', '<C-H>', '<C-W><C-H>')
 vim.keymap.set('n', '<C-_>', '<C-W><C-_>')
 
 -- Edit vimrc keybindings
-vim.keymap.set('n', '<leader>ev', ':vsplit $MYVIMRC<cr>')
-vim.keymap.set('n', '<leader>sv', ':source $MYVIMRC<cr>')
+vim.keymap.set('n', '<leader>ev', ':vsplit $MYVIMRC<CR>', {silent = true})
+vim.keymap.set('n', '<leader>sv', ':source $MYVIMRC<CR>:PackerSync<CR>', {silent = true})
 
 -- Make the current fold the only fold showing ("z This")
 vim.keymap.set('n', 'zT', 'zMzvzczO', { silent = true})
@@ -127,9 +127,14 @@ require('packer').startup(function(use)
   use 'godlygeek/tabular'
   use 'neoclide/jsonc.vim'
   use 'junegunn/vim-peekaboo'
-  use 'danilo-augusto/vim-afterglow'
   use 'junegunn/goyo.vim'
 
+  use {
+    'RRethy/nvim-base16',
+    config = function()
+      vim.cmd('colorscheme base16-tomorrow-night')
+    end
+  }
   use {
     'rizzatti/dash.vim',
     config = function()
@@ -188,7 +193,7 @@ require('packer').startup(function(use)
       require('lualine').setup({
         options = {
           icons_enabled = false,
-          globalstatus = true,
+          globalstatus = false,
           section_separators = { left = '', right = '' },
           component_separators = { left = '', right = '' }
         },
@@ -197,7 +202,15 @@ require('packer').startup(function(use)
           lualine_c = {{'filename', path = 1}},
           lualine_x = {'diagnostics'},
           lualine_y = {'filetype'}
-        }
+        },
+        inactive_sections = {
+          lualine_a = {},
+          lualine_b = {},
+          lualine_c = {{'filename', path = 1}},
+          lualine_x = {'location'},
+          lualine_y = {},
+          lualine_z = {}
+        },
       })
     end
   }
@@ -317,12 +330,23 @@ require('packer').startup(function(use)
     run = ':TSUpdate',
     config = function()
       require'nvim-treesitter.configs'.setup {
-        ensure_installed = { "lua", "javascript", "typescript", "ruby" },
+        ensure_installed = {
+          "lua",
+          "html",
+          "css",
+          "javascript",
+          "typescript",
+          "python",
+          "tsx",
+          "ruby"
+        },
 
         highlight = {
           enable = true,
           additional_vim_regex_highlighting = false,
         },
+
+        indent = { enable = true },
       }
     end
   }
