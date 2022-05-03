@@ -3,7 +3,7 @@ set -o emacs
 export EDITOR="nvim"
 export SHELL="/bin/zsh"
 export PATH="$HOME/.local/bin:/usr/local/bin:/usr/local/sbin:$PATH"
-export TERM="xterm-256color"
+export TERM="screen-256color"
 export NOTES="$HOME/Documents/Notes"
 
 # Rust
@@ -79,7 +79,11 @@ j() {
 }
 
 nj() {
-  cd $JOURNAL && $EDITOR "$(date '+%F') $1.md"
+  if [ $# -gt 0 ]; then
+    cd $JOURNAL && $EDITOR "$(date '+%F') $1.md"
+  else
+    cd $JOURNAL && $EDITOR "$(date '+%F').md"
+  fi
 }
 
 # Explore a JSON file using Node.

@@ -60,8 +60,8 @@ vim.o.list = true
 vim.cmd [[hi NonText ctermfg=11]]
 
 -- <leader>g to grep for visual selection or word under cursor
-vim.keymap.set('n', '<leader>g', ':silent grep "<C-R><C-W>"<CR>:copen<CR>', {silent = true})
-vim.keymap.set('v', '<leader>g', '"sy :silent grep "<C-R>s"<CR>:copen<CR>', {silent = true})
+vim.keymap.set('n', '<leader>g', ':grep"<C-R><C-W>"<CR>:copen<CR>', {silent = true})
+vim.keymap.set('v', '<leader>g', '"sy:grep"<C-R>s"<CR>:copen<CR>', {silent = true})
 
 -- Automatically open the quickfix window on grep
 vim.cmd([[
@@ -95,7 +95,7 @@ vim.keymap.set('n', '<C-_>', '<C-W><C-_>')
 
 -- Edit vimrc keybindings
 vim.keymap.set('n', '<leader>ev', ':vsplit $MYVIMRC<CR>', {silent = true})
-vim.keymap.set('n', '<leader>sv', ':source $MYVIMRC<CR>:PackerSync<CR>', {silent = true})
+vim.keymap.set('n', '<leader>sv', ':source $MYVIMRC<CR>:PackerCompile<CR>', {silent = true})
 
 -- Make the current fold the only fold showing ("z This")
 vim.keymap.set('n', 'zT', 'zMzvzczO', { silent = true})
@@ -224,15 +224,15 @@ require('packer').startup(function(use)
       null_ls.setup({
         sources = {
           null_ls.builtins.diagnostics.eslint_d,
-          null_ls.builtins.formatting.prettier
+          null_ls.builtins.formatting.prettierd
         },
         on_attach = function(client)
           if client.resolved_capabilities.document_formatting then
             vim.cmd([[
-            augroup lspformatting
-            autocmd! * <buffer>
-            autocmd bufwritepre <buffer> lua vim.lsp.buf.formatting_seq_sync()
-            augroup end
+              augroup lspformatting
+                autocmd! * <buffer>
+                autocmd bufwritepre <buffer> lua vim.lsp.buf.formatting_sync()
+              augroup end
             ]])
           end
         end,
@@ -308,16 +308,14 @@ require('packer').startup(function(use)
       local nvim_lsp = require('lspconfig')
       local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
-      nvim_lsp.flow.setup{
-        capabilities = capabilities,
-        filetypes = { "javascript", "javascriptreact", "javascript.jsx" },
-        flags = { debounce_text_changes = 100, },
-      }
-
       nvim_lsp.tsserver.setup{
         capabilities = capabilities,
         filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
         flags = { debounce_text_changes = 100, },
+        on_attach = function(client)
+          -- Disable since it conflicts with Prettier
+          client.resolved_capabilities.document_formatting = false
+        end
       }
 
       -- View logs with `:lua vim.cmd('e'..vim.lsp.get_log_path())`
