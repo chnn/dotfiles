@@ -6,7 +6,7 @@ vim.o.ruler = true
 vim.o.cursorline = true
 vim.o.signcolumn = 'yes'
 vim.o.showmode = false
-vim.cmd(':set fillchars+=vert:\\ ')
+vim.opt.fillchars:append({vert = ' '})
 
 -- Folds
 vim.o.foldmethod = 'indent'
@@ -14,7 +14,7 @@ vim.o.foldlevel = 10
 vim.g.markdown_folding = 1
 
 -- Backup and undo
-vim.o.hidden = true
+vim.o.hidden = false
 vim.o.backupcopy = 'yes'
 vim.o.undofile = true
 vim.o.directory = vim.fn.stdpath('cache') .. '/swap'
@@ -26,51 +26,90 @@ vim.o.shiftwidth = 2
 vim.o.tabstop = 2
 vim.o.expandtab = true
 
--- Search
+-- Search and replace
 vim.o.incsearch = true
 vim.o.hlsearch = true
+vim.o.inccommand = 'split'
 
 -- Colors
 vim.o.background = 'dark'
 vim.o.termguicolors = true -- Use nicer colors (may require Neovim and fancy terminal)
 
+-- Use space as leader
+vim.g.mapleader = ' '
+
 -- LSP and diagnostics
+local diagnostic_severity = {min = vim.diagnostic.severity.WARN}
+
+local format_diagnostic = function(d)
+  -- Include the error code for ESLint diagnostics
+  if d.source == "eslint" or d.source == "eslint_d" then
+    return "(" .. tostring(d.code) .. ") " .. d.message
+  end
+
+  return d.message
+end
+
 vim.diagnostic.config({
   virtual_text = false,
-  signs = {severity = {min = vim.diagnostic.severity.WARN}},
-  underline = false,
+  signs = {severity = diagnostic_severity},
+  underline = {severity = diagnostic_severity},
   update_in_insert = false,
-  severity_sort = false,
+  severity_sort = true,
 })
 
 vim.keymap.set('n', 'gd', vim.lsp.buf.definition)
 vim.keymap.set('n', 'gh', vim.lsp.buf.hover)
 vim.keymap.set('n', 'gr', vim.lsp.buf.references)
-vim.keymap.set('n', '[r', function() vim.diagnostic.goto_prev({severity = {min = vim.diagnostic.severity.WARN}}) end)
-vim.keymap.set('n', ']r', function() vim.diagnostic.goto_next({severity = {min = vim.diagnostic.severity.WARN}}) end)
 vim.keymap.set('n', '<space>f', vim.lsp.buf.formatting)
 vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename)
 vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action)
+vim.keymap.set('n', '[r', function() vim.diagnostic.goto_prev({ severity = diagnostic_severity, float = { format = format_diagnostic }}) end)
+vim.keymap.set('n', ']r', function() vim.diagnostic.goto_next({ severity = diagnostic_severity, float = { format = format_diagnostic }}) end)
+vim.keymap.set('n', '<leader>j', function() vim.diagnostic.setqflist({ open = true, severity = diagnostic_severity, }) end)
 
--- Use ripgrep for :grep
-vim.o.grepprg = 'rg --vimgrep --hidden'
+-- Open the full message for the first diagnostic under the cursor in a buffer
+-- (useful for very long TypeScript errors)
+vim.keymap.set(
+  'n',
+  'ge',
+  function()
+    local lnum = vim.api.nvim_eval("line('.') - 1")
+    local d = vim.diagnostic.get(0, {lnum = lnum, severity_sort = true})[1]
+
+    if d == nil then
+      return
+    end
+
+    -- Using a tmpfile because I can't figure out how to escape | and " when
+    -- pasting a register using :put
+    local tmpfile_path = vim.fn.stdpath('cache') .. '/diagnostic'
+    local f = io.open(tmpfile_path, "w")
+    f:write(d.message)
+    f:close()
+    vim.api.nvim_command("pedit " .. tmpfile_path)
+  end
+)
 
 -- Show whitespace
 vim.o.list = true
 vim.cmd [[hi NonText ctermfg=11]]
 
--- <leader>g to grep for visual selection or word under cursor
-vim.keymap.set('n', '<leader>g', ':grep"<C-R><C-W>"<CR>:copen<CR>', {silent = true})
-vim.keymap.set('v', '<leader>g', '"sy:grep"<C-R>s"<CR>:copen<CR>', {silent = true})
+-- Use ripgrep for :grep
+vim.o.grepprg = "rg --vimgrep --hidden --iglob '!.git'"
 
--- Automatically open the quickfix window on grep
+-- <leader>g to grep for visual selection or word under cursor
+vim.keymap.set('n', '<leader>g', ':silent grep"<C-R><C-W>"<CR>:copen<CR>', {silent = true})
+vim.keymap.set('v', '<leader>g', '"sy:silent grep"<C-R>s"<CR>:copen<CR>', {silent = true})
+
+-- Automatically open the quickfix window on :grep
 vim.cmd([[
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
 ]])
 
 -- Treat kebab-cases variables as one word
-vim.cmd([[set iskeyword+=]])
+vim.opt.iskeyword:append("-")
 
 -- Stripe-specific settings
 vim.cmd([[
@@ -79,22 +118,19 @@ if filereadable(expand('~/.config/nvim/stripe.vim'))
 endif
 ]])
 
--- Use space as leader
-vim.g.mapleader = ' '
-
 -- Keep selected text selected when fixing indentation
 vim.keymap.set('v', '<', '<gv')
 vim.keymap.set('v', '>', '>gv')
 
 -- Quicker window navigation keybindings
-vim.keymap.set('n', '<C-J>', '<C-W><C-J>')
-vim.keymap.set('n', '<C-K>', '<C-W><C-K>')
-vim.keymap.set('n', '<C-L>', '<C-W><C-L>')
-vim.keymap.set('n', '<C-H>', '<C-W><C-H>')
-vim.keymap.set('n', '<C-_>', '<C-W><C-_>')
+vim.keymap.set('n', 's', '<C-W>')
+vim.keymap.set('n', 'sm', '<C-W><C-_>')
+vim.keymap.set('n', 'su', '<C-W>=')
+vim.cmd([[autocmd FileType fugitive silent! nunmap <buffer> s]])
+vim.cmd([[autocmd FileType netrw silent! nunmap <buffer> s]])
 
 -- Edit vimrc keybindings
-vim.keymap.set('n', '<leader>ev', ':vsplit $MYVIMRC<CR>', {silent = true})
+vim.keymap.set('n', '<leader>ev', ':e $MYVIMRC<CR>', {silent = true})
 vim.keymap.set('n', '<leader>sv', ':source $MYVIMRC<CR>:PackerCompile<CR>', {silent = true})
 
 -- Make the current fold the only fold showing ("z This")
@@ -103,6 +139,9 @@ vim.keymap.set('n', 'zT', 'zMzvzczO', { silent = true})
 -- Copy to the system clipboard
 vim.keymap.set('n', '<leader>c', '"+yy', { silent = true})
 vim.keymap.set('v', '<leader>c', '"+y', { silent = true})
+
+-- Close all buffers but this one with :Rlw ("reload workspace")
+vim.cmd([[command! Rlw %bd|e#]])
 
 -- Clone packer if necessary
 local install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
@@ -135,6 +174,7 @@ require('packer').startup(function(use)
       vim.cmd('colorscheme base16-tomorrow-night')
     end
   }
+
   use {
     'rizzatti/dash.vim',
     config = function()
@@ -173,21 +213,6 @@ require('packer').startup(function(use)
   }
 
   use {
-    'folke/trouble.nvim',
-    config = function()
-      require("trouble").setup {
-        icons = false,
-        fold_open = "",
-        fold_closed = "",
-        indent_lines = false,
-        use_diagnostic_signs = true
-      }
-
-      vim.keymap.set('n', '<leader>j', ':Trouble<cr>', {silent = true})
-    end
-  }
-
-  use {
     'nvim-lualine/lualine.nvim',
     config = function()
       require('lualine').setup({
@@ -200,7 +225,7 @@ require('packer').startup(function(use)
         sections = {
           lualine_b = {'branch', 'diff'},
           lualine_c = {{'filename', path = 1}},
-          lualine_x = {'diagnostics'},
+          lualine_x = {{'diagnostics', sections = {'error', 'warn'}}},
           lualine_y = {'filetype'}
         },
         inactive_sections = {
@@ -310,7 +335,7 @@ require('packer').startup(function(use)
 
       nvim_lsp.tsserver.setup{
         capabilities = capabilities,
-        filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
+        filetypes = { "javascript", "typescript", "typescriptreact", "typescript.tsx" },
         flags = { debounce_text_changes = 100, },
         on_attach = function(client)
           -- Disable since it conflicts with Prettier
@@ -318,7 +343,7 @@ require('packer').startup(function(use)
         end
       }
 
-      -- View logs with `:lua vim.cmd('e'..vim.lsp.get_log_path())`
+      -- View logs with `:lua vim.cmd('e' .. vim.lsp.get_log_path())`
       -- vim.lsp.set_log_level("debug")
     end
   }
@@ -336,7 +361,10 @@ require('packer').startup(function(use)
           "typescript",
           "python",
           "tsx",
-          "ruby"
+          "ruby",
+          "hcl",
+          "markdown",
+          "bash",
         },
 
         highlight = {
@@ -344,7 +372,7 @@ require('packer').startup(function(use)
           additional_vim_regex_highlighting = false,
         },
 
-        indent = { enable = true },
+        -- indent = { enable = true },
       }
     end
   }

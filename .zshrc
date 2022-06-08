@@ -60,6 +60,7 @@ alias pjs="cat package.json | jq '.scripts'"
 alias g='git'
 alias gst='git status -sb'
 alias glo='git log --oneline'
+alias glon='git log --oneline -n 10'
 alias gp='git pull'
 alias glo='git log --oneline'
 alias gca='git add -A && git commit -v'
@@ -69,8 +70,19 @@ alias gba='git branch -a --sort=-committerdate'
 alias gco="git checkout"
 alias gplease='git push --force-with-lease'
 alias gri='git rebase --autosquash -i'
+alias gfu='git add -A && git commit --fixup'
+alias gbb='gh browse -b $(git branch --show-current)'
 alias hb='hub browse'
 alias hpr=$'hub pr show $(hub pr list | fzf | sd \'\w*#(\d+).*\' \'$1\')'
+alias fyr='yarn run $(cat package.json | jq -r ".scripts | keys[]" | fzf)'
+
+gprs() {
+  gh pr view --web $(gh pr list -L 100 | fzf | sd '^([0-9]+).*' '$1')
+}
+
+gcopr() {
+  gh pr checkout $(gh pr list -L 100 | fzf | sd '^([0-9]+).*' '$1')
+}
 
 j() {
   [ $# -gt 0 ] && cd $(autojump "$*") && return
