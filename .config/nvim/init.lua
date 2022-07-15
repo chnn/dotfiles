@@ -153,7 +153,12 @@ require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
 
   -- Our lord and savior
-  use 'tpope/vim-fugitive'
+  use {
+    'tpope/vim-fugitive',
+    config = function()
+      vim.keymap.set('n', '<leader>n', ':vert Git ++curwin log --oneline -n 100<CR>')
+    end
+  }
   use 'tpope/vim-rhubarb'
   use 'tpope/vim-surround'
   use 'tpope/vim-unimpaired'
@@ -249,7 +254,16 @@ require('packer').startup(function(use)
       null_ls.setup({
         sources = {
           null_ls.builtins.diagnostics.eslint_d,
-          null_ls.builtins.formatting.prettierd
+          null_ls.builtins.formatting.prettierd.with({
+            filetypes = {
+              "json",
+              "markdown",
+              "javascript",
+              "javascriptreact",
+              "typescript",
+              "typescriptreact"
+            },
+          })
         },
         on_attach = function(client)
           if client.resolved_capabilities.document_formatting then
@@ -337,6 +351,11 @@ require('packer').startup(function(use)
         capabilities = capabilities,
         filetypes = { "javascript", "typescript", "typescriptreact", "typescript.tsx" },
         flags = { debounce_text_changes = 100, },
+        init_options = {
+          preferences = {
+            importModuleSpecifierPreference = "non-relative",
+          },
+        },
         on_attach = function(client)
           -- Disable since it conflicts with Prettier
           client.resolved_capabilities.document_formatting = false
