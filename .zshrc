@@ -13,9 +13,8 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
 
-# autojump
-export AUTOJUMP_DB="$HOME/Library/autojump/autojump.txt"
-[ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh # macOS
+# cd
+eval "$(zoxide init zsh)"
 
 # FZF
 export FZF_DEFAULT_COMMAND='rg --files --hidden'
@@ -74,7 +73,7 @@ alias gfu='git add -A && git commit --fixup'
 alias gbb='gh browse -b $(git branch --show-current)'
 alias hb='hub browse'
 alias hpr=$'hub pr show $(hub pr list | fzf | sd \'\w*#(\d+).*\' \'$1\')'
-alias fyr='yarn run $(cat package.json | jq -r ".scripts | keys[]" | fzf)'
+alias yr='yarn run $(cat package.json | jq -r ".scripts | keys[]" | fzf)'
 
 gprs() {
   gh pr view --web $(gh pr list -L 100 | fzf | sd '^([0-9]+).*' '$1')
