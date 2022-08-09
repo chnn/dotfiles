@@ -17,7 +17,7 @@ export PATH="$VOLTA_HOME/bin:$PATH"
 eval "$(zoxide init zsh)"
 
 # FZF
-export FZF_DEFAULT_COMMAND='rg --files --hidden'
+export FZF_DEFAULT_COMMAND="rg --files --hidden --iglob '!.git'"
 [ -f ~/.fzf.zsh ] && . ~/.fzf.zsh
 
 # Stripe
@@ -57,7 +57,8 @@ alias fo="cd ~ && fd --ignore-file .searchignore | fzf --print0 | xargs -0 open"
 alias ezsh="$EDITOR ~/.zshrc && . ~/.zshrc"
 alias pjs="cat package.json | jq '.scripts'"
 alias g='git'
-alias gst='git status -sb'
+alias gs='git status -sb -uno'
+alias gsu='git status -sb'
 alias glo='git log --oneline -n 20'
 alias glon='git log --oneline -n 10'
 alias gp='git pull'
@@ -67,6 +68,7 @@ alias gb='git branch --sort=-committerdate'
 alias gcb='git checkout $(git branch --sort=-committerdate | fzf)'
 alias gba='git branch -a --sort=-committerdate'
 alias gco="git checkout"
+alias grp="git rev-parse HEAD"
 alias gplease='git push --force-with-lease'
 alias gri='git rebase --autosquash -i'
 alias gfu='git add -A && git commit --fixup'
@@ -83,17 +85,19 @@ gcopr() {
   gh pr checkout $(gh pr list -L 100 | fzf | sd '^([0-9]+).*' '$1')
 }
 
-j() {
-  [ $# -gt 0 ] && cd $(autojump "$*") && return
-  local dir
-  dir="$(cat $AUTOJUMP_DB | sort -nr | awk '{print $2}' | fzf +s)" && cd "${dir}" || return 1
-}
-
 nj() {
   if [ $# -gt 0 ]; then
     cd $JOURNAL && $EDITOR "$(date '+%F') $1.md"
   else
     cd $JOURNAL && $EDITOR "$(date '+%F').md"
+  fi
+}
+
+function j() {
+  if [[ $# -gt 0 ]]; then
+    z $1
+  else
+    zi
   fi
 }
 
