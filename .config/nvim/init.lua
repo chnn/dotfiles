@@ -104,12 +104,8 @@ autocmd QuickFixCmdPost    l* nested lwindow
 -- Treat kebab-cases variables as one word
 vim.opt.iskeyword:append("-")
 
--- Stripe-specific settings
-vim.cmd([[
-if filereadable(expand('~/.config/nvim/stripe.vim'))
-  source ~/.config/nvim/stripe.vim
-endif
-]])
+-- Work-specific settings
+pcall(require, 'work')
 
 -- Keep selected text selected when fixing indentation
 vim.keymap.set("v", "<", "<gv")
@@ -132,6 +128,9 @@ vim.keymap.set("n", "zT", "zMzvzczO", { silent = true })
 -- Copy to the system clipboard
 vim.keymap.set("n", "<leader>c", '"+yy', { silent = true })
 vim.keymap.set("v", "<leader>c", '"+y', { silent = true })
+
+-- Exist terminal mode with Esc
+vim.cmd([[tnoremap <Esc> <C-\><C-n>:q!<CR>]]);
 
 -- Close all buffers but this one with :Rlw ("reload workspace")
 vim.cmd([[command! Rlw %bd|e#]])
@@ -258,16 +257,7 @@ require("packer").startup(function(use)
               return null_ls_utils.root_pattern("package.json")(params.bufname)
             end),
           }),
-          null_ls.builtins.formatting.prettierd.with({
-            filetypes = {
-              "json",
-              "markdown",
-              "javascript",
-              "javascriptreact",
-              "typescript",
-              "typescriptreact",
-            },
-          }),
+          null_ls.builtins.formatting.prettierd,
           null_ls.builtins.formatting.stylua.with({
             extra_args = { "--indent-type", "Spaces", "--indent-size", 2 },
           }),
@@ -289,13 +279,10 @@ require("packer").startup(function(use)
   use({
     "hrsh7th/nvim-cmp",
     requires = {
-      { "hrsh7th/vim-vsnip" },
-      { "hrsh7th/vim-vsnip-integ" },
       { "hrsh7th/cmp-nvim-lsp" },
       { "hrsh7th/cmp-buffer" },
       { "hrsh7th/cmp-path" },
       { "hrsh7th/cmp-cmdline" },
-      { "hrsh7th/cmp-vsnip" },
     },
     config = function()
       local cmp = require("cmp")
@@ -305,11 +292,6 @@ require("packer").startup(function(use)
       vim.o.updatetime = 300
 
       cmp.setup({
-        snippet = {
-          expand = function(args)
-            vim.fn["vsnip#anonymous"](args.body)
-          end,
-        },
         mapping = {
           ["<C-b>"] = cmp.mapping.scroll_docs(-4),
           ["<C-f>"] = cmp.mapping.scroll_docs(4),
@@ -363,7 +345,7 @@ require("packer").startup(function(use)
       })
 
       -- View logs with `:lua vim.cmd('e' .. vim.lsp.get_log_path())`
-      vim.lsp.set_log_level("debug")
+      -- vim.lsp.set_log_level("debug")
     end,
   })
 
@@ -391,7 +373,7 @@ require("packer").startup(function(use)
           additional_vim_regex_highlighting = false,
         },
 
-        -- indent = { enable = true },
+        indent = { enable = true },
       })
     end,
   })
