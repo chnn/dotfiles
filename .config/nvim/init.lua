@@ -6,6 +6,7 @@ vim.o.ruler = true
 vim.o.cursorline = true
 vim.o.signcolumn = "yes"
 vim.o.showmode = false
+vim.o.relativenumber = true
 vim.opt.fillchars:append({ vert = " " })
 
 -- Folds
@@ -115,8 +116,6 @@ vim.keymap.set("v", ">", ">gv")
 vim.keymap.set("n", "s", "<C-W>")
 vim.keymap.set("n", "sm", "<C-W><C-_>")
 vim.keymap.set("n", "su", "<C-W>=")
-vim.cmd([[autocmd FileType fugitive silent! nunmap <buffer> s]])
-vim.cmd([[autocmd FileType netrw silent! nunmap <buffer> s]])
 
 -- Edit vimrc keybindings
 vim.keymap.set("n", "<leader>ev", ":e $MYVIMRC<CR>", { silent = true })
@@ -149,7 +148,9 @@ require("packer").startup(function(use)
   use({
     "tpope/vim-fugitive",
     config = function()
-      vim.keymap.set("n", "<leader>n", ":vert Git ++curwin log --oneline -n 100<CR>")
+      vim.keymap.set("n", "<leader>n", ":vert Git ++curwin log --oneline -n 30<CR>")
+      vim.cmd([[autocmd FileType fugitive silent! nunmap <buffer> s]])
+      vim.cmd([[autocmd FileType netrw silent! nunmap <buffer> s]])
     end,
   })
   use("tpope/vim-rhubarb")
@@ -165,19 +166,12 @@ require("packer").startup(function(use)
   use("neoclide/jsonc.vim")
   use("junegunn/vim-peekaboo")
   use("junegunn/goyo.vim")
-  -- use("github/copilot.vim")
+  use("wellle/targets.vim")
 
   use({
     "RRethy/nvim-base16",
     config = function()
       vim.cmd("colorscheme base16-tomorrow-night")
-    end,
-  })
-
-  use({
-    "rizzatti/dash.vim",
-    config = function()
-      vim.keymap.set("n", "K", "<Plug>DashSearch", { silent = true })
     end,
   })
 
@@ -202,14 +196,12 @@ require("packer").startup(function(use)
   })
 
   use({
-    "lucapette/vim-textobj-underscore",
-    requires = { { "kana/vim-textobj-user" } },
+    "numToStr/Comment.nvim",
+    config = function()
+      require("Comment").setup()
+    end,
   })
 
-  use({
-    "RyanMcG/vim-textobj-dash",
-    requires = { { "kana/vim-textobj-user" } },
-  })
 
   use({
     "nvim-lualine/lualine.nvim",
@@ -240,49 +232,17 @@ require("packer").startup(function(use)
   })
 
   use({
-    "jose-elias-alvarez/null-ls.nvim",
-    requires = { { "nvim-lua/plenary.nvim" } },
-    config = function()
-      local null_ls = require("null-ls")
-      local null_ls_helpers = require("null-ls/helpers")
-      local null_ls_utils = require("null-ls/utils")
-
-      null_ls.setup({
-        sources = {
-          null_ls.builtins.diagnostics.eslint_d.with({
-            diagnostics_format = "[#{c}] #{m}",
-            cwd = null_ls_helpers.cache.by_bufnr(function(params)
-              -- Works better for projects with a single root package.json and
-              -- multiple nested .eslintrc.js config files
-              return null_ls_utils.root_pattern("package.json")(params.bufname)
-            end),
-          }),
-          null_ls.builtins.formatting.prettierd,
-          null_ls.builtins.formatting.stylua.with({
-            extra_args = { "--indent-type", "Spaces", "--indent-size", 2 },
-          }),
-        },
-        on_attach = function(client)
-          if client.resolved_capabilities.document_formatting then
-            vim.cmd([[
-              augroup lspformatting
-                autocmd! * <buffer>
-                autocmd bufwritepre <buffer> lua vim.lsp.buf.formatting_sync()
-              augroup end
-            ]])
-          end
-        end,
-      })
-    end,
-  })
-
-  use({
     "hrsh7th/nvim-cmp",
     requires = {
       { "hrsh7th/cmp-nvim-lsp" },
       { "hrsh7th/cmp-buffer" },
       { "hrsh7th/cmp-path" },
       { "hrsh7th/cmp-cmdline" },
+
+      -- I don't actually want snippets, but nvim-cmp requires it
+      { "hrsh7th/vim-vsnip" },
+      { "hrsh7th/vim-vsnip-integ" },
+      { "hrsh7th/cmp-vsnip" },
     },
     config = function()
       local cmp = require("cmp")
@@ -292,6 +252,11 @@ require("packer").startup(function(use)
       vim.o.updatetime = 300
 
       cmp.setup({
+        snippet = {
+          expand = function(args)
+            vim.fn["vsnip#anonymous"](args.body)
+          end,
+        },
         mapping = {
           ["<C-b>"] = cmp.mapping.scroll_docs(-4),
           ["<C-f>"] = cmp.mapping.scroll_docs(4),
@@ -312,13 +277,6 @@ require("packer").startup(function(use)
         mapping = cmp.mapping.preset.cmdline(),
         sources = cmp.config.sources({ { name = "path" } }, { { name = "cmdline" } }),
       })
-    end,
-  })
-
-  use({
-    "numToStr/Comment.nvim",
-    config = function()
-      require("Comment").setup()
     end,
   })
 
@@ -344,10 +302,64 @@ require("packer").startup(function(use)
         end,
       })
 
+      nvim_lsp.gopls.setup({
+        capabilities = capabilities,
+      })
+
       -- View logs with `:lua vim.cmd('e' .. vim.lsp.get_log_path())`
       -- vim.lsp.set_log_level("debug")
     end,
   })
+
+  use({
+    "jose-elias-alvarez/null-ls.nvim",
+    requires = { { "nvim-lua/plenary.nvim" } },
+    config = function()
+      local null_ls = require("null-ls")
+      local null_ls_helpers = require("null-ls/helpers")
+      local null_ls_utils = require("null-ls/utils")
+
+      null_ls.setup({
+        sources = {
+          null_ls.builtins.diagnostics.eslint_d.with({
+            diagnostics_format = "[#{c}] #{m}",
+            cwd = null_ls_helpers.cache.by_bufnr(function(params)
+              -- Works better for projects with a single root package.json and
+              -- multiple nested .eslintrc.js config files
+              return null_ls_utils.root_pattern("package.json")(params.bufname)
+            end),
+          }),
+          null_ls.builtins.formatting.prettierd.with({
+            filetypes = {
+              "javascript",
+              "javascriptreact",
+              "typescript",
+              "typescriptreact",
+              "json",
+              "yaml",
+              "markdown"
+            },
+          }),
+          null_ls.builtins.formatting.stylua.with({
+            extra_args = { "--indent-type", "Spaces", "--indent-size", 2 },
+          }),
+          null_ls.builtins.formatting.gofmt,
+          null_ls.builtins.formatting.goimports,
+        },
+        on_attach = function(client)
+          if client.resolved_capabilities.document_formatting then
+            vim.cmd([[
+              augroup lspformatting
+                autocmd! * <buffer>
+                autocmd bufwritepre <buffer> lua vim.lsp.buf.formatting_sync()
+              augroup end
+            ]])
+          end
+        end,
+      })
+    end,
+  })
+
 
   use({
     "nvim-treesitter/nvim-treesitter",
@@ -371,11 +383,19 @@ require("packer").startup(function(use)
         highlight = {
           enable = true,
           additional_vim_regex_highlighting = false,
+
+          -- Perf regression
+          disable = { "typescript", "tsx" }
         },
 
-        indent = { enable = true },
+        -- indent = { enable = true },
       })
     end,
+  })
+
+  use({
+    "nvim-treesitter/nvim-treesitter-context",
+    requires = "nvim-treesitter/nvim-treesitter"
   })
 
   -- Automatically sync after cloning packer.nvim

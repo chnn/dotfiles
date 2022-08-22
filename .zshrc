@@ -50,32 +50,24 @@ alias ls="exa -l"
 alias f="ranger"
 alias tma="tmux attach -d || tmux"
 alias ns='cd "$NOTES" && $EDITOR'
-alias dr="cd ~ && fd --ignore-file .searchignore -t d | fzf --print0 | xargs -0 open"
-alias fr="cd ~ && fd --ignore-file .searchignore | fzf --print0 | xargs -0 open -R"
-alias fe="cd ~ && fd --ignore-file .searchignore | fzf --print0 | xargs -0 $EDITOR"
-alias fo="cd ~ && fd --ignore-file .searchignore | fzf --print0 | xargs -0 open"
 alias ezsh="$EDITOR ~/.zshrc && . ~/.zshrc"
-alias pjs="cat package.json | jq '.scripts'"
 alias g='git'
 alias gs='git status -sb -uno'
 alias gsu='git status -sb'
+alias gd='git diff'
 alias glo='git log --oneline -n 20'
-alias glon='git log --oneline -n 10'
 alias gp='git pull'
-alias glo='git log --oneline'
 alias gca='git add -A && git commit -v'
 alias gb='git branch --sort=-committerdate'
 alias gcb='git checkout $(git branch --sort=-committerdate | fzf)'
 alias gba='git branch -a --sort=-committerdate'
 alias gco="git checkout"
 alias grp="git rev-parse HEAD"
-alias gplease='git push --force-with-lease'
 alias gri='git rebase --autosquash -i'
 alias gfu='git add -A && git commit --fixup'
 alias gbb='gh browse -b $(git branch --show-current)'
-alias hb='hub browse'
-alias hpr=$'hub pr show $(hub pr list | fzf | sd \'\w*#(\d+).*\' \'$1\')'
 alias yr='yarn run $(cat package.json | jq -r ".scripts | keys[]" | fzf)'
+alias pjs="cat package.json | jq '.scripts'"
 
 gprs() {
   gh pr view --web $(gh pr list -L 100 | fzf | sd '^([0-9]+).*' '$1')
