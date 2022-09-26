@@ -134,6 +134,14 @@ vim.cmd([[tnoremap <Esc> <C-\><C-n>:q!<CR>]]);
 -- Close all buffers but this one with :Rlw ("reload workspace")
 vim.cmd([[command! Rlw %bd|e#]])
 
+-- Fix background color in tmux
+vim.cmd([[
+if exists('$TMUX')
+  let &t_8f = "<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "<Esc>[48;2;%lu;%lu;%lum"
+endif
+]])
+
 -- Clone packer if necessary
 local install_path = vim.fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then

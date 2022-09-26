@@ -3,7 +3,6 @@ set -o emacs
 export EDITOR="nvim"
 export SHELL="/bin/zsh"
 export PATH="$HOME/.local/bin:/usr/local/bin:/usr/local/sbin:$PATH"
-export TERM="screen-256color"
 export NOTES="$HOME/Documents/Notes"
 
 # Rust
