@@ -165,7 +165,6 @@ require("packer").startup(function(use)
   use("godlygeek/tabular")
   use("neoclide/jsonc.vim")
   use("junegunn/vim-peekaboo")
-  use("junegunn/goyo.vim")
   use("wellle/targets.vim")
 
   use({
@@ -176,12 +175,28 @@ require("packer").startup(function(use)
   })
 
   use({
-    "reedes/vim-pencil",
-    after = "goyo.vim",
+    "junegunn/goyo.vim",
+    after = {"vim-pencil", "lualine.nvim"},
     config = function()
-      vim.keymap.set("n", "<leader>w", ":SoftPencil<CR>:Goyo<CR>", { silent = true })
-    end,
+      vim.cmd([[
+        function! s:goyo_enter()
+          lua require('lualine').hide()
+          call pencil#init({'wrap': 'soft'})
+        endfunction
+
+        function! s:goyo_leave()
+          call pencil#init({'wrap': 'off'})
+        endfunction
+
+        autocmd! User GoyoEnter nested call <SID>goyo_enter()
+        autocmd! User GoyoLeave nested call <SID>goyo_leave()
+      ]])
+
+      vim.keymap.set("n", "<leader>w", ":Goyo<CR>", { silent = true })
+    end
   })
+
+  use("reedes/vim-pencil")
 
   use("/usr/local/opt/fzf")
   use({
@@ -337,7 +352,8 @@ require("packer").startup(function(use)
               "typescriptreact",
               "json",
               "yaml",
-              "markdown"
+              "markdown",
+              "css"
             },
           }),
           null_ls.builtins.formatting.stylua.with({
@@ -377,18 +393,17 @@ require("packer").startup(function(use)
           "ruby",
           "hcl",
           "markdown",
+          "markdown_inline",
           "bash",
+          "yaml",
         },
 
         highlight = {
           enable = true,
           additional_vim_regex_highlighting = false,
-
-          -- Perf regression
-          disable = { "typescript", "tsx" }
         },
 
-        -- indent = { enable = true },
+        indent = { enable = true },
       })
     end,
   })
