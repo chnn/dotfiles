@@ -65,6 +65,7 @@ alias grp="git rev-parse HEAD"
 alias gri='git rebase --autosquash -i'
 alias gfu='git add -A && git commit --fixup'
 alias gbb='gh browse -b $(git branch --show-current)'
+alias gpr='gh pr view --web'
 alias yr='yarn run $(cat package.json | jq -r ".scripts | keys[]" | fzf)'
 alias pjs="cat package.json | jq '.scripts'"
 
