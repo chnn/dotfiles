@@ -106,7 +106,7 @@ autocmd QuickFixCmdPost    l* nested lwindow
 vim.opt.iskeyword:append("-")
 
 -- Work-specific settings
-pcall(require, 'work')
+pcall(require, "work")
 
 -- Keep selected text selected when fixing indentation
 vim.keymap.set("v", "<", "<gv")
@@ -129,7 +129,7 @@ vim.keymap.set("n", "<leader>c", '"+yy', { silent = true })
 vim.keymap.set("v", "<leader>c", '"+y', { silent = true })
 
 -- Exist terminal mode with Esc
-vim.cmd([[tnoremap <Esc> <C-\><C-n>:q!<CR>]]);
+vim.cmd([[tnoremap <Esc> <C-\><C-n>:q!<CR>]])
 
 -- Close all buffers but this one with :Rlw ("reload workspace")
 vim.cmd([[command! Rlw %bd|e#]])
@@ -184,7 +184,7 @@ require("packer").startup(function(use)
 
   use({
     "junegunn/goyo.vim",
-    after = {"vim-pencil", "lualine.nvim"},
+    after = { "vim-pencil", "lualine.nvim" },
     config = function()
       vim.cmd([[
         function! s:goyo_enter()
@@ -201,7 +201,7 @@ require("packer").startup(function(use)
       ]])
 
       vim.keymap.set("n", "<leader>w", ":Goyo<CR>", { silent = true })
-    end
+    end,
   })
 
   use("reedes/vim-pencil")
@@ -224,7 +224,6 @@ require("packer").startup(function(use)
       require("Comment").setup()
     end,
   })
-
 
   use({
     "nvim-lualine/lualine.nvim",
@@ -267,7 +266,7 @@ require("packer").startup(function(use)
     },
     config = function()
       local cmp = require("cmp")
-      
+
       local completeopt = "menu,menuone,noinsert,preview"
 
       vim.o.completeopt = completeopt
@@ -285,7 +284,7 @@ require("packer").startup(function(use)
 
       cmp.setup({
         completion = {
-          completeopt = completeopt
+          completeopt = completeopt,
         },
         snippet = {
           expand = function(args)
@@ -324,7 +323,7 @@ require("packer").startup(function(use)
           { name = "nvim_lsp" },
           { name = "vsnip" },
           { name = "buffer" },
-          { name = "path" }
+          { name = "path" },
         }),
       })
 
@@ -398,11 +397,11 @@ require("packer").startup(function(use)
               "json",
               "yaml",
               "markdown",
-              "css"
+              "css",
             },
           }),
           null_ls.builtins.formatting.stylua.with({
-            extra_args = { "--indent-type", "Spaces", "--indent-size", 2 },
+            extra_args = { "--indent-width", "2", "--indent-type", "Spaces" },
           }),
           null_ls.builtins.formatting.gofmt,
           null_ls.builtins.formatting.goimports,
@@ -420,7 +419,6 @@ require("packer").startup(function(use)
       })
     end,
   })
-
 
   use({
     "nvim-treesitter/nvim-treesitter",
@@ -455,7 +453,7 @@ require("packer").startup(function(use)
 
   use({
     "nvim-treesitter/nvim-treesitter-context",
-    requires = "nvim-treesitter/nvim-treesitter"
+    requires = "nvim-treesitter/nvim-treesitter",
   })
 
   -- Automatically sync after cloning packer.nvim
