@@ -136,6 +136,7 @@ require("paq")({
 
   "nvim-treesitter/nvim-treesitter",
   "nvim-treesitter/nvim-treesitter-context",
+  "nvim-treesitter/nvim-treesitter-textobjects",
 })
 
 vim.cmd("colorscheme base16-tomorrow-night")
@@ -431,4 +432,23 @@ require("nvim-treesitter.configs").setup({
   },
 
   indent = { enable = true },
+
+  textobjects = {
+    select = {
+      enable = true,
+      lookahead = true,
+      -- include_surrounding_whitespace = true,
+
+      keymaps = {
+        ["af"] = "@function.outer",
+        ["if"] = "@function.inner",
+        ["aa"] = "@parameter.outer",
+        ["ia"] = "@parameter.inner",
+      },
+
+      selection_modes = {
+        ["@function.outer"] = "V",
+      },
+    },
+  },
 })
