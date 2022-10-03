@@ -241,7 +241,15 @@ vim.keymap.set("n", "[d", function()
   vim.diagnostic.goto_prev({ severity = diagnostic_severity })
 end)
 
+vim.keymap.set("n", "]D", function()
+  vim.diagnostic.goto_prev({ severity = diagnostic_severity })
+end)
+
 vim.keymap.set("n", "]d", function()
+  vim.diagnostic.goto_next({ severity = diagnostic_severity })
+end)
+
+vim.keymap.set("n", "[D", function()
   vim.diagnostic.goto_next({ severity = diagnostic_severity })
 end)
 
@@ -283,14 +291,11 @@ cmp.setup({
   completion = { completeopt = completeopt },
 
   sources = cmp.config.sources({
-    {
-      { name = "nvim_lsp" },
-      { name = "vsnip" },
-    },
-    {
-      { name = "buffer" },
-      { name = "path" },
-    },
+    { name = "nvim_lsp" },
+    { name = "vsnip" },
+  }, {
+    { name = "buffer" },
+    { name = "path" },
   }),
 
   snippet = {
@@ -366,7 +371,7 @@ null_ls.setup({
       end),
     }),
 
-    null_ls.builtins.formatting.prettierd.with({
+    null_ls.builtins.formatting.prettier.with({
       filetypes = {
         "javascript",
         "javascriptreact",
@@ -389,7 +394,7 @@ null_ls.setup({
   },
 
   on_attach = function(client, bufnr)
-    if client.supports_method("textDocument/formatting") then
+    if not client.supports_method("textDocument/formatting") then
       return
     end
 
