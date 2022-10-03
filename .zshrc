@@ -4,6 +4,7 @@ export EDITOR="nvim"
 export SHELL="/bin/zsh"
 export PATH="$HOME/.local/bin:/usr/local/bin:/usr/local/sbin:$PATH"
 export NOTES="$HOME/Documents/Notes"
+export JOURNAL="$HOME/Documents/Journal"
 
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
@@ -12,15 +13,21 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
 
+# Homebrew
+[ -f /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# Broot
+[ -f ~/.config/broot/launcher/bash/br ] && source ~/.config/broot/launcher/bash/br
+
 # cd
-eval "$(zoxide init zsh)"
+command -v zoxide &> /dev/null && eval "$(zoxide init zsh)"
 
 # FZF
 export FZF_DEFAULT_COMMAND="rg --files --hidden --iglob '!.git'"
 [ -f ~/.fzf.zsh ] && . ~/.fzf.zsh
 
 # Stripe
-[ -f "$HOME/.stripe.zsh" ] && . "$HOME/.stripe.zsh"
+[ -f ~/.work.zshrc ] && source ~/.work.zshrc
 
 # Edit current command with ^J
 autoload -U edit-command-line
@@ -46,6 +53,7 @@ setopt SHARE_HISTORY
 # Alias'
 alias e="$EDITOR"
 alias ls="exa -l"
+alias cat="bat"
 alias f="ranger"
 alias tma="tmux attach -d || tmux"
 alias ns='cd "$NOTES" && $EDITOR'
