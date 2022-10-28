@@ -2,30 +2,52 @@ draw_bold_text_with_bright_colors: false
 font:
   size: 16
   normal:
-    family: Iosevka Term
+    family: Iosevka Nerd Font
     style: Regular
-colors: # Base16 iA Dark
+colors: # Base16 Tomorrow Night 256
   primary:
-    background: '0x1a1a1a'
-    foreground: '0xcccccc'
+    background: "0x1d1f21"
+    foreground: "0xc5c8c6"
   cursor:
-    text: '0x1a1a1a'
-    cursor: '0xcccccc'
+    text: "0x1d1f21"
+    cursor: "0xc5c8c6"
   normal:
-    black:   '0x1a1a1a'
-    red:     '0xd88568'
-    green:   '0x83a471'
-    yellow:  '0xb99353'
-    blue:    '0x8eccdd'
-    magenta: '0xb98eb2'
-    cyan:    '0x7c9cae'
-    white:   '0xcccccc'
+    black: "0x1d1f21"
+    red: "0xcc6666"
+    green: "0xb5bd68"
+    yellow: "0xf0c674"
+    blue: "0x81a2be"
+    magenta: "0xb294bb"
+    cyan: "0x8abeb7"
+    white: "0xc5c8c6"
   bright:
-    black:   '0x767676'
-    red:     '0xd86868'
-    green:   '0x222222'
-    yellow:  '0x1d414d'
-    blue:    '0xb8b8b8'
-    magenta: '0xe8e8e8'
-    cyan:    '0x8b6c37'
-    white:   '0xf8f8f8'
+    black: "0x969896"
+    red: "0xcc6666"
+    green: "0xb5bd68"
+    yellow: "0xf0c674"
+    blue: "0x81a2be"
+    magenta: "0xb294bb"
+    cyan: "0x8abeb7"
+    white: "0xffffff"
+  indexed_colors:
+    - { index: 16, color: "0xde935f" }
+    - { index: 17, color: "0xa3685a" }
+    - { index: 18, color: "0x282a2e" }
+    - { index: 19, color: "0x373b41" }
+    - { index: 20, color: "0xb4b7b4" }
+    - { index: 21, color: "0xe0e0e0" }
+key_bindings:
+  - { key: T, mods: Command, chars: "\x00\x63" }
+  - { key: Tab, mods: Control, chars: "\x00\x6e" }
+  - { key: Tab, mods: Shift|Control, chars: "\x00\x70" }
+  - { key: W, mods: Command, chars: "\x00\x78" }
+  - { key: Key0, mods: Command, chars: "\x00\x30" }
+  - { key: Key1, mods: Command, chars: "\x00\x31" }
+  - { key: Key2, mods: Command, chars: "\x00\x32" }
+  - { key: Key3, mods: Command, chars: "\x00\x33" }
+  - { key: Key4, mods: Command, chars: "\x00\x34" }
+  - { key: Key5, mods: Command, chars: "\x00\x35" }
+  - { key: Key6, mods: Command, chars: "\x00\x36" }
+  - { key: Key7, mods: Command, chars: "\x00\x37" }
+  - { key: Key8, mods: Command, chars: "\x00\x38" }
+  - { key: Key9, mods: Command, chars: "\x00\x39" }
