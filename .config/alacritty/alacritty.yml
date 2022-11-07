@@ -1,41 +1,11 @@
 draw_bold_text_with_bright_colors: false
+imports:
+  - ~/.config/alacritty/theme.yml
 font:
   size: 16
   normal:
     family: Iosevka Nerd Font
     style: Regular
-colors: # Base16 Tomorrow Night 256
-  primary:
-    background: "0x1d1f21"
-    foreground: "0xc5c8c6"
-  cursor:
-    text: "0x1d1f21"
-    cursor: "0xc5c8c6"
-  normal:
-    black: "0x1d1f21"
-    red: "0xcc6666"
-    green: "0xb5bd68"
-    yellow: "0xf0c674"
-    blue: "0x81a2be"
-    magenta: "0xb294bb"
-    cyan: "0x8abeb7"
-    white: "0xc5c8c6"
-  bright:
-    black: "0x969896"
-    red: "0xcc6666"
-    green: "0xb5bd68"
-    yellow: "0xf0c674"
-    blue: "0x81a2be"
-    magenta: "0xb294bb"
-    cyan: "0x8abeb7"
-    white: "0xffffff"
-  indexed_colors:
-    - { index: 16, color: "0xde935f" }
-    - { index: 17, color: "0xa3685a" }
-    - { index: 18, color: "0x282a2e" }
-    - { index: 19, color: "0x373b41" }
-    - { index: 20, color: "0xb4b7b4" }
-    - { index: 21, color: "0xe0e0e0" }
 key_bindings:
   - { key: T, mods: Command, chars: "\x00\x63" }
   - { key: Tab, mods: Control, chars: "\x00\x6e" }
@@ -51,3 +21,9 @@ key_bindings:
   - { key: Key7, mods: Command, chars: "\x00\x37" }
   - { key: Key8, mods: Command, chars: "\x00\x38" }
   - { key: Key9, mods: Command, chars: "\x00\x39" }
+
+  # Alt keybindings on macOS
+  # https://github.com/alacritty/alacritty/issues/62#issuecomment-347552058
+  - { key: C, mods: Alt, chars: "\x1bc" }
+  - { key: S, mods: Alt, chars: "\x1bs" }
+  - { key: Grave, mods: Alt, chars: "\x1b`" }
