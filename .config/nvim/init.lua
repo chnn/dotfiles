@@ -3,7 +3,7 @@ vim.o.wrap = false
 vim.o.number = true
 vim.o.laststatus = 2
 vim.o.ruler = true
-vim.o.cursorline = true
+vim.o.cursorline = false
 vim.o.signcolumn = "yes"
 vim.o.showmode = false
 vim.o.relativenumber = true
@@ -137,9 +137,14 @@ require("paq")({
   "nvim-treesitter/nvim-treesitter",
   "nvim-treesitter/nvim-treesitter-context",
   "nvim-treesitter/nvim-treesitter-textobjects",
+  "nvim-treesitter/playground",
+
+  "preservim/vim-markdown",
+
+  "windwp/nvim-autopairs",
 })
 
-vim.cmd("colorscheme base16-tomorrow-night")
+vim.cmd("colorscheme base16-gruvbox-dark-hard")
 
 -- lualine.nvim
 require("lualine").setup({
@@ -429,6 +434,7 @@ require("nvim-treesitter.configs").setup({
     "markdown_inline",
     "bash",
     "yaml",
+    "query",
   },
 
   highlight = {
@@ -445,6 +451,7 @@ require("nvim-treesitter.configs").setup({
       -- include_surrounding_whitespace = true,
 
       keymaps = {
+        ["ac"] = "@class.outer",
         ["af"] = "@function.outer",
         ["if"] = "@function.inner",
         ["aa"] = "@parameter.outer",
@@ -453,7 +460,12 @@ require("nvim-treesitter.configs").setup({
 
       selection_modes = {
         ["@function.outer"] = "V",
+        ["@class.outer"] = "V",
       },
     },
   },
+
+  playground = { enable = true },
 })
+
+require("nvim-autopairs").setup({})
