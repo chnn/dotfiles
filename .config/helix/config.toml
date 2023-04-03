@@ -1,0 +1,7 @@
+theme = "gruvbox"
+
+[editor]
+color-modes = true
+
+[editor.soft-wrap]
+enable = true

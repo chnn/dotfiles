@@ -1,7 +1,7 @@
 -- Panes
 vim.o.wrap = false
 vim.o.number = true
-vim.o.laststatus = 2
+vim.o.laststatus = 1
 vim.o.ruler = true
 vim.o.cursorline = false
 vim.o.signcolumn = "yes"
@@ -144,13 +144,13 @@ require("paq")({
   "windwp/nvim-autopairs",
 })
 
-vim.cmd("colorscheme base16-gruvbox-dark-hard")
+vim.cmd("colorscheme base16-gruvbox-dark-medium")
 
 -- lualine.nvim
 require("lualine").setup({
   options = {
     icons_enabled = false,
-    globalstatus = false,
+    globalstatus = true,
     section_separators = { left = "", right = "" },
     component_separators = { left = "", right = "" },
   },
@@ -340,7 +340,7 @@ cmp.setup({
 })
 
 local nvim_lsp = require("lspconfig")
-local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 nvim_lsp.tsserver.setup({
   capabilities = capabilities,
@@ -358,6 +358,7 @@ nvim_lsp.tsserver.setup({
 
 nvim_lsp.gopls.setup({ capabilities = capabilities })
 nvim_lsp.rust_analyzer.setup({ capabilities = capabilities })
+nvim_lsp.tailwindcss.setup({ capabilities = capabilities })
 
 local null_ls = require("null-ls")
 local null_ls_helpers = require("null-ls/helpers")
@@ -374,6 +375,15 @@ null_ls.setup({
       cwd = null_ls_helpers.cache.by_bufnr(function(params)
         return null_ls_utils.root_pattern("package.json")(params.bufname)
       end),
+
+      condition = function(utils)
+        return utils.root_has_file({
+          ".eslintrc",
+          ".eslintrc.js",
+          ".eslintrc.json",
+          ".eslintrc.yaml",
+        })
+      end,
     }),
 
     null_ls.builtins.formatting.prettier.with({
@@ -387,6 +397,14 @@ null_ls.setup({
         "markdown",
         "css",
       },
+      condition = function(utils)
+        return utils.root_has_file({
+          ".prettierrc",
+          ".prettierrc.js",
+          ".prettierrc.json",
+          ".prettierrc.yaml",
+        })
+      end,
     }),
 
     null_ls.builtins.formatting.stylua.with({

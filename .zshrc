@@ -1,9 +1,9 @@
 set -o emacs
 
-export EDITOR="nvim"
+export EDITOR="hx"
 export SHELL="/bin/zsh"
 export PATH="$HOME/.local/bin:/usr/local/bin:/usr/local/sbin:$PATH"
-export NOTES="$HOME/Documents/Notes"
+export NOTES="$HOME/Documents/Dropbox/Notes"
 export JOURNAL="$HOME/Documents/Journal"
 
 # Rust
@@ -21,6 +21,11 @@ export PATH="$VOLTA_HOME/bin:$PATH"
 
 # cd
 command -v zoxide &> /dev/null && eval "$(zoxide init zsh)"
+
+# # Ruby
+# source $(brew --prefix)/opt/chruby/share/chruby/chruby.sh
+# source $(brew --prefix)/opt/chruby/share/chruby/auto.sh
+# chruby ruby-3.1.3
 
 # FZF
 export FZF_DEFAULT_COMMAND="rg --files --hidden --iglob '!.git'"
