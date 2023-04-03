@@ -91,11 +91,20 @@ gcopr() {
 }
 
 nj() {
+  local filename="$(date '+%F').md"
+
   if [ $# -gt 0 ]; then
-    cd $JOURNAL && $EDITOR "$(date '+%F') $1.md"
-  else
-    cd $JOURNAL && $EDITOR "$(date '+%F').md"
+    filename="$(date '+%F') $1.md"
   fi
+
+  cd $JOURNAL
+
+  if test -f "template.md"; then
+    cp template.md $filename
+  fi
+
+  $EDITOR $filename
+  cd -
 }
 
 function j() {
