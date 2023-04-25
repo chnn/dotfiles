@@ -6,7 +6,7 @@ vim.o.ruler = true
 vim.o.cursorline = false
 vim.o.signcolumn = "yes"
 vim.o.showmode = false
-vim.o.relativenumber = true
+vim.o.relativenumber = false
 vim.opt.fillchars:append({ vert = " " })
 
 -- Folds
@@ -45,6 +45,7 @@ vim.cmd([[hi NonText ctermfg=11]])
 
 -- Use ripgrep for :grep
 vim.o.grepprg = "rg --vimgrep --hidden --iglob '!.git'"
+vim.keymap.set("n", "<leader>/", ":grep ")
 
 -- <leader>g to grep for visual selection or word under cursor
 vim.keymap.set("n", "<leader>g", ':silent grep"<C-R><C-W>"<CR>:copen<CR>', { silent = true })
@@ -69,18 +70,18 @@ pcall(require, "work")
 vim.keymap.set("v", "<", "<gv")
 vim.keymap.set("v", ">", ">gv")
 
--- Quicker window navigation keybindings
-vim.keymap.set("n", "s", "<C-W>")
-vim.keymap.set("n", "sm", "<C-W><C-_>")
-vim.keymap.set("n", "su", "<C-W>=")
+-- ; to exit visual mode
+vim.keymap.set("v", ";", "<Esc>")
 
 -- Edit vimrc keybindings
 vim.keymap.set("n", "<leader>ev", ":e $MYVIMRC<CR>", { silent = true })
 vim.keymap.set("n", "<leader>sv", ":source $MYVIMRC<CR>", { silent = true })
 
 -- Copy to the system clipboard
-vim.keymap.set("n", "<leader>c", '"+yy', { silent = true })
-vim.keymap.set("v", "<leader>c", '"+y', { silent = true })
+vim.keymap.set("n", "<leader>y", '"+yy', { silent = true })
+vim.keymap.set("v", "<leader>y", '"+y', { silent = true })
+vim.keymap.set("n", "<leader>p", '"+p', { silent = true })
+vim.keymap.set("n", "<leader>P", '"+P', { silent = true })
 
 -- Exist terminal mode with Esc
 vim.cmd([[tnoremap <Esc> <C-\><C-n>:q!<CR>]])
@@ -104,23 +105,20 @@ require("paq")({
   "tpope/vim-repeat",
   "tpope/vim-rsi",
   "tpope/vim-abolish",
-
   "godlygeek/tabular",
   "neoclide/jsonc.vim",
   "junegunn/vim-peekaboo",
   "wellle/targets.vim",
-
   "RRethy/nvim-base16",
-
   "junegunn/goyo.vim",
   "reedes/vim-pencil",
-
   "junegunn/fzf",
   "junegunn/fzf.vim",
+  "gfanto/fzf-lsp.nvim",
   "numToStr/Comment.nvim",
   "nvim-lualine/lualine.nvim",
-
-  "hrsh7th/nvim-cmp",
+  "neovim/nvim-lspconfig",
+  "j-hui/fidget.nvim",
   "hrsh7th/cmp-nvim-lsp",
   "hrsh7th/cmp-buffer",
   "hrsh7th/cmp-path",
@@ -128,29 +126,22 @@ require("paq")({
   "hrsh7th/vim-vsnip",
   "hrsh7th/vim-vsnip-integ",
   "hrsh7th/cmp-vsnip",
-
-  "neovim/nvim-lspconfig",
-
+  "hrsh7th/nvim-cmp",
   "nvim-lua/plenary.nvim",
   "jose-elias-alvarez/null-ls.nvim",
-
   "nvim-treesitter/nvim-treesitter",
-  "nvim-treesitter/nvim-treesitter-context",
-  "nvim-treesitter/nvim-treesitter-textobjects",
-  "nvim-treesitter/playground",
-
   "preservim/vim-markdown",
-
   "windwp/nvim-autopairs",
+  "github/copilot.vim",
 })
 
-vim.cmd("colorscheme base16-gruvbox-dark-medium")
+vim.cmd("colorscheme base16-default-dark")
 
 -- lualine.nvim
 require("lualine").setup({
   options = {
     icons_enabled = false,
-    globalstatus = true,
+    globalstatus = false,
     section_separators = { left = "", right = "" },
     component_separators = { left = "", right = "" },
   },
@@ -172,13 +163,6 @@ require("lualine").setup({
 
 -- vim-fugitive
 vim.keymap.set("n", "<leader>n", ":vert Git ++curwin log --oneline -n 30<CR>")
-vim.cmd([[
-augroup FugitiveKeymappings
-  autocmd!
-  autocmd FileType fugitive silent! nunmap <buffer> s
-  autocmd FileType netrw silent! nunmap <buffer> s
-augroup end
-]])
 
 -- goyo.vim and vim-pencil
 vim.keymap.set("n", "<leader>w", ":Goyo<CR>", { silent = true })
@@ -200,10 +184,22 @@ vim.cmd([[
 ]])
 
 -- fzf.vim
+vim.g.fzf_preview_window = {}
+vim.g.fzf_layout = { window = { width = 0.9, height = 0.9, border = "sharp" } }
+
 vim.keymap.set("n", "<leader>f", ":Files<CR>", { silent = true })
 vim.keymap.set("n", "<leader>b", ":Buffers<CR>", { silent = true })
 vim.keymap.set("n", "<leader>l", ":Rg<CR>", { silent = true })
-vim.g.fzf_preview_window = {}
+vim.keymap.set("n", "<leader>s", require("fzf_lsp").document_symbol_call)
+vim.keymap.set("n", "<leader>S", require("fzf_lsp").workspace_symbol_call)
+
+vim.keymap.set("n", "<leader>d", function()
+  require("fzf_lsp").diagnostic_call({ severity = vim.diagnostic.severity.ERROR })
+end)
+
+vim.keymap.set("n", "<leader>D", function()
+  require("fzf_lsp").diagnostic_call({ severity = vim.diagnostic.severity.ERROR, bufnr = nil })
+end)
 
 -- Comment.nvim
 require("Comment").setup()
@@ -236,11 +232,9 @@ vim.diagnostic.config({
   severity_sort = true,
 })
 
+vim.keymap.set("n", "<leader>k", vim.lsp.buf.hover)
 vim.keymap.set("n", "gd", vim.lsp.buf.definition)
-vim.keymap.set("n", "gh", vim.lsp.buf.hover)
 vim.keymap.set("n", "gr", vim.lsp.buf.references)
-vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename)
-vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action)
 
 vim.keymap.set("n", "[d", function()
   vim.diagnostic.goto_prev({ severity = diagnostic_severity })
@@ -402,6 +396,7 @@ null_ls.setup({
           ".prettierrc",
           ".prettierrc.js",
           ".prettierrc.json",
+          ".prettierrc.yml",
           ".prettierrc.yaml",
         })
       end,
@@ -461,30 +456,21 @@ require("nvim-treesitter.configs").setup({
     additional_vim_regex_highlighting = false,
   },
 
-  indent = { enable = true },
-
-  textobjects = {
-    select = {
-      enable = true,
-      lookahead = true,
-      -- include_surrounding_whitespace = true,
-
-      keymaps = {
-        ["ac"] = "@class.outer",
-        ["af"] = "@function.outer",
-        ["if"] = "@function.inner",
-        ["aa"] = "@parameter.outer",
-        ["ia"] = "@parameter.inner",
-      },
-
-      selection_modes = {
-        ["@function.outer"] = "V",
-        ["@class.outer"] = "V",
-      },
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = "<A-o>",
+      node_incremental = "<A-o>",
+      scope_incremental = "<A-O>",
+      node_decremental = "<A-i>",
     },
   },
-
-  playground = { enable = true },
 })
 
 require("nvim-autopairs").setup({})
+
+require("fidget").setup({
+  text = {
+    spinner = "dots",
+  },
+})

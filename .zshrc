@@ -1,6 +1,6 @@
 set -o emacs
 
-export EDITOR="hx"
+export EDITOR="nvim"
 export SHELL="/bin/zsh"
 export PATH="$HOME/.local/bin:/usr/local/bin:/usr/local/sbin:$PATH"
 export NOTES="$HOME/Documents/Dropbox/Notes"
@@ -29,6 +29,8 @@ command -v zoxide &> /dev/null && eval "$(zoxide init zsh)"
 
 # FZF
 export FZF_DEFAULT_COMMAND="rg --files --hidden --iglob '!.git'"
+export FZF_DEFAULT_OPTS='--layout=reverse'
+
 [ -f ~/.fzf.zsh ] && . ~/.fzf.zsh
 
 # Stripe
@@ -61,7 +63,7 @@ alias ls="exa -l"
 alias cat="bat"
 alias f="ranger"
 alias tma="tmux attach -d || tmux"
-alias ns='cd "$NOTES" && $EDITOR'
+alias ns='cd "$NOTES" && $EDITOR && cd -'
 alias ezsh="$EDITOR ~/.zshrc && . ~/.zshrc"
 alias g='git'
 alias gs='git status -sb -uno'
