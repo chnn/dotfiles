@@ -1,7 +1,6 @@
 -- Panes
 vim.o.wrap = false
 vim.o.number = true
-vim.o.laststatus = 1
 vim.o.ruler = true
 vim.o.cursorline = false
 vim.o.signcolumn = "yes"
@@ -160,6 +159,8 @@ require("lualine").setup({
   },
 })
 
+vim.o.laststatus = 1
+
 -- vim-fugitive
 vim.keymap.set("n", "<leader>n", ":vert Git ++curwin log --oneline -n 30<CR>")
 
@@ -218,7 +219,7 @@ require("Comment").setup()
 local completeopt = "menu,menuone,noinsert,noselect,preview"
 
 vim.o.completeopt = completeopt
-vim.o.shortmess = vim.o.shortmess .. "c"
+vim.o.shortmess = vim.o.shortmess .. "cI"
 vim.o.updatetime = 300
 
 local diagnostic_severity = { min = vim.diagnostic.severity.WARN }
