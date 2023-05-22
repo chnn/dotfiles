@@ -130,7 +130,6 @@ require("paq")({
   "nvim-lua/plenary.nvim",
   "jose-elias-alvarez/null-ls.nvim",
   "nvim-treesitter/nvim-treesitter",
-  "preservim/vim-markdown",
   "windwp/nvim-autopairs",
   "github/copilot.vim",
 })
@@ -216,7 +215,7 @@ require("Comment").setup()
 --     :lua vim.cmd('e' .. vim.lsp.get_log_path())
 --
 
-local completeopt = "menu,menuone,noinsert,preview"
+local completeopt = "menu,menuone,noinsert,noselect,preview"
 
 vim.o.completeopt = completeopt
 vim.o.shortmess = vim.o.shortmess .. "c"
@@ -275,15 +274,6 @@ vim.keymap.set("n", "ge", function()
   vim.api.nvim_command("pedit " .. tmpfile_path)
 end)
 
-local has_words_before = function()
-  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-end
-
-local feedkey = function(key, mode)
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
-end
-
 local cmp = require("cmp")
 
 cmp.setup({
@@ -304,32 +294,12 @@ cmp.setup({
   },
 
   mapping = {
+    ["<C-n>"] = cmp.mapping(cmp.mapping.select_next_item()),
+    ["<C-p>"] = cmp.mapping(cmp.mapping.select_prev_item()),
+    ["<CR>"] = cmp.mapping.confirm({ select = false }),
     ["<C-b>"] = cmp.mapping.scroll_docs(-4),
     ["<C-f>"] = cmp.mapping.scroll_docs(4),
     ["<C-e>"] = cmp.mapping.abort(),
-    ["<CR>"] = cmp.mapping.confirm({ select = true }),
-    ["<C-n>"] = cmp.mapping(cmp.mapping.select_next_item()),
-    ["<C-p>"] = cmp.mapping(cmp.mapping.select_prev_item()),
-
-    ["<Tab>"] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.confirm({ select = true })
-      elseif vim.fn["vsnip#available"](1) == 1 then
-        feedkey("<Plug>(vsnip-expand-or-jump)", "")
-      elseif has_words_before() then
-        cmp.complete()
-      else
-        fallback()
-      end
-    end, { "i", "s" }),
-
-    ["<S-Tab>"] = cmp.mapping(function()
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif vim.fn["vsnip#jumpable"](-1) == 1 then
-        feedkey("<Plug>(vsnip-jump-prev)", "")
-      end
-    end, { "i", "s" }),
   },
 })
 
