@@ -133,7 +133,8 @@ require("paq")({
   "github/copilot.vim",
 })
 
-vim.cmd("colorscheme base16-default-dark")
+vim.cmd("colorscheme base16-gruvbox-material-dark-hard")
+vim.cmd("hi TSURI guifg=#5a524c")
 
 -- lualine.nvim
 require("lualine").setup({
@@ -166,10 +167,12 @@ vim.keymap.set("n", "<leader>n", ":vert Git ++curwin log --oneline -n 30<CR>")
 
 -- goyo.vim and vim-pencil
 vim.keymap.set("n", "<leader>w", ":Goyo<CR>", { silent = true })
+vim.cmd([[let g:pencil#conceallevel = 0]])
 vim.cmd([[
   function! s:goyo_enter()
     lua require('lualine').hide()
     call pencil#init({'wrap': 'soft'})
+    set conceallevel=0
   endfunction
 
   function! s:goyo_leave()
@@ -319,6 +322,10 @@ nvim_lsp.tsserver.setup({
   init_options = {
     preferences = { importModuleSpecifierPreference = "non-relative" },
   },
+  on_attach = function(client, bufnr)
+    -- Use built-in gq formatexpr
+    vim.o.formatexpr = ""
+  end,
 })
 
 nvim_lsp.gopls.setup({ capabilities = capabilities })
@@ -420,11 +427,16 @@ require("nvim-treesitter.configs").setup({
     "bash",
     "yaml",
     "query",
+    "json",
   },
 
   highlight = {
     enable = true,
     additional_vim_regex_highlighting = false,
+  },
+
+  indent = {
+    enable = true,
   },
 
   incremental_selection = {
