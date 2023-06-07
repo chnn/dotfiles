@@ -11,7 +11,6 @@ vim.opt.fillchars:append({ vert = " " })
 -- Folds
 vim.o.foldmethod = "indent"
 vim.o.foldlevel = 10
-vim.g.markdown_folding = 1
 
 -- Backup and undo
 vim.o.hidden = false
@@ -59,8 +58,9 @@ augroup AutoOpenQuickFix
 augroup end
 ]])
 
--- Treat kebab-cases variables as one word
-vim.opt.iskeyword:append("-")
+-- Recognize words in snake_case and kebab-case
+vim.opt.iskeyword:remove("-")
+vim.opt.iskeyword:remove("_")
 
 -- Work-specific settings
 pcall(require, "work")
@@ -82,11 +82,17 @@ vim.keymap.set("v", "<leader>y", '"+y', { silent = true })
 vim.keymap.set("n", "<leader>p", '"+p', { silent = true })
 vim.keymap.set("n", "<leader>P", '"+P', { silent = true })
 
--- Exist terminal mode with Esc
+-- Exit terminal mode with Esc
 vim.cmd([[tnoremap <Esc> <C-\><C-n>:q!<CR>]])
+
+-- Better indentation for soft-wrapped bullets in markdown files
+vim.cmd([[autocmd FileType markdown set briopt+=list:-1]])
 
 -- Close all buffers but this one with :Rlw ("reload workspace")
 vim.cmd([[command! Rlw %bd|e#]])
+
+-- Write file with today's date prepended with :Wt
+vim.cmd([[command! -nargs=1 Wt exe 'w ' . strftime("%F") . ' ' . "<args>"]])
 
 -- If paq is not installed:
 --
@@ -131,12 +137,14 @@ require("paq")({
   "nvim-treesitter/nvim-treesitter",
   "windwp/nvim-autopairs",
   "github/copilot.vim",
+  "stevearc/oil.nvim",
 })
 
+-- Colors
 vim.cmd("colorscheme base16-gruvbox-material-dark-hard")
 vim.cmd("hi TSURI guifg=#5a524c")
 
--- lualine.nvim
+-- Statusline
 require("lualine").setup({
   options = {
     icons_enabled = false,
@@ -159,11 +167,7 @@ require("lualine").setup({
     lualine_z = {},
   },
 })
-
 vim.o.laststatus = 1
-
--- vim-fugitive
-vim.keymap.set("n", "<leader>n", ":vert Git ++curwin log --oneline -n 30<CR>")
 
 -- goyo.vim and vim-pencil
 vim.keymap.set("n", "<leader>w", ":Goyo<CR>", { silent = true })
@@ -206,6 +210,53 @@ end)
 
 -- Comment.nvim
 require("Comment").setup()
+
+require("nvim-treesitter.configs").setup({
+  ensure_installed = {
+    "lua",
+    "html",
+    "css",
+    "javascript",
+    "typescript",
+    "python",
+    "tsx",
+    "ruby",
+    "hcl",
+    "markdown",
+    "markdown_inline",
+    "bash",
+    "yaml",
+    "query",
+    "json",
+  },
+
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting = false,
+  },
+
+  indent = {
+    enable = true,
+  },
+
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = "<A-o>",
+      node_incremental = "<A-o>",
+      scope_incremental = "<A-O>",
+      node_decremental = "<A-i>",
+    },
+  },
+})
+
+require("nvim-autopairs").setup({})
+
+require("fidget").setup({
+  text = {
+    spinner = "dots",
+  },
+})
 
 -- LSP and diagnostics settings
 -- ----------------------------
@@ -409,51 +460,4 @@ null_ls.setup({
       end,
     })
   end,
-})
-
-require("nvim-treesitter.configs").setup({
-  ensure_installed = {
-    "lua",
-    "html",
-    "css",
-    "javascript",
-    "typescript",
-    "python",
-    "tsx",
-    "ruby",
-    "hcl",
-    "markdown",
-    "markdown_inline",
-    "bash",
-    "yaml",
-    "query",
-    "json",
-  },
-
-  highlight = {
-    enable = true,
-    additional_vim_regex_highlighting = false,
-  },
-
-  indent = {
-    enable = true,
-  },
-
-  incremental_selection = {
-    enable = true,
-    keymaps = {
-      init_selection = "<A-o>",
-      node_incremental = "<A-o>",
-      scope_incremental = "<A-O>",
-      node_decremental = "<A-i>",
-    },
-  },
-})
-
-require("nvim-autopairs").setup({})
-
-require("fidget").setup({
-  text = {
-    spinner = "dots",
-  },
 })
