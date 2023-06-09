@@ -1,12 +1,16 @@
+-- Window
+vim.o.showmode = false
+vim.o.showcmd = false
+vim.o.shortmess = "filnxtToOFcI"
+
 -- Panes
 vim.o.wrap = false
-vim.o.number = true
+vim.o.number = false
+vim.o.relativenumber = false
 vim.o.ruler = true
 vim.o.cursorline = false
 vim.o.signcolumn = "yes"
-vim.o.showmode = false
-vim.o.relativenumber = false
-vim.opt.fillchars:append({ vert = " " })
+vim.opt.fillchars:append({ vert = " ", eob = " " })
 
 -- Folds
 vim.o.foldmethod = "indent"
@@ -273,7 +277,6 @@ require("fidget").setup({
 local completeopt = "menu,menuone,noinsert,noselect,preview"
 
 vim.o.completeopt = completeopt
-vim.o.shortmess = vim.o.shortmess .. "cI"
 vim.o.updatetime = 300
 
 local diagnostic_severity = { min = vim.diagnostic.severity.WARN }
