@@ -28,7 +28,7 @@ command -v zoxide &> /dev/null && eval "$(zoxide init zsh)"
 # chruby ruby-3.1.3
 
 # FZF
-export FZF_DEFAULT_COMMAND="rg --files --hidden --iglob '!.git'"
+export FZF_DEFAULT_COMMAND="rg --files --sortr=created --hidden --iglob '!.git'"
 export FZF_DEFAULT_OPTS='--layout=reverse'
 
 [ -f ~/.fzf.zsh ] && . ~/.fzf.zsh
@@ -101,7 +101,7 @@ nj() {
 
   cd $JOURNAL
 
-  if test -f "template.md"; then
+  if test -f "template.md" && ! test -f $filename; then
     cp template.md $filename
   fi
 
