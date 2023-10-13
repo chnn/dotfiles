@@ -5,7 +5,7 @@ vim.o.shortmess = "filnxtToOFcI"
 
 -- Panes
 vim.o.wrap = false
-vim.o.number = false
+vim.o.number = true
 vim.o.relativenumber = false
 vim.o.ruler = true
 vim.o.cursorline = false
@@ -35,8 +35,20 @@ vim.o.hlsearch = true
 vim.o.inccommand = "split"
 
 -- Colors
-vim.o.background = "dark"
-vim.o.termguicolors = true -- Use nicer colors (may require Neovim and fancy terminal)
+local light_or_dark = "dark"
+function set_colors()
+  light_or_dark = os.execute("defaults read -g AppleInterfaceStyle 2> /dev/null | grep -q 'Dark'") == 0 and "dark"
+    or "light"
+
+  vim.o.background = light_or_dark
+  vim.o.termguicolors = true
+
+  vim.cmd("colorscheme solarized")
+  vim.g.solarized_contrast = true
+  vim.g.solarized_italic_comments = true
+end
+set_colors()
+vim.api.nvim_create_user_command("Colors", set_colors, { nargs = 0 })
 
 -- Use space as leader
 vim.g.mapleader = " "
@@ -86,6 +98,22 @@ vim.keymap.set("v", "<leader>y", '"+y', { silent = true })
 vim.keymap.set("n", "<leader>p", '"+p', { silent = true })
 vim.keymap.set("n", "<leader>P", '"+P', { silent = true })
 
+-- Toggle window UI with <leader>z
+local window_ui = true
+vim.keymap.set("n", "<leader>z", function()
+  if window_ui then
+    vim.o.number = false
+    vim.o.signcolumn = "no"
+    vim.o.laststatus = 1
+    window_ui = false
+  else
+    vim.o.number = true
+    vim.o.signcolumn = "yes"
+    vim.o.laststatus = 2
+    window_ui = true
+  end
+end, { silent = true })
+
 -- Exit terminal mode with Esc
 vim.cmd([[tnoremap <Esc> <C-\><C-n>:q!<CR>]])
 
@@ -127,7 +155,7 @@ require("paq")({
   "numToStr/Comment.nvim",
   "nvim-lualine/lualine.nvim",
   "neovim/nvim-lspconfig",
-  "j-hui/fidget.nvim",
+  { "j-hui/fidget.nvim", branch = "legacy" },
   "hrsh7th/cmp-nvim-lsp",
   "hrsh7th/cmp-buffer",
   "hrsh7th/cmp-path",
@@ -155,6 +183,7 @@ require("lualine").setup({
     globalstatus = false,
     section_separators = { left = "", right = "" },
     component_separators = { left = "", right = "" },
+    theme = "solarized_" .. light_or_dark,
   },
   sections = {
     lualine_b = { "branch", "diff" },
@@ -171,7 +200,7 @@ require("lualine").setup({
     lualine_z = {},
   },
 })
-vim.o.laststatus = 1
+vim.o.laststatus = 2
 
 -- goyo.vim and vim-pencil
 vim.keymap.set("n", "<leader>w", ":Goyo<CR>", { silent = true })
@@ -385,6 +414,8 @@ nvim_lsp.tsserver.setup({
 nvim_lsp.gopls.setup({ capabilities = capabilities })
 nvim_lsp.rust_analyzer.setup({ capabilities = capabilities })
 nvim_lsp.tailwindcss.setup({ capabilities = capabilities })
+nvim_lsp.eslint.setup({ capabilities = capabilities })
+nvim_lsp.jsonls.setup({ capabilities = capabilities })
 
 local null_ls = require("null-ls")
 local null_ls_helpers = require("null-ls/helpers")
@@ -392,26 +423,8 @@ local null_ls_utils = require("null-ls/utils")
 local format_augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 
 null_ls.setup({
+  debug = true,
   sources = {
-    null_ls.builtins.diagnostics.eslint_d.with({
-      diagnostics_format = "[#{c}] #{m}",
-
-      -- Works better for projects with a single root package.json and
-      -- multiple nested .eslintrc.js config files
-      cwd = null_ls_helpers.cache.by_bufnr(function(params)
-        return null_ls_utils.root_pattern("package.json")(params.bufname)
-      end),
-
-      condition = function(utils)
-        return utils.root_has_file({
-          ".eslintrc",
-          ".eslintrc.js",
-          ".eslintrc.json",
-          ".eslintrc.yaml",
-        })
-      end,
-    }),
-
     null_ls.builtins.formatting.prettier.with({
       filetypes = {
         "javascript",
@@ -419,15 +432,18 @@ null_ls.setup({
         "typescript",
         "typescriptreact",
         "json",
+        "jsonc",
         "yaml",
         "markdown",
         "css",
+        "html",
       },
       condition = function(utils)
         return utils.root_has_file({
           ".prettierrc",
           ".prettierrc.js",
           ".prettierrc.json",
+          "client/.prettierrc.json",
           ".prettierrc.yml",
           ".prettierrc.yaml",
         })
@@ -438,9 +454,12 @@ null_ls.setup({
       extra_args = { "--indent-width", "2", "--indent-type", "Spaces" },
     }),
 
+    null_ls.builtins.formatting.rustfmt.with({
+      extra_args = { "--edition=2021" },
+    }),
+
     null_ls.builtins.formatting.gofmt,
     null_ls.builtins.formatting.goimports,
-    null_ls.builtins.formatting.rustfmt,
     null_ls.builtins.formatting.terraform_fmt,
   },
 
