@@ -35,20 +35,9 @@ vim.o.hlsearch = true
 vim.o.inccommand = "split"
 
 -- Colors
-local light_or_dark = "dark"
-function set_colors()
-  light_or_dark = os.execute("defaults read -g AppleInterfaceStyle 2> /dev/null | grep -q 'Dark'") == 0 and "dark"
-    or "light"
-
-  vim.o.background = light_or_dark
-  vim.o.termguicolors = true
-
-  vim.cmd("colorscheme solarized")
-  vim.g.solarized_contrast = true
-  vim.g.solarized_italic_comments = true
-end
-set_colors()
-vim.api.nvim_create_user_command("Colors", set_colors, { nargs = 0 })
+vim.o.background = "dark"
+vim.o.termguicolors = true
+vim.cmd("colorscheme base16-classic-dark")
 
 -- Use space as leader
 vim.g.mapleader = " "
@@ -168,13 +157,8 @@ require("paq")({
   "jose-elias-alvarez/null-ls.nvim",
   "nvim-treesitter/nvim-treesitter",
   "windwp/nvim-autopairs",
-  "github/copilot.vim",
-  "stevearc/oil.nvim",
+  "nvim-zh/better-escape.vim",
 })
-
--- Colors
-vim.cmd("colorscheme base16-gruvbox-material-dark-hard")
-vim.cmd("hi TSURI guifg=#5a524c")
 
 -- Statusline
 require("lualine").setup({
@@ -183,7 +167,7 @@ require("lualine").setup({
     globalstatus = false,
     section_separators = { left = "", right = "" },
     component_separators = { left = "", right = "" },
-    theme = "solarized_" .. light_or_dark,
+    theme = "auto",
   },
   sections = {
     lualine_b = { "branch", "diff" },
@@ -200,7 +184,7 @@ require("lualine").setup({
     lualine_z = {},
   },
 })
-vim.o.laststatus = 2
+vim.o.laststatus = 1
 
 -- goyo.vim and vim-pencil
 vim.keymap.set("n", "<leader>w", ":Goyo<CR>", { silent = true })
@@ -210,6 +194,7 @@ vim.cmd([[
     lua require('lualine').hide()
     call pencil#init({'wrap': 'soft'})
     set conceallevel=0
+    hi clear StatusLine " Fix ^^^ from showing at bottom of buffer
   endfunction
 
   function! s:goyo_leave()
@@ -290,6 +275,8 @@ require("fidget").setup({
     spinner = "dots",
   },
 })
+
+vim.g.better_escape_shortcut = "jj"
 
 -- LSP and diagnostics settings
 -- ----------------------------
@@ -395,23 +382,14 @@ local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 nvim_lsp.tsserver.setup({
   capabilities = capabilities,
-  filetypes = {
-    "javascript",
-    "typescript",
-    "typescriptreact",
-    "typescript.tsx",
-  },
+  filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
   flags = { debounce_text_changes = 100 },
-  init_options = {
-    preferences = { importModuleSpecifierPreference = "non-relative" },
-  },
+  init_options = { preferences = { importModuleSpecifierPreference = "non-relative" } },
   on_attach = function(client, bufnr)
-    -- Use built-in gq formatexpr
-    vim.o.formatexpr = ""
+    vim.o.formatexpr = "" -- Use built-in gq formatexpr
   end,
 })
 
-nvim_lsp.gopls.setup({ capabilities = capabilities })
 nvim_lsp.rust_analyzer.setup({ capabilities = capabilities })
 nvim_lsp.tailwindcss.setup({ capabilities = capabilities })
 nvim_lsp.eslint.setup({ capabilities = capabilities })
@@ -421,7 +399,6 @@ local null_ls = require("null-ls")
 local null_ls_helpers = require("null-ls/helpers")
 local null_ls_utils = require("null-ls/utils")
 local format_augroup = vim.api.nvim_create_augroup("LspFormatting", {})
-
 null_ls.setup({
   debug = true,
   sources = {

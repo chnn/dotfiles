@@ -3,7 +3,7 @@ set -o emacs
 export EDITOR="nvim"
 export SHELL="/bin/zsh"
 export PATH="$HOME/.local/bin:/usr/local/bin:/usr/local/sbin:$PATH"
-export NOTES="$HOME/Documents/Dropbox/Notes"
+export NOTES="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes"
 export JOURNAL="$HOME/Documents/Journal"
 
 # Rust
@@ -21,6 +21,9 @@ export PATH="$VOLTA_HOME/bin:$PATH"
 
 # cd
 command -v zoxide &> /dev/null && eval "$(zoxide init zsh)"
+
+# atuin
+eval "$(atuin init zsh)"
 
 # # Ruby
 # source $(brew --prefix)/opt/chruby/share/chruby/chruby.sh
@@ -93,16 +96,16 @@ gcopr() {
 }
 
 nj() {
-  local filename="$(date '+%F').md"
+  local filename="$(date '+%F').txt"
 
   if [ $# -gt 0 ]; then
-    filename="$(date '+%F') $1.md"
+    filename="$(date '+%F') $1.txt"
   fi
 
   cd $JOURNAL
 
-  if test -f "template.md" && ! test -f $filename; then
-    cp template.md $filename
+  if test -f "template.txt" && ! test -f $filename; then
+    cp template.txt $filename
   fi
 
   $EDITOR $filename
