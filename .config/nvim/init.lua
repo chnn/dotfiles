@@ -1,7 +1,7 @@
 -- Window
-vim.o.showmode = false
-vim.o.showcmd = false
 vim.o.shortmess = "filnxtToOFcI"
+vim.o.laststatus = 2
+vim.o.statusline = "%f %h%m%r%w%=%{strlen(&ft)?&ft:'none'} %-(%l,%c%)"
 
 -- Panes
 vim.o.wrap = false
@@ -37,7 +37,7 @@ vim.o.inccommand = "split"
 -- Colors
 vim.o.background = "dark"
 vim.o.termguicolors = true
-vim.cmd("colorscheme base16-classic-dark")
+vim.cmd("colorscheme base16-default-dark")
 
 -- Use space as leader
 vim.g.mapleader = " "
@@ -67,12 +67,16 @@ augroup end
 vim.opt.iskeyword:remove("-")
 vim.opt.iskeyword:remove("_")
 
--- Work-specific settings
-pcall(require, "work")
-
 -- Keep selected text selected when fixing indentation
 vim.keymap.set("v", "<", "<gv")
 vim.keymap.set("v", ">", ">gv")
+
+-- Quicker window navigation keybindings
+vim.keymap.set("n", "<C-J>", "<C-W><C-J>")
+vim.keymap.set("n", "<C-K>", "<C-W><C-K>")
+vim.keymap.set("n", "<C-L>", "<C-W><C-L>")
+vim.keymap.set("n", "<C-H>", "<C-W><C-H>")
+vim.keymap.set("n", "<C-_>", "<C-W><C-_>")
 
 -- ; to exit visual mode
 vim.keymap.set("v", ";", "<Esc>")
@@ -87,27 +91,11 @@ vim.keymap.set("v", "<leader>y", '"+y', { silent = true })
 vim.keymap.set("n", "<leader>p", '"+p', { silent = true })
 vim.keymap.set("n", "<leader>P", '"+P', { silent = true })
 
--- Toggle window UI with <leader>z
-local window_ui = true
-vim.keymap.set("n", "<leader>z", function()
-  if window_ui then
-    vim.o.number = false
-    vim.o.signcolumn = "no"
-    vim.o.laststatus = 1
-    window_ui = false
-  else
-    vim.o.number = true
-    vim.o.signcolumn = "yes"
-    vim.o.laststatus = 2
-    window_ui = true
-  end
-end, { silent = true })
-
 -- Exit terminal mode with Esc
 vim.cmd([[tnoremap <Esc> <C-\><C-n>:q!<CR>]])
 
--- Better indentation for soft-wrapped bullets in markdown files
-vim.cmd([[autocmd FileType markdown set briopt+=list:-1]])
+-- -- Better indentation for soft-wrapped bullets in markdown files
+-- vim.cmd([[autocmd FileType markdown set briopt+=list:-1]])
 
 -- Close all buffers but this one with :Rlw ("reload workspace")
 vim.cmd([[command! Rlw %bd|e#]])
@@ -131,20 +119,29 @@ require("paq")({
   "tpope/vim-repeat",
   "tpope/vim-rsi",
   "tpope/vim-abolish",
+
   "godlygeek/tabular",
   "neoclide/jsonc.vim",
   "junegunn/vim-peekaboo",
   "wellle/targets.vim",
-  "RRethy/nvim-base16",
+  "tinted-theming/base16-vim",
   "junegunn/goyo.vim",
   "reedes/vim-pencil",
+  "numToStr/Comment.nvim",
+  "nvim-lua/plenary.nvim",
+  "nvim-treesitter/nvim-treesitter",
+  "windwp/nvim-autopairs",
+  "preservim/vim-markdown",
+  "epwalsh/obsidian.nvim",
+
   "junegunn/fzf",
   "junegunn/fzf.vim",
   "gfanto/fzf-lsp.nvim",
-  "numToStr/Comment.nvim",
-  "nvim-lualine/lualine.nvim",
+
   "neovim/nvim-lspconfig",
   { "j-hui/fidget.nvim", branch = "legacy" },
+  "elentok/format-on-save.nvim",
+
   "hrsh7th/cmp-nvim-lsp",
   "hrsh7th/cmp-buffer",
   "hrsh7th/cmp-path",
@@ -153,48 +150,46 @@ require("paq")({
   "hrsh7th/vim-vsnip-integ",
   "hrsh7th/cmp-vsnip",
   "hrsh7th/nvim-cmp",
-  "nvim-lua/plenary.nvim",
-  "jose-elias-alvarez/null-ls.nvim",
-  "nvim-treesitter/nvim-treesitter",
-  "windwp/nvim-autopairs",
-  "nvim-zh/better-escape.vim",
 })
 
--- Statusline
-require("lualine").setup({
-  options = {
-    icons_enabled = false,
-    globalstatus = false,
-    section_separators = { left = "", right = "" },
-    component_separators = { left = "", right = "" },
-    theme = "auto",
+-- Misc. plugins
+require("Comment").setup()
+require("nvim-autopairs").setup({})
+require("fidget").setup({ text = { spinner = "dots" } })
+
+-- vim-markdown
+vim.g.vim_markdown_new_list_item_indent = 2
+vim.g.vim_markdown_math = 1
+vim.g.vim_markdown_frontmatter = 1
+vim.cmd([[autocmd FileType markdown set conceallevel=2]])
+
+-- obsidian.nvim
+require("obsidian").setup({
+  workspaces = {
+    {
+      name = "Notes",
+      path = "~/Documents/Notes",
+    },
   },
-  sections = {
-    lualine_b = { "branch", "diff" },
-    lualine_c = { { "filename", path = 1 } },
-    lualine_x = { { "diagnostics", sections = { "error", "warn" } } },
-    lualine_y = { "filetype" },
-  },
-  inactive_sections = {
-    lualine_a = {},
-    lualine_b = {},
-    lualine_c = { { "filename", path = 1 } },
-    lualine_x = { "location" },
-    lualine_y = {},
-    lualine_z = {},
-  },
+
+  note_id_func = function(title)
+    if title ~= nil then
+      return os.date("%Y-%m-%d") .. " " .. title
+    end
+
+    return os.date("%Y-%m-%d")
+  end,
+
+  disable_frontmatter = true,
 })
-vim.o.laststatus = 1
 
 -- goyo.vim and vim-pencil
 vim.keymap.set("n", "<leader>w", ":Goyo<CR>", { silent = true })
-vim.cmd([[let g:pencil#conceallevel = 0]])
+vim.cmd([[let g:pencil#conceallevel = 2]])
 vim.cmd([[
   function! s:goyo_enter()
-    lua require('lualine').hide()
     call pencil#init({'wrap': 'soft'})
-    set conceallevel=0
-    hi clear StatusLine " Fix ^^^ from showing at bottom of buffer
+    " hi clear StatusLine " Fix ^^^ from showing at bottom of buffer
   endfunction
 
   function! s:goyo_leave()
@@ -211,24 +206,19 @@ vim.cmd([[
 -- fzf.vim
 vim.g.fzf_preview_window = {}
 vim.g.fzf_layout = { window = { width = 0.9, height = 0.9, border = "sharp" } }
-
 vim.keymap.set("n", "<leader>f", ":Files<CR>", { silent = true })
 vim.keymap.set("n", "<leader>b", ":Buffers<CR>", { silent = true })
 vim.keymap.set("n", "<leader>l", ":Rg<CR>", { silent = true })
 vim.keymap.set("n", "<leader>s", require("fzf_lsp").document_symbol_call)
 vim.keymap.set("n", "<leader>S", require("fzf_lsp").workspace_symbol_call)
-
 vim.keymap.set("n", "<leader>d", function()
   require("fzf_lsp").diagnostic_call({ severity = vim.diagnostic.severity.ERROR })
 end)
-
 vim.keymap.set("n", "<leader>D", function()
   require("fzf_lsp").diagnostic_call({ severity = vim.diagnostic.severity.ERROR, bufnr = nil })
 end)
 
--- Comment.nvim
-require("Comment").setup()
-
+-- nvim-treesitter
 require("nvim-treesitter.configs").setup({
   ensure_installed = {
     "lua",
@@ -267,16 +257,6 @@ require("nvim-treesitter.configs").setup({
     },
   },
 })
-
-require("nvim-autopairs").setup({})
-
-require("fidget").setup({
-  text = {
-    spinner = "dots",
-  },
-})
-
-vim.g.better_escape_shortcut = "jj"
 
 -- LSP and diagnostics settings
 -- ----------------------------
@@ -380,83 +360,41 @@ cmp.setup({
 local nvim_lsp = require("lspconfig")
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
+nvim_lsp.jsonls.setup({ capabilities = capabilities })
+nvim_lsp.rust_analyzer.setup({ capabilities = capabilities })
+
 nvim_lsp.tsserver.setup({
   capabilities = capabilities,
-  filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
   flags = { debounce_text_changes = 100 },
-  init_options = { preferences = { importModuleSpecifierPreference = "non-relative" } },
+  init_options = {
+    preferences = { importModuleSpecifierPreference = "non-relative" },
+    maxTsServerMemory = 12288,
+  },
   on_attach = function(client, bufnr)
     vim.o.formatexpr = "" -- Use built-in gq formatexpr
   end,
 })
 
-nvim_lsp.rust_analyzer.setup({ capabilities = capabilities })
-nvim_lsp.tailwindcss.setup({ capabilities = capabilities })
-nvim_lsp.eslint.setup({ capabilities = capabilities })
-nvim_lsp.jsonls.setup({ capabilities = capabilities })
-
-local null_ls = require("null-ls")
-local null_ls_helpers = require("null-ls/helpers")
-local null_ls_utils = require("null-ls/utils")
-local format_augroup = vim.api.nvim_create_augroup("LspFormatting", {})
-null_ls.setup({
-  debug = true,
-  sources = {
-    null_ls.builtins.formatting.prettier.with({
-      filetypes = {
-        "javascript",
-        "javascriptreact",
-        "typescript",
-        "typescriptreact",
-        "json",
-        "jsonc",
-        "yaml",
-        "markdown",
-        "css",
-        "html",
-      },
-      condition = function(utils)
-        return utils.root_has_file({
-          ".prettierrc",
-          ".prettierrc.js",
-          ".prettierrc.json",
-          "client/.prettierrc.json",
-          ".prettierrc.yml",
-          ".prettierrc.yaml",
-        })
-      end,
-    }),
-
-    null_ls.builtins.formatting.stylua.with({
-      extra_args = { "--indent-width", "2", "--indent-type", "Spaces" },
-    }),
-
-    null_ls.builtins.formatting.rustfmt.with({
-      extra_args = { "--edition=2021" },
-    }),
-
-    null_ls.builtins.formatting.gofmt,
-    null_ls.builtins.formatting.goimports,
-    null_ls.builtins.formatting.terraform_fmt,
+nvim_lsp.eslint.setup({
+  capabilities = capabilities,
+  settings = {
+    rulesCustomizations = {
+      { rule = "prettier/prettier", severity = "off" },
+    },
   },
+})
 
-  on_attach = function(client, bufnr)
-    if not client.supports_method("textDocument/formatting") then
-      return
-    end
+local format_on_save = require("format-on-save")
+local formatters = require("format-on-save.formatters")
 
-    vim.api.nvim_clear_autocmds({ group = format_augroup, buffer = bufnr })
-    vim.api.nvim_create_autocmd("BufWritePre", {
-      group = format_augroup,
-      buffer = bufnr,
-      callback = function()
-        vim.lsp.buf.format({
-          bufnr = bufnr,
-          filter = function(client)
-            return client.name ~= "rust_analyzer" and client.name ~= "tsserver"
-          end,
-        })
-      end,
-    })
-  end,
+format_on_save.setup({
+  formatter_by_ft = {
+    css = formatters.prettierd,
+    javascript = formatters.prettierd,
+    json = formatters.prettierd,
+    typescript = formatters.prettierd,
+    typescriptreact = formatters.prettierd,
+    rust = formatters.lsp,
+    lua = formatters.shell({ cmd = { "stylua", "--indent-type", "Spaces", "--indent-width", "2", "-" } }),
+  },
 })
