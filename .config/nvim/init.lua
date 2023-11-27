@@ -1,14 +1,16 @@
 -- Window
 vim.o.shortmess = "filnxtToOFcI"
 vim.o.laststatus = 2
-vim.o.statusline = "%f %h%m%r%w%=%{strlen(&ft)?&ft:'none'} %-(%l,%c%)"
+vim.o.showmode = false
+vim.o.showcmd = false
+vim.o.cmdheight = 0
 
 -- Panes
 vim.o.wrap = false
 vim.o.number = true
 vim.o.relativenumber = false
 vim.o.ruler = true
-vim.o.cursorline = false
+vim.o.cursorline = true
 vim.o.signcolumn = "yes"
 vim.opt.fillchars:append({ vert = " ", eob = " " })
 
@@ -124,7 +126,7 @@ require("paq")({
   "neoclide/jsonc.vim",
   "junegunn/vim-peekaboo",
   "wellle/targets.vim",
-  "tinted-theming/base16-vim",
+  "RRethy/nvim-base16",
   "junegunn/goyo.vim",
   "reedes/vim-pencil",
   "numToStr/Comment.nvim",
@@ -133,10 +135,14 @@ require("paq")({
   "windwp/nvim-autopairs",
   "preservim/vim-markdown",
   "epwalsh/obsidian.nvim",
+  "nvim-lualine/lualine.nvim",
+  "AndrewRadev/tagalong.vim",
 
-  "junegunn/fzf",
-  "junegunn/fzf.vim",
-  "gfanto/fzf-lsp.nvim",
+  -- Necessary for Yarn PnP (https://yarnpkg.com/getting-started/editor-sdks#neovim-native-lsp)
+  "lbrayner/vim-rzip",
+
+  { "ibhagwan/fzf-lua", branch = "main" },
+  "nvim-tree/nvim-web-devicons",
 
   "neovim/nvim-lspconfig",
   { "j-hui/fidget.nvim", branch = "legacy" },
@@ -163,14 +169,38 @@ vim.g.vim_markdown_math = 1
 vim.g.vim_markdown_frontmatter = 1
 vim.cmd([[autocmd FileType markdown set conceallevel=2]])
 
+-- lualine.nvim
+require("lualine").setup({
+  options = {
+    icons_enabled = false,
+    globalstatus = false,
+    section_separators = { left = "", right = "" },
+    component_separators = { left = "", right = "" },
+    theme = "base16",
+  },
+  sections = {
+    lualine_a = { "mode" },
+    lualine_b = { "diff" },
+    lualine_c = { { "filename", path = 1 } },
+    lualine_x = { { "diagnostics", sections = { "error", "warn" } } },
+    lualine_y = { "filetype" },
+    lualine_z = { "location" },
+  },
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = { { "filename", path = 1 } },
+    lualine_x = {},
+    lualine_y = {},
+    lualine_z = {},
+  },
+})
+
 -- obsidian.nvim
 require("obsidian").setup({
-  workspaces = {
-    {
-      name = "Notes",
-      path = "~/Documents/Notes",
-    },
-  },
+  workspaces = { { name = "Notes", path = "~/Documents/Notes" } },
+  daily_notes = { folder = "Journal" },
+  disable_frontmatter = true,
 
   note_id_func = function(title)
     if title ~= nil then
@@ -179,8 +209,6 @@ require("obsidian").setup({
 
     return os.date("%Y-%m-%d")
   end,
-
-  disable_frontmatter = true,
 })
 
 -- goyo.vim and vim-pencil
@@ -189,6 +217,7 @@ vim.cmd([[let g:pencil#conceallevel = 2]])
 vim.cmd([[
   function! s:goyo_enter()
     call pencil#init({'wrap': 'soft'})
+    lua require('lualine').hide()
     " hi clear StatusLine " Fix ^^^ from showing at bottom of buffer
   endfunction
 
@@ -204,19 +233,20 @@ vim.cmd([[
 ]])
 
 -- fzf.vim
-vim.g.fzf_preview_window = {}
-vim.g.fzf_layout = { window = { width = 0.9, height = 0.9, border = "sharp" } }
-vim.keymap.set("n", "<leader>f", ":Files<CR>", { silent = true })
-vim.keymap.set("n", "<leader>b", ":Buffers<CR>", { silent = true })
-vim.keymap.set("n", "<leader>l", ":Rg<CR>", { silent = true })
-vim.keymap.set("n", "<leader>s", require("fzf_lsp").document_symbol_call)
-vim.keymap.set("n", "<leader>S", require("fzf_lsp").workspace_symbol_call)
-vim.keymap.set("n", "<leader>d", function()
-  require("fzf_lsp").diagnostic_call({ severity = vim.diagnostic.severity.ERROR })
-end)
-vim.keymap.set("n", "<leader>D", function()
-  require("fzf_lsp").diagnostic_call({ severity = vim.diagnostic.severity.ERROR, bufnr = nil })
-end)
+vim.keymap.set("n", "<leader>f", ":FzfLua files<CR>", { silent = true })
+vim.keymap.set("n", "<leader>b", ":FzfLua buffers<CR>", { silent = true })
+vim.keymap.set("n", "<leader>l", ":FzfLua live_grep<CR>", { silent = true })
+vim.keymap.set("n", "<leader>s", ":FzfLua lsp_document_symbols<CR>", { silent = true })
+vim.keymap.set("n", "<leader>S", ":FzfLua lsp_workspace_symbols<CR>", { silent = true })
+vim.keymap.set("n", "<leader>d", ":FzfLua diagnostics_document<CR>", { silent = true })
+vim.keymap.set("n", "<leader>D", ":FzfLua diagnostics_workspace<CR>", { silent = true })
+require("fzf-lua").setup({
+  winopts = {
+    preview = {
+      layout = "vertical",
+    },
+  },
+})
 
 -- nvim-treesitter
 require("nvim-treesitter.configs").setup({
@@ -285,23 +315,17 @@ vim.diagnostic.config({
   severity_sort = true,
 })
 
-vim.keymap.set("n", "<leader>k", vim.lsp.buf.hover)
+vim.keymap.set("n", "gh", vim.lsp.buf.hover)
+vim.keymap.set("n", "gi", vim.lsp.buf.implementation)
 vim.keymap.set("n", "gd", vim.lsp.buf.definition)
+vim.keymap.set("n", "gt", vim.lsp.buf.type_definition)
 vim.keymap.set("n", "gr", vim.lsp.buf.references)
 
 vim.keymap.set("n", "[d", function()
   vim.diagnostic.goto_prev({ severity = diagnostic_severity })
 end)
 
-vim.keymap.set("n", "]D", function()
-  vim.diagnostic.goto_prev({ severity = diagnostic_severity })
-end)
-
 vim.keymap.set("n", "]d", function()
-  vim.diagnostic.goto_next({ severity = diagnostic_severity })
-end)
-
-vim.keymap.set("n", "[D", function()
   vim.diagnostic.goto_next({ severity = diagnostic_severity })
 end)
 
@@ -365,13 +389,17 @@ nvim_lsp.rust_analyzer.setup({ capabilities = capabilities })
 
 nvim_lsp.tsserver.setup({
   capabilities = capabilities,
-  flags = { debounce_text_changes = 100 },
+  -- flags = { debounce_text_changes = 100 },
   init_options = {
     preferences = { importModuleSpecifierPreference = "non-relative" },
-    maxTsServerMemory = 12288,
+    maxTsServerMemory = 24576,
   },
   on_attach = function(client, bufnr)
-    vim.o.formatexpr = "" -- Use built-in gq formatexpr
+    -- Use built-in gq formatexpr
+    vim.o.formatexpr = ""
+
+    -- Disable highlighting from tsserver
+    client.server_capabilities.semanticTokensProvider = nil
   end,
 })
 
@@ -380,6 +408,7 @@ nvim_lsp.eslint.setup({
   settings = {
     rulesCustomizations = {
       { rule = "prettier/prettier", severity = "off" },
+      { rule = "arca/import-ordering", severity = "off" },
     },
   },
 })
