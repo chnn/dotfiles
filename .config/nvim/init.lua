@@ -78,6 +78,8 @@ vim.keymap.set("n", "<C-K>", "<C-W><C-K>")
 vim.keymap.set("n", "<C-L>", "<C-W><C-L>")
 vim.keymap.set("n", "<C-H>", "<C-W><C-H>")
 vim.keymap.set("n", "<C-_>", "<C-W><C-_>")
+vim.keymap.set("n", "<C-q>", "<C-W><C-q>")
+vim.keymap.set("n", "<C-s>", "<C-W>s")
 
 -- ; to exit visual mode
 vim.keymap.set("v", ";", "<Esc>")
@@ -289,6 +291,8 @@ local completeopt = "menu,menuone,noinsert,noselect,preview"
 vim.o.completeopt = completeopt
 vim.o.updatetime = 300
 
+vim.lsp.set_log_level("debug")
+
 local diagnostic_severity = { min = vim.diagnostic.severity.WARN }
 
 vim.diagnostic.config({
@@ -304,15 +308,12 @@ vim.keymap.set("n", "gi", vim.lsp.buf.implementation)
 vim.keymap.set("n", "gd", vim.lsp.buf.definition)
 vim.keymap.set("n", "gt", vim.lsp.buf.type_definition)
 vim.keymap.set("n", "gr", vim.lsp.buf.references)
-
 vim.keymap.set("n", "[d", function()
   vim.diagnostic.goto_prev({ severity = diagnostic_severity })
 end)
-
 vim.keymap.set("n", "]d", function()
   vim.diagnostic.goto_next({ severity = diagnostic_severity })
 end)
-
 vim.keymap.set("n", "<leader>j", function()
   vim.diagnostic.setqflist({ open = true, severity = diagnostic_severity })
 end)
@@ -337,7 +338,6 @@ vim.keymap.set("n", "ge", function()
 end)
 
 local cmp = require("cmp")
-
 cmp.setup({
   completion = { completeopt = completeopt },
 
@@ -375,7 +375,6 @@ nvim_lsp.rust_analyzer.setup({ capabilities = capabilities })
 
 nvim_lsp.tsserver.setup({
   capabilities = capabilities,
-  -- flags = { debounce_text_changes = 100 },
   init_options = {
     preferences = { importModuleSpecifierPreference = "non-relative" },
     maxTsServerMemory = 24576,
