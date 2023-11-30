@@ -1,9 +1,8 @@
 -- Window
 vim.o.shortmess = "filnxtToOFcI"
-vim.o.laststatus = 2
+vim.o.laststatus = 1
 vim.o.showmode = false
 vim.o.showcmd = false
-vim.o.cmdheight = 0
 
 -- Panes
 vim.o.wrap = false
@@ -96,9 +95,6 @@ vim.keymap.set("n", "<leader>P", '"+P', { silent = true })
 -- Exit terminal mode with Esc
 vim.cmd([[tnoremap <Esc> <C-\><C-n>:q!<CR>]])
 
--- -- Better indentation for soft-wrapped bullets in markdown files
--- vim.cmd([[autocmd FileType markdown set briopt+=list:-1]])
-
 -- Close all buffers but this one with :Rlw ("reload workspace")
 vim.cmd([[command! Rlw %bd|e#]])
 
@@ -134,7 +130,6 @@ require("paq")({
   "nvim-treesitter/nvim-treesitter",
   "windwp/nvim-autopairs",
   "preservim/vim-markdown",
-  "epwalsh/obsidian.nvim",
   "nvim-lualine/lualine.nvim",
   "AndrewRadev/tagalong.vim",
 
@@ -142,7 +137,6 @@ require("paq")({
   "lbrayner/vim-rzip",
 
   { "ibhagwan/fzf-lua", branch = "main" },
-  "nvim-tree/nvim-web-devicons",
 
   "neovim/nvim-lspconfig",
   { "j-hui/fidget.nvim", branch = "legacy" },
@@ -156,6 +150,7 @@ require("paq")({
   "hrsh7th/vim-vsnip-integ",
   "hrsh7th/cmp-vsnip",
   "hrsh7th/nvim-cmp",
+  "ray-x/cmp-treesitter",
 })
 
 -- Misc. plugins
@@ -163,11 +158,14 @@ require("Comment").setup()
 require("nvim-autopairs").setup({})
 require("fidget").setup({ text = { spinner = "dots" } })
 
--- vim-markdown
+-- vim-markdown + general markdown settings
 vim.g.vim_markdown_new_list_item_indent = 2
 vim.g.vim_markdown_math = 1
 vim.g.vim_markdown_frontmatter = 1
-vim.cmd([[autocmd FileType markdown set conceallevel=2]])
+vim.cmd([[autocmd FileType markdown set conceallevel=0]])
+vim.cmd([[autocmd FileType markdown set laststatus=1]])
+vim.cmd([[autocmd FileType markdown set nonumber]])
+-- vim.cmd([[autocmd FileType markdown set briopt+=list:-1]])  -- Better indentation for soft-wrapped bullets in markdown files
 
 -- lualine.nvim
 require("lualine").setup({
@@ -196,29 +194,14 @@ require("lualine").setup({
   },
 })
 
--- obsidian.nvim
-require("obsidian").setup({
-  workspaces = { { name = "Notes", path = "~/Documents/Notes" } },
-  daily_notes = { folder = "Journal" },
-  disable_frontmatter = true,
-
-  note_id_func = function(title)
-    if title ~= nil then
-      return os.date("%Y-%m-%d") .. " " .. title
-    end
-
-    return os.date("%Y-%m-%d")
-  end,
-})
-
 -- goyo.vim and vim-pencil
 vim.keymap.set("n", "<leader>w", ":Goyo<CR>", { silent = true })
-vim.cmd([[let g:pencil#conceallevel = 2]])
+vim.cmd([[let g:pencil#conceallevel = 0]])
 vim.cmd([[
   function! s:goyo_enter()
     call pencil#init({'wrap': 'soft'})
     lua require('lualine').hide()
-    " hi clear StatusLine " Fix ^^^ from showing at bottom of buffer
+    hi clear StatusLine " Fix ^^^ from showing at bottom of buffer
   endfunction
 
   function! s:goyo_leave()
@@ -232,7 +215,8 @@ vim.cmd([[
   augroup end
 ]])
 
--- fzf.vim
+-- fzf
+vim.keymap.set("n", "<M-p>", ":FzfLua files<CR>", { silent = true })
 vim.keymap.set("n", "<leader>f", ":FzfLua files<CR>", { silent = true })
 vim.keymap.set("n", "<leader>b", ":FzfLua buffers<CR>", { silent = true })
 vim.keymap.set("n", "<leader>l", ":FzfLua live_grep<CR>", { silent = true })
@@ -360,6 +344,8 @@ cmp.setup({
   sources = cmp.config.sources({
     { name = "nvim_lsp" },
     { name = "vsnip" },
+  }, {
+    { name = "treesitter" },
   }, {
     { name = "buffer" },
     { name = "path" },
