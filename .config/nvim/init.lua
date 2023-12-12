@@ -11,6 +11,7 @@ vim.o.relativenumber = false
 vim.o.ruler = true
 vim.o.cursorline = true
 vim.o.signcolumn = "yes"
+vim.o.mouse = ""
 vim.opt.fillchars:append({ vert = " ", eob = " " })
 
 -- Folds
@@ -38,7 +39,6 @@ vim.o.inccommand = "split"
 -- Colors
 vim.o.background = "dark"
 vim.o.termguicolors = true
-vim.cmd("colorscheme base16-default-dark")
 
 -- Use space as leader
 vim.g.mapleader = " "
@@ -64,10 +64,6 @@ augroup AutoOpenQuickFix
 augroup end
 ]])
 
--- Recognize words in snake_case and kebab-case
-vim.opt.iskeyword:remove("-")
-vim.opt.iskeyword:remove("_")
-
 -- Keep selected text selected when fixing indentation
 vim.keymap.set("v", "<", "<gv")
 vim.keymap.set("v", ">", ">gv")
@@ -80,9 +76,6 @@ vim.keymap.set("n", "<C-H>", "<C-W><C-H>")
 vim.keymap.set("n", "<C-_>", "<C-W><C-_>")
 vim.keymap.set("n", "<C-q>", "<C-W><C-q>")
 vim.keymap.set("n", "<C-s>", "<C-W>s")
-
--- ; to exit visual mode
-vim.keymap.set("v", ";", "<Esc>")
 
 -- Edit vimrc keybindings
 vim.keymap.set("n", "<leader>ev", ":e $MYVIMRC<CR>", { silent = true })
@@ -109,17 +102,14 @@ vim.cmd([[command! -nargs=1 Wt exe 'w ' . strftime("%F") . ' ' . "<args>"]])
 --
 require("paq")({
   "savq/paq-nvim",
-
   "tpope/vim-fugitive",
   "tpope/vim-rhubarb",
   "tpope/vim-surround",
   "tpope/vim-unimpaired",
-  "tpope/vim-vinegar",
   "tpope/vim-sleuth",
   "tpope/vim-repeat",
   "tpope/vim-rsi",
   "tpope/vim-abolish",
-
   "godlygeek/tabular",
   "neoclide/jsonc.vim",
   "junegunn/vim-peekaboo",
@@ -134,16 +124,13 @@ require("paq")({
   "preservim/vim-markdown",
   "nvim-lualine/lualine.nvim",
   "AndrewRadev/tagalong.vim",
-
-  -- Necessary for Yarn PnP (https://yarnpkg.com/getting-started/editor-sdks#neovim-native-lsp)
-  "lbrayner/vim-rzip",
-
-  { "ibhagwan/fzf-lua", branch = "main" },
-
+  "stevearc/oil.nvim",
+  "stevearc/conform.nvim",
+  "github/copilot.vim",
   "neovim/nvim-lspconfig",
+  { "ibhagwan/fzf-lua", branch = "main" },
   { "j-hui/fidget.nvim", branch = "legacy" },
-  "elentok/format-on-save.nvim",
-
+  "lbrayner/vim-rzip", -- Necessary for Yarn PnP (https://yarnpkg.com/getting-started/editor-sdks#neovim-native-lsp)
   "hrsh7th/cmp-nvim-lsp",
   "hrsh7th/cmp-buffer",
   "hrsh7th/cmp-path",
@@ -152,24 +139,21 @@ require("paq")({
   "hrsh7th/vim-vsnip-integ",
   "hrsh7th/cmp-vsnip",
   "hrsh7th/nvim-cmp",
-  "ray-x/cmp-treesitter",
 })
 
--- Misc. plugins
 require("Comment").setup()
 require("nvim-autopairs").setup({})
 require("fidget").setup({ text = { spinner = "dots" } })
+vim.cmd("colorscheme base16-default-dark")
 
--- vim-markdown + general markdown settings
 vim.g.vim_markdown_new_list_item_indent = 2
 vim.g.vim_markdown_math = 1
 vim.g.vim_markdown_frontmatter = 1
 vim.cmd([[autocmd FileType markdown set conceallevel=0]])
-vim.cmd([[autocmd FileType markdown set laststatus=1]])
-vim.cmd([[autocmd FileType markdown set nonumber]])
--- vim.cmd([[autocmd FileType markdown set briopt+=list:-1]])  -- Better indentation for soft-wrapped bullets in markdown files
 
--- lualine.nvim
+require("oil").setup({ default_file_explorer = false })
+vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+
 require("lualine").setup({
   options = {
     icons_enabled = false,
@@ -196,7 +180,6 @@ require("lualine").setup({
   },
 })
 
--- goyo.vim and vim-pencil
 vim.keymap.set("n", "<leader>w", ":Goyo<CR>", { silent = true })
 vim.cmd([[let g:pencil#conceallevel = 0]])
 vim.cmd([[
@@ -217,7 +200,6 @@ vim.cmd([[
   augroup end
 ]])
 
--- fzf
 vim.keymap.set("n", "<M-p>", ":FzfLua files<CR>", { silent = true })
 vim.keymap.set("n", "<leader>f", ":FzfLua files<CR>", { silent = true })
 vim.keymap.set("n", "<leader>b", ":FzfLua buffers<CR>", { silent = true })
@@ -227,14 +209,36 @@ vim.keymap.set("n", "<leader>S", ":FzfLua lsp_workspace_symbols<CR>", { silent =
 vim.keymap.set("n", "<leader>d", ":FzfLua diagnostics_document<CR>", { silent = true })
 vim.keymap.set("n", "<leader>D", ":FzfLua diagnostics_workspace<CR>", { silent = true })
 require("fzf-lua").setup({
+  files = { previewer = false },
+  buffers = { previewer = false },
   winopts = {
-    preview = {
-      layout = "vertical",
-    },
+    preview = { layout = "vertical" },
   },
 })
 
--- nvim-treesitter
+require("conform").setup({
+  formatters = {
+    stylua = {
+      command = "stylua",
+      args = { "--indent-type", "Spaces", "--indent-width", "2", "-" },
+    },
+  },
+  formatters_by_ft = {
+    javascript = { { "prettierd", "prettier" } },
+    css = { { "prettierd", "prettier" } },
+    javascript = { { "prettierd", "prettier" } },
+    javascriptreact = { { "prettierd", "prettier" } },
+    json = { { "prettierd", "prettier" } },
+    typescript = { { "prettierd", "prettier" } },
+    typescriptreact = { { "prettierd", "prettier" } },
+    rust = { "rustfmt" },
+    lua = { "stylua" },
+  },
+  format_after_save = {
+    lsp_fallback = false,
+  },
+})
+
 require("nvim-treesitter.configs").setup({
   ensure_installed = {
     "lua",
@@ -252,6 +256,7 @@ require("nvim-treesitter.configs").setup({
     "yaml",
     "query",
     "json",
+    "hurl",
   },
 
   highlight = {
@@ -274,24 +279,10 @@ require("nvim-treesitter.configs").setup({
   },
 })
 
--- LSP and diagnostics settings
--- ----------------------------
---
--- To debug, set:
---
---     vim.lsp.set_log_level("debug")
---
--- View logs with:
---
---     :lua vim.cmd('e' .. vim.lsp.get_log_path())
---
-
 local completeopt = "menu,menuone,noinsert,noselect,preview"
 
 vim.o.completeopt = completeopt
 vim.o.updatetime = 300
-
-vim.lsp.set_log_level("debug")
 
 local diagnostic_severity = { min = vim.diagnostic.severity.WARN }
 
@@ -343,12 +334,10 @@ cmp.setup({
 
   sources = cmp.config.sources({
     { name = "nvim_lsp" },
-    { name = "vsnip" },
-  }, {
-    { name = "treesitter" },
   }, {
     { name = "buffer" },
     { name = "path" },
+    { name = "vsnip" },
   }),
 
   snippet = {
@@ -380,7 +369,7 @@ nvim_lsp.tsserver.setup({
     maxTsServerMemory = 24576,
   },
   on_attach = function(client, bufnr)
-    -- Use built-in gq formatexpr
+    -- Use built-in gq formatexpr which works better for comments
     vim.o.formatexpr = ""
 
     -- Disable highlighting from tsserver
@@ -394,21 +383,8 @@ nvim_lsp.eslint.setup({
     rulesCustomizations = {
       { rule = "prettier/prettier", severity = "off" },
       { rule = "arca/import-ordering", severity = "off" },
+      { rule = "arca/newline-after-import-section", severity = "off" },
+      { rule = "quotes", severity = "off" },
     },
-  },
-})
-
-local format_on_save = require("format-on-save")
-local formatters = require("format-on-save.formatters")
-
-format_on_save.setup({
-  formatter_by_ft = {
-    css = formatters.prettierd,
-    javascript = formatters.prettierd,
-    json = formatters.prettierd,
-    typescript = formatters.prettierd,
-    typescriptreact = formatters.prettierd,
-    rust = formatters.lsp,
-    lua = formatters.shell({ cmd = { "stylua", "--indent-type", "Spaces", "--indent-width", "2", "-" } }),
   },
 })
