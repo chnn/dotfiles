@@ -292,6 +292,11 @@ vim.diagnostic.config({
   underline = { severity = diagnostic_severity },
   update_in_insert = false,
   severity_sort = true,
+  float = {
+    format = function(d)
+      return "(" .. d.source .. ") " .. d.message
+    end,
+  },
 })
 
 vim.keymap.set("n", "gh", vim.lsp.buf.hover)
@@ -299,6 +304,7 @@ vim.keymap.set("n", "gi", vim.lsp.buf.implementation)
 vim.keymap.set("n", "gd", vim.lsp.buf.definition)
 vim.keymap.set("n", "gt", vim.lsp.buf.type_definition)
 vim.keymap.set("n", "gr", vim.lsp.buf.references)
+vim.keymap.set("n", "gn", vim.lsp.buf.rename)
 vim.keymap.set("n", "[d", function()
   vim.diagnostic.goto_prev({ severity = diagnostic_severity })
 end)
