@@ -4,7 +4,7 @@ export EDITOR="nvim"
 export SHELL="/bin/zsh"
 export PATH="$HOME/.local/bin:/usr/local/bin:/usr/local/sbin:$PATH"
 export NOTES="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes"
-export JOURNAL="$HOME/Documents/Journal"
+export JOURNAL="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/Journal"
 
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
