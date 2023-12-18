@@ -139,6 +139,7 @@ require("paq")({
   "hrsh7th/vim-vsnip-integ",
   "hrsh7th/cmp-vsnip",
   "hrsh7th/nvim-cmp",
+  "pmizio/typescript-tools.nvim",
 })
 
 require("Comment").setup()
@@ -150,6 +151,7 @@ vim.g.vim_markdown_new_list_item_indent = 2
 vim.g.vim_markdown_math = 1
 vim.g.vim_markdown_frontmatter = 1
 vim.cmd([[autocmd FileType markdown set conceallevel=0]])
+vim.cmd([[autocmd FileType markdown set laststatus=1]])
 
 require("oil").setup({ default_file_explorer = false })
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
@@ -366,14 +368,9 @@ local nvim_lsp = require("lspconfig")
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 nvim_lsp.jsonls.setup({ capabilities = capabilities })
-nvim_lsp.rust_analyzer.setup({ capabilities = capabilities })
+nvim_lsp.rust_analyzer.setup({ capabilities = capabilities, single_file_support = false })
 
-nvim_lsp.tsserver.setup({
-  capabilities = capabilities,
-  init_options = {
-    preferences = { importModuleSpecifierPreference = "non-relative" },
-    maxTsServerMemory = 24576,
-  },
+require("typescript-tools").setup({
   on_attach = function(client, bufnr)
     -- Use built-in gq formatexpr which works better for comments
     vim.o.formatexpr = ""
@@ -385,6 +382,7 @@ nvim_lsp.tsserver.setup({
 
 nvim_lsp.eslint.setup({
   capabilities = capabilities,
+  single_file_support = false,
   settings = {
     rulesCustomizations = {
       { rule = "prettier/prettier", severity = "off" },
