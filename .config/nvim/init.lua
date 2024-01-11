@@ -1,25 +1,25 @@
 -- Window
 vim.o.shortmess = "filnxtToOFcI"
-vim.o.laststatus = 1
 vim.o.showmode = false
 vim.o.showcmd = false
+vim.o.statusline = "%f %h%m%r%w%= %-(%l,%c%)"
 
 -- Panes
 vim.o.wrap = false
 vim.o.number = true
 vim.o.relativenumber = false
 vim.o.ruler = true
-vim.o.cursorline = true
+vim.o.cursorline = false
 vim.o.signcolumn = "yes"
 vim.o.mouse = ""
-vim.opt.fillchars:append({ vert = " ", eob = " " })
+vim.opt.fillchars:append({ vert = " " })
 
 -- Folds
 vim.o.foldmethod = "indent"
 vim.o.foldlevel = 10
 
 -- Backup and undo
-vim.o.hidden = false
+vim.o.hidden = true
 vim.o.backupcopy = "yes"
 vim.o.undofile = true
 vim.o.directory = vim.fn.stdpath("cache") .. "/swap"
@@ -37,7 +37,7 @@ vim.o.hlsearch = true
 vim.o.inccommand = "split"
 
 -- Colors
-vim.o.background = "dark"
+vim.o.background = "light"
 vim.o.termguicolors = true
 
 -- Use space as leader
@@ -74,6 +74,7 @@ vim.keymap.set("n", "<C-K>", "<C-W><C-K>")
 vim.keymap.set("n", "<C-L>", "<C-W><C-L>")
 vim.keymap.set("n", "<C-H>", "<C-W><C-H>")
 vim.keymap.set("n", "<C-_>", "<C-W><C-_>")
+vim.keymap.set("n", "<C-=>", "<C-W><C-=>")
 vim.keymap.set("n", "<C-q>", "<C-W><C-q>")
 vim.keymap.set("n", "<C-s>", "<C-W>s")
 
@@ -140,18 +141,30 @@ require("paq")({
   "hrsh7th/cmp-vsnip",
   "hrsh7th/nvim-cmp",
   "pmizio/typescript-tools.nvim",
+  "svermeulen/vim-yoink",
 })
 
 require("Comment").setup()
 require("nvim-autopairs").setup({})
 require("fidget").setup({ text = { spinner = "dots" } })
-vim.cmd("colorscheme base16-default-dark")
+vim.cmd("colorscheme base16-solarized-light")
+
+vim.cmd([[nmap <c-n> <plug>(YoinkPostPasteSwapBack)]])
+vim.cmd([[nmap <c-p> <plug>(YoinkPostPasteSwapForward)]])
+vim.cmd([[nmap p <plug>(YoinkPaste_p)]])
+vim.cmd([[nmap P <plug>(YoinkPaste_P)]])
+vim.cmd([[nmap gp <plug>(YoinkPaste_gp)]])
+vim.cmd([[nmap gP <plug>(YoinkPaste_gP)]])
+-- vim.cmd([[nmap <c-=> <plug>(YoinkPostPasteToggleFormat)]])
+vim.cmd([[nmap y <plug>(YoinkYankPreserveCursorPosition)]])
+vim.cmd([[xmap y <plug>(YoinkYankPreserveCursorPosition)]])
 
 vim.g.vim_markdown_new_list_item_indent = 2
 vim.g.vim_markdown_math = 1
 vim.g.vim_markdown_frontmatter = 1
 vim.cmd([[autocmd FileType markdown set conceallevel=0]])
-vim.cmd([[autocmd FileType markdown set laststatus=1]])
+vim.cmd([[autocmd FileType markdown set nonumber]])
+vim.cmd([[autocmd FileType markdown set nocursorline]])
 
 require("oil").setup({ default_file_explorer = false })
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
@@ -181,6 +194,7 @@ require("lualine").setup({
     lualine_z = {},
   },
 })
+vim.o.laststatus = 1
 
 vim.keymap.set("n", "<leader>w", ":Goyo<CR>", { silent = true })
 vim.cmd([[let g:pencil#conceallevel = 0]])
@@ -211,11 +225,9 @@ vim.keymap.set("n", "<leader>S", ":FzfLua lsp_workspace_symbols<CR>", { silent =
 vim.keymap.set("n", "<leader>d", ":FzfLua diagnostics_document<CR>", { silent = true })
 vim.keymap.set("n", "<leader>D", ":FzfLua diagnostics_workspace<CR>", { silent = true })
 require("fzf-lua").setup({
-  files = { previewer = false },
-  buffers = { previewer = false },
-  winopts = {
-    preview = { layout = "vertical" },
-  },
+  files = { no_header = true },
+  buffers = { no_header = true },
+  live_grep = { no_header = true },
 })
 
 require("conform").setup({
@@ -283,9 +295,6 @@ require("nvim-treesitter.configs").setup({
 
 local completeopt = "menu,menuone,noinsert,noselect,preview"
 
-vim.o.completeopt = completeopt
-vim.o.updatetime = 300
-
 local diagnostic_severity = { min = vim.diagnostic.severity.WARN }
 
 vim.diagnostic.config({
@@ -336,16 +345,18 @@ vim.keymap.set("n", "ge", function()
   vim.api.nvim_command("pedit " .. tmpfile_path)
 end)
 
+vim.o.completeopt = completeopt
+vim.o.updatetime = 300
 local cmp = require("cmp")
 cmp.setup({
   completion = { completeopt = completeopt },
 
   sources = cmp.config.sources({
-    { name = "nvim_lsp" },
+    { name = "buffer" },
   }, {
+    { name = "nvim_lsp" },
     { name = "buffer" },
     { name = "path" },
-    { name = "vsnip" },
   }),
 
   snippet = {
@@ -364,6 +375,12 @@ cmp.setup({
   },
 })
 
+cmp.setup.filetype("markdown", {
+  sources = {},
+})
+
+vim.keymap.set("i", "<M-\\>", "<CMD>Copilot panel<CR>", { silent = true })
+
 local nvim_lsp = require("lspconfig")
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
@@ -371,12 +388,10 @@ nvim_lsp.jsonls.setup({ capabilities = capabilities })
 nvim_lsp.rust_analyzer.setup({ capabilities = capabilities, single_file_support = false })
 
 require("typescript-tools").setup({
+  separate_diagnostic_server = false,
   on_attach = function(client, bufnr)
     -- Use built-in gq formatexpr which works better for comments
     vim.o.formatexpr = ""
-
-    -- Disable highlighting from tsserver
-    client.server_capabilities.semanticTokensProvider = nil
   end,
 })
 
