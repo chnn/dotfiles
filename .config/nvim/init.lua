@@ -147,7 +147,7 @@ require("paq")({
 require("Comment").setup()
 require("nvim-autopairs").setup({})
 require("fidget").setup({ text = { spinner = "dots" } })
-vim.cmd("colorscheme base16-solarized-light")
+vim.cmd("colorscheme base16-default-dark")
 
 vim.cmd([[nmap <c-n> <plug>(YoinkPostPasteSwapBack)]])
 vim.cmd([[nmap <c-p> <plug>(YoinkPostPasteSwapForward)]])
