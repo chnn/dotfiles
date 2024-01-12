@@ -392,6 +392,9 @@ require("typescript-tools").setup({
   on_attach = function(client, bufnr)
     -- Use built-in gq formatexpr which works better for comments
     vim.o.formatexpr = ""
+
+    -- Disable highlighting from tsserver
+    client.server_capabilities.semanticTokensProvider = nil
   end,
 })
 
