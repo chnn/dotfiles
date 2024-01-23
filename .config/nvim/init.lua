@@ -360,8 +360,12 @@ cmp.setup({
   },
 })
 cmp.setup.filetype("markdown", { sources = {} })
+cmp.setup.filetype("text", { sources = {} })
 
--- LSP
+vim.keymap.set("i", "<M-\\>", "<CMD>Copilot panel<CR>", { silent = true })
+vim.g.copilot_filetypes = { text = false, markdown = false }
+
+--- LSP
 vim.keymap.set("n", "gh", vim.lsp.buf.hover)
 vim.keymap.set("n", "gi", vim.lsp.buf.implementation)
 vim.keymap.set("n", "gd", vim.lsp.buf.definition)
@@ -387,8 +391,6 @@ vim.keymap.set("n", "ge", function()
   f:close()
   vim.api.nvim_command("pedit " .. tmpfile_path)
 end)
-
-vim.keymap.set("i", "<M-\\>", "<CMD>Copilot panel<CR>", { silent = true })
 
 local nvim_lsp = require("lspconfig")
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
