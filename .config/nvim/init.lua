@@ -55,6 +55,9 @@ vim.keymap.set("n", "<leader>/", ":grep ")
 vim.keymap.set("n", "<leader>g", ':silent grep"<C-R><C-W>"<CR>:copen<CR>', { silent = true })
 vim.keymap.set("v", "<leader>g", '"sy:silent grep"<C-R>s"<CR>:copen<CR>', { silent = true })
 
+-- <leader>n to copy filename of buffer under the cursor to system clipboard
+vim.keymap.set("n", "<leader>n", ':let @+=fnamemodify(expand("%"), ":~:.")<CR>', { silent = true })
+
 -- Automatically open the quickfix window on :grep
 vim.cmd([[
 augroup AutoOpenQuickFix
@@ -131,7 +134,6 @@ require("paq")({
   "neovim/nvim-lspconfig",
   { "ibhagwan/fzf-lua", branch = "main" },
   { "j-hui/fidget.nvim", branch = "legacy" },
-  "lbrayner/vim-rzip", -- Necessary for Yarn PnP (https://yarnpkg.com/getting-started/editor-sdks#neovim-native-lsp)
   "hrsh7th/cmp-nvim-lsp",
   "hrsh7th/cmp-buffer",
   "hrsh7th/cmp-path",
@@ -149,15 +151,22 @@ require("nvim-autopairs").setup({})
 require("fidget").setup({ text = { spinner = "dots" } })
 vim.cmd("colorscheme base16-default-dark")
 
-vim.cmd([[nmap <c-n> <plug>(YoinkPostPasteSwapBack)]])
-vim.cmd([[nmap <c-p> <plug>(YoinkPostPasteSwapForward)]])
-vim.cmd([[nmap p <plug>(YoinkPaste_p)]])
-vim.cmd([[nmap P <plug>(YoinkPaste_P)]])
-vim.cmd([[nmap gp <plug>(YoinkPaste_gp)]])
-vim.cmd([[nmap gP <plug>(YoinkPaste_gP)]])
--- vim.cmd([[nmap <c-=> <plug>(YoinkPostPasteToggleFormat)]])
-vim.cmd([[nmap y <plug>(YoinkYankPreserveCursorPosition)]])
-vim.cmd([[xmap y <plug>(YoinkYankPreserveCursorPosition)]])
+-- More sensible cut/copy/paste behavior
+vim.o.clipboard = "unnamed"
+vim.g.yoinkSyncSystemClipboardOnFocus = 1
+vim.g.yoinkMoveCursorToEndOfPaste = 1
+vim.g.yoinkIncludeDeleteOperations = 1
+vim.keymap.set("n", "<c-n>", "<plug>(YoinkPostPasteSwapBack)")
+vim.keymap.set("n", "<c-p>", "<plug>(YoinkPostPasteSwapForward)")
+vim.keymap.set("n", "p", "<plug>(YoinkPaste_p)")
+vim.keymap.set("n", "P", "<plug>(YoinkPaste_P)")
+vim.keymap.set("n", "gp", "<plug>(YoinkPaste_gp)")
+vim.keymap.set("n", "gP", "<plug>(YoinkPaste_gP)")
+vim.keymap.set("n", "<c-=>", "<plug>(YoinkPostPasteToggleFormat)")
+vim.keymap.set("n", "=p", "o<esc><plug>(YoinkPaste_p)==")
+vim.keymap.set("n", "=P", "O<esc><plug>(YoinkPaste_P)==")
+vim.keymap.set("n", "y", "<plug>(YoinkYankPreserveCursorPosition)")
+vim.keymap.set("x", "y", "<plug>(YoinkYankPreserveCursorPosition)")
 
 vim.g.vim_markdown_new_list_item_indent = 2
 vim.g.vim_markdown_math = 1
@@ -166,7 +175,11 @@ vim.cmd([[autocmd FileType markdown set conceallevel=0]])
 vim.cmd([[autocmd FileType markdown set nonumber]])
 vim.cmd([[autocmd FileType markdown set nocursorline]])
 
-require("oil").setup({ default_file_explorer = false })
+require("oil").setup({
+  default_file_explorer = false,
+  delete_to_trash = true,
+  skip_confirm_for_simple_edits = true,
+})
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
 require("lualine").setup({
@@ -194,7 +207,7 @@ require("lualine").setup({
     lualine_z = {},
   },
 })
-vim.o.laststatus = 1
+vim.o.laststatus = 2
 
 vim.keymap.set("n", "<leader>w", ":Goyo<CR>", { silent = true })
 vim.cmd([[let g:pencil#conceallevel = 0]])
@@ -228,6 +241,9 @@ require("fzf-lua").setup({
   files = { no_header = true },
   buffers = { no_header = true },
   live_grep = { no_header = true },
+  winopts = {
+    preview = { layout = "vertical" },
+  },
 })
 
 require("conform").setup({
@@ -387,8 +403,15 @@ local capabilities = require("cmp_nvim_lsp").default_capabilities()
 nvim_lsp.jsonls.setup({ capabilities = capabilities })
 nvim_lsp.rust_analyzer.setup({ capabilities = capabilities, single_file_support = false })
 
+local api = require("typescript-tools.api")
 require("typescript-tools").setup({
   separate_diagnostic_server = false,
+  handlers = {
+    ["textDocument/publishDiagnostics"] = api.filter_diagnostics({
+      80006, -- "may be converted to an async function"
+      6133, -- "is assigned to a value but never used" (dupe of ESLint)
+    }),
+  },
   on_attach = function(client, bufnr)
     -- Use built-in gq formatexpr which works better for comments
     vim.o.formatexpr = ""
