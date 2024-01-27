@@ -9,10 +9,10 @@ vim.o.wrap = false
 vim.o.number = true
 vim.o.relativenumber = false
 vim.o.ruler = true
-vim.o.cursorline = false
+vim.o.cursorline = true
 vim.o.signcolumn = "yes"
 vim.o.mouse = ""
-vim.opt.fillchars:append({ vert = " " })
+vim.opt.fillchars:append({ vert = " ", eob = " " })
 
 -- Folds
 vim.o.foldmethod = "indent"
@@ -37,8 +37,32 @@ vim.o.hlsearch = true
 vim.o.inccommand = "split"
 
 -- Colors
-vim.o.background = "light"
+vim.o.background = "dark"
 vim.o.termguicolors = true
+
+-- Diagnostics
+local diagnostic_severity = { min = vim.diagnostic.severity.WARN }
+vim.diagnostic.config({
+  virtual_text = false,
+  signs = { severity = diagnostic_severity },
+  underline = { severity = diagnostic_severity },
+  update_in_insert = false,
+  severity_sort = true,
+  float = {
+    format = function(d)
+      return "(" .. d.source .. ") " .. d.message
+    end,
+  },
+})
+vim.keymap.set("n", "[d", function()
+  vim.diagnostic.goto_prev({ severity = diagnostic_severity })
+end)
+vim.keymap.set("n", "]d", function()
+  vim.diagnostic.goto_next({ severity = diagnostic_severity })
+end)
+vim.keymap.set("n", "<leader>j", function()
+  vim.diagnostic.setqflist({ open = true, severity = diagnostic_severity })
+end)
 
 -- Use space as leader
 vim.g.mapleader = " "
@@ -55,9 +79,6 @@ vim.keymap.set("n", "<leader>/", ":grep ")
 vim.keymap.set("n", "<leader>g", ':silent grep"<C-R><C-W>"<CR>:copen<CR>', { silent = true })
 vim.keymap.set("v", "<leader>g", '"sy:silent grep"<C-R>s"<CR>:copen<CR>', { silent = true })
 
--- <leader>n to copy filename of buffer under the cursor to system clipboard
-vim.keymap.set("n", "<leader>n", ':let @+=fnamemodify(expand("%"), ":~:.")<CR>', { silent = true })
-
 -- Automatically open the quickfix window on :grep
 vim.cmd([[
 augroup AutoOpenQuickFix
@@ -66,6 +87,22 @@ augroup AutoOpenQuickFix
   autocmd QuickFixCmdPost    l* nested lwindow
 augroup end
 ]])
+
+-- Alternative improved clipboard behavior: paste is remapped to always paste
+-- from the system clipboard, and yanks (y) and cuts (x) are sent to the system
+-- clipboard as well. The default delete (d) behavior is left untouched. Yank
+-- or cut text if you want it in the clipboard, otherwise delete it.
+vim.keymap.set("n", "y", '"*y')
+vim.keymap.set("x", "y", '"*y')
+vim.keymap.set("x", "x", '"*x')
+vim.keymap.set("n", "p", '"*p')
+vim.keymap.set("n", "P", '"*P')
+
+-- <leader>n to copy filename of buffer under the cursor to system clipboard
+vim.keymap.set("n", "<leader>n", ':let @+=fnamemodify(expand("%"), ":~:.")<CR>', { silent = true })
+
+-- Clear highlights
+vim.cmd([[nmap <silent> <C-_> :nohlsearch<CR>:match<CR>:diffupdate<CR>]])
 
 -- Keep selected text selected when fixing indentation
 vim.keymap.set("v", "<", "<gv")
@@ -84,12 +121,6 @@ vim.keymap.set("n", "<C-s>", "<C-W>s")
 -- Edit vimrc keybindings
 vim.keymap.set("n", "<leader>ev", ":e $MYVIMRC<CR>", { silent = true })
 vim.keymap.set("n", "<leader>sv", ":source $MYVIMRC<CR>", { silent = true })
-
--- Copy to the system clipboard
-vim.keymap.set("n", "<leader>y", '"+yy', { silent = true })
-vim.keymap.set("v", "<leader>y", '"+y', { silent = true })
-vim.keymap.set("n", "<leader>p", '"+p', { silent = true })
-vim.keymap.set("n", "<leader>P", '"+P', { silent = true })
 
 -- Exit terminal mode with Esc
 vim.cmd([[tnoremap <Esc> <C-\><C-n>:q!<CR>]])
@@ -143,38 +174,21 @@ require("paq")({
   "hrsh7th/cmp-vsnip",
   "hrsh7th/nvim-cmp",
   "pmizio/typescript-tools.nvim",
-  "svermeulen/vim-yoink",
 })
 
+-- Misc. plugins
 require("Comment").setup()
 require("nvim-autopairs").setup({})
 require("fidget").setup({ text = { spinner = "dots" } })
-vim.cmd("colorscheme base16-default-dark")
+vim.cmd("colorscheme base16-tomorrow-night")
 
--- More sensible cut/copy/paste behavior
-vim.o.clipboard = "unnamed"
-vim.g.yoinkSyncSystemClipboardOnFocus = 1
-vim.g.yoinkMoveCursorToEndOfPaste = 1
-vim.g.yoinkIncludeDeleteOperations = 1
-vim.keymap.set("n", "<c-n>", "<plug>(YoinkPostPasteSwapBack)")
-vim.keymap.set("n", "<c-p>", "<plug>(YoinkPostPasteSwapForward)")
-vim.keymap.set("n", "p", "<plug>(YoinkPaste_p)")
-vim.keymap.set("n", "P", "<plug>(YoinkPaste_P)")
-vim.keymap.set("n", "gp", "<plug>(YoinkPaste_gp)")
-vim.keymap.set("n", "gP", "<plug>(YoinkPaste_gP)")
-vim.keymap.set("n", "<c-=>", "<plug>(YoinkPostPasteToggleFormat)")
-vim.keymap.set("n", "=p", "o<esc><plug>(YoinkPaste_p)==")
-vim.keymap.set("n", "=P", "O<esc><plug>(YoinkPaste_P)==")
-vim.keymap.set("n", "y", "<plug>(YoinkYankPreserveCursorPosition)")
-vim.keymap.set("x", "y", "<plug>(YoinkYankPreserveCursorPosition)")
-
+-- Markdown settings
 vim.g.vim_markdown_new_list_item_indent = 2
 vim.g.vim_markdown_math = 1
 vim.g.vim_markdown_frontmatter = 1
 vim.cmd([[autocmd FileType markdown set conceallevel=0]])
-vim.cmd([[autocmd FileType markdown set nonumber]])
-vim.cmd([[autocmd FileType markdown set nocursorline]])
 
+-- oil.nvim
 require("oil").setup({
   default_file_explorer = false,
   delete_to_trash = true,
@@ -182,6 +196,7 @@ require("oil").setup({
 })
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
+-- Statusline
 require("lualine").setup({
   options = {
     icons_enabled = false,
@@ -209,6 +224,7 @@ require("lualine").setup({
 })
 vim.o.laststatus = 2
 
+-- Zen mode
 vim.keymap.set("n", "<leader>w", ":Goyo<CR>", { silent = true })
 vim.cmd([[let g:pencil#conceallevel = 0]])
 vim.cmd([[
@@ -229,6 +245,7 @@ vim.cmd([[
   augroup end
 ]])
 
+-- Fzf
 vim.keymap.set("n", "<M-p>", ":FzfLua files<CR>", { silent = true })
 vim.keymap.set("n", "<leader>f", ":FzfLua files<CR>", { silent = true })
 vim.keymap.set("n", "<leader>b", ":FzfLua buffers<CR>", { silent = true })
@@ -246,6 +263,7 @@ require("fzf-lua").setup({
   },
 })
 
+-- Format on save
 require("conform").setup({
   formatters = {
     stylua = {
@@ -269,6 +287,7 @@ require("conform").setup({
   },
 })
 
+-- Treesitter
 require("nvim-treesitter.configs").setup({
   ensure_installed = {
     "lua",
@@ -309,58 +328,8 @@ require("nvim-treesitter.configs").setup({
   },
 })
 
+-- Completion
 local completeopt = "menu,menuone,noinsert,noselect,preview"
-
-local diagnostic_severity = { min = vim.diagnostic.severity.WARN }
-
-vim.diagnostic.config({
-  virtual_text = false,
-  signs = { severity = diagnostic_severity },
-  underline = { severity = diagnostic_severity },
-  update_in_insert = false,
-  severity_sort = true,
-  float = {
-    format = function(d)
-      return "(" .. d.source .. ") " .. d.message
-    end,
-  },
-})
-
-vim.keymap.set("n", "gh", vim.lsp.buf.hover)
-vim.keymap.set("n", "gi", vim.lsp.buf.implementation)
-vim.keymap.set("n", "gd", vim.lsp.buf.definition)
-vim.keymap.set("n", "gt", vim.lsp.buf.type_definition)
-vim.keymap.set("n", "gr", vim.lsp.buf.references)
-vim.keymap.set("n", "gn", vim.lsp.buf.rename)
-vim.keymap.set("n", "[d", function()
-  vim.diagnostic.goto_prev({ severity = diagnostic_severity })
-end)
-vim.keymap.set("n", "]d", function()
-  vim.diagnostic.goto_next({ severity = diagnostic_severity })
-end)
-vim.keymap.set("n", "<leader>j", function()
-  vim.diagnostic.setqflist({ open = true, severity = diagnostic_severity })
-end)
-
--- Open the full message for the first diagnostic under the cursor in a buffer
--- (useful for very long TypeScript errors)
-vim.keymap.set("n", "ge", function()
-  local lnum = vim.api.nvim_eval("line('.') - 1")
-  local d = vim.diagnostic.get(0, { lnum = lnum, severity_sort = true })[1]
-
-  if d == nil then
-    return
-  end
-
-  -- Using a tmpfile because I can't figure out how to escape | and " when
-  -- pasting a register using :put
-  local tmpfile_path = vim.fn.stdpath("cache") .. "/diagnostic"
-  local f = io.open(tmpfile_path, "w")
-  f:write(d.message)
-  f:close()
-  vim.api.nvim_command("pedit " .. tmpfile_path)
-end)
-
 vim.o.completeopt = completeopt
 vim.o.updatetime = 300
 local cmp = require("cmp")
@@ -390,10 +359,34 @@ cmp.setup({
     ["<C-e>"] = cmp.mapping.abort(),
   },
 })
+cmp.setup.filetype("markdown", { sources = {} })
 
-cmp.setup.filetype("markdown", {
-  sources = {},
-})
+-- LSP
+vim.keymap.set("n", "gh", vim.lsp.buf.hover)
+vim.keymap.set("n", "gi", vim.lsp.buf.implementation)
+vim.keymap.set("n", "gd", vim.lsp.buf.definition)
+vim.keymap.set("n", "gt", vim.lsp.buf.type_definition)
+vim.keymap.set("n", "gr", vim.lsp.buf.references)
+vim.keymap.set("n", "gn", vim.lsp.buf.rename)
+
+-- Open the full message for the first diagnostic under the cursor in a buffer
+-- (useful for very long TypeScript errors)
+vim.keymap.set("n", "ge", function()
+  local lnum = vim.api.nvim_eval("line('.') - 1")
+  local d = vim.diagnostic.get(0, { lnum = lnum, severity_sort = true })[1]
+
+  if d == nil then
+    return
+  end
+
+  -- Using a tmpfile because I can't figure out how to escape | and " when
+  -- pasting a register using :put
+  local tmpfile_path = vim.fn.stdpath("cache") .. "/diagnostic"
+  local f = io.open(tmpfile_path, "w")
+  f:write(d.message)
+  f:close()
+  vim.api.nvim_command("pedit " .. tmpfile_path)
+end)
 
 vim.keymap.set("i", "<M-\\>", "<CMD>Copilot panel<CR>", { silent = true })
 
@@ -403,9 +396,26 @@ local capabilities = require("cmp_nvim_lsp").default_capabilities()
 nvim_lsp.jsonls.setup({ capabilities = capabilities })
 nvim_lsp.rust_analyzer.setup({ capabilities = capabilities, single_file_support = false })
 
+nvim_lsp.eslint.setup({
+  capabilities = capabilities,
+  single_file_support = false,
+  settings = {
+    rulesCustomizations = {
+      { rule = "prettier/prettier", severity = "off" },
+      { rule = "arca/import-ordering", severity = "off" },
+      { rule = "arca/newline-after-import-section", severity = "off" },
+      { rule = "quotes", severity = "off" },
+    },
+  },
+})
+
 local api = require("typescript-tools.api")
 require("typescript-tools").setup({
   separate_diagnostic_server = false,
+  tsserver_file_preferences = {
+    importModuleSpecifier = "non-relative",
+    importModuleSpecifierEnding = "minimal",
+  },
   handlers = {
     ["textDocument/publishDiagnostics"] = api.filter_diagnostics({
       80006, -- "may be converted to an async function"
@@ -419,17 +429,4 @@ require("typescript-tools").setup({
     -- Disable highlighting from tsserver
     client.server_capabilities.semanticTokensProvider = nil
   end,
-})
-
-nvim_lsp.eslint.setup({
-  capabilities = capabilities,
-  single_file_support = false,
-  settings = {
-    rulesCustomizations = {
-      { rule = "prettier/prettier", severity = "off" },
-      { rule = "arca/import-ordering", severity = "off" },
-      { rule = "arca/newline-after-import-section", severity = "off" },
-      { rule = "quotes", severity = "off" },
-    },
-  },
 })
