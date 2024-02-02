@@ -9,7 +9,7 @@ vim.o.wrap = false
 vim.o.number = true
 vim.o.relativenumber = false
 vim.o.ruler = true
-vim.o.cursorline = true
+vim.o.cursorline = false
 vim.o.signcolumn = "yes"
 vim.o.mouse = ""
 vim.opt.fillchars:append({ vert = " ", eob = " " })
@@ -155,6 +155,7 @@ require("paq")({
   "numToStr/Comment.nvim",
   "nvim-lua/plenary.nvim",
   "nvim-treesitter/nvim-treesitter",
+  "nvim-treesitter/nvim-treesitter-textobjects",
   "windwp/nvim-autopairs",
   "preservim/vim-markdown",
   "nvim-lualine/lualine.nvim",
@@ -200,18 +201,17 @@ vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 require("lualine").setup({
   options = {
     icons_enabled = false,
-    globalstatus = false,
     section_separators = { left = "", right = "" },
     component_separators = { left = "", right = "" },
     theme = "base16",
   },
   sections = {
-    lualine_a = { "mode" },
-    lualine_b = { "diff" },
-    lualine_c = { { "filename", path = 1 } },
+    lualine_a = {},
+    lualine_b = { "mode" },
+    lualine_c = { { "filename", path = 1 }, "diff" },
     lualine_x = { { "diagnostics", sections = { "error", "warn" } } },
     lualine_y = { "filetype" },
-    lualine_z = { "location" },
+    lualine_z = {},
   },
   inactive_sections = {
     lualine_a = {},
@@ -324,6 +324,41 @@ require("nvim-treesitter.configs").setup({
       node_incremental = "<A-o>",
       scope_incremental = "<A-O>",
       node_decremental = "<A-i>",
+    },
+  },
+
+  textobjects = {
+    select = {
+      enable = true,
+      lookahead = true,
+      keymaps = {
+        ["af"] = "@function.outer",
+        ["if"] = "@function.inner",
+        ["ic"] = "@comment.inner",
+        ["ac"] = "@comment.outer",
+        ["ia"] = "@parameter.inner",
+        ["aa"] = "@parameter.outer",
+      },
+    },
+
+    move = {
+      enable = true,
+
+      goto_next_start = {
+        ["]f"] = "@function.outer",
+      },
+
+      goto_next_end = {
+        ["]F"] = "@function.outer",
+      },
+
+      goto_previous_start = {
+        ["[f"] = "@function.outer",
+      },
+
+      goto_previous_end = {
+        ["[F"] = "@function.outer",
+      },
     },
   },
 })
