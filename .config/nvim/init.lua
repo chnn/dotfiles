@@ -92,11 +92,10 @@ augroup end
 -- from the system clipboard, and yanks (y) and cuts (x) are sent to the system
 -- clipboard as well. The default delete (d) behavior is left untouched. Yank
 -- or cut text if you want it in the clipboard, otherwise delete it.
-vim.keymap.set("n", "y", '"*y')
-vim.keymap.set("x", "y", '"*y')
-vim.keymap.set("x", "x", '"*x')
-vim.keymap.set("n", "p", '"*p')
-vim.keymap.set("n", "P", '"*P')
+vim.keymap.set({ "n", "x" }, "y", '"*y')
+vim.keymap.set({ "n", "x" }, "x", '"*x')
+vim.keymap.set({ "n", "x" }, "p", '"*p')
+vim.keymap.set({ "n", "x" }, "P", '"*P')
 
 -- <leader>n to copy filename of buffer under the cursor to system clipboard
 vim.keymap.set("n", "<leader>n", ':let @+=fnamemodify(expand("%"), ":~:.")<CR>', { silent = true })
@@ -139,7 +138,6 @@ require("paq")({
   "savq/paq-nvim",
   "tpope/vim-fugitive",
   "tpope/vim-rhubarb",
-  "tpope/vim-surround",
   "tpope/vim-unimpaired",
   "tpope/vim-sleuth",
   "tpope/vim-repeat",
@@ -147,7 +145,7 @@ require("paq")({
   "tpope/vim-abolish",
   "godlygeek/tabular",
   "neoclide/jsonc.vim",
-  "junegunn/vim-peekaboo",
+  "kylechui/nvim-surround",
   "wellle/targets.vim",
   "RRethy/nvim-base16",
   "junegunn/goyo.vim",
@@ -179,8 +177,9 @@ require("paq")({
 
 -- Misc. plugins
 require("Comment").setup()
-require("nvim-autopairs").setup({})
+require("nvim-autopairs").setup()
 require("fidget").setup({ text = { spinner = "dots" } })
+require("nvim-surround").setup()
 vim.cmd("colorscheme base16-tomorrow-night")
 
 -- Markdown settings
