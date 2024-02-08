@@ -12,6 +12,7 @@ vim.o.ruler = true
 vim.o.cursorline = false
 vim.o.signcolumn = "yes"
 vim.o.mouse = ""
+vim.o.conceallevel = 2
 vim.opt.fillchars:append({ vert = " ", eob = " " })
 
 -- Folds
@@ -88,14 +89,25 @@ augroup AutoOpenQuickFix
 augroup end
 ]])
 
--- Alternative improved clipboard behavior: paste is remapped to always paste
--- from the system clipboard, and yanks (y) and cuts (x) are sent to the system
--- clipboard as well. The default delete (d) behavior is left untouched. Yank
--- or cut text if you want it in the clipboard, otherwise delete it.
-vim.keymap.set({ "n", "x" }, "y", '"*y')
+-- Alternative improved clipboard behavior: Yank or cut text if you want it in
+-- the clipboard, otherwise delete it. Paste is remapped to always paste from
+-- the system clipboard, and yanks (y) and cuts (x) are sent to the system
+-- clipboard as well. The default delete (d) behavior is left untouched.
 vim.keymap.set({ "n", "x" }, "x", '"*x')
+vim.keymap.set({ "n", "x" }, "y", '"*y')
 vim.keymap.set({ "n", "x" }, "p", '"*p')
 vim.keymap.set({ "n", "x" }, "P", '"*P')
+
+-- Various Helix-like keybindings
+vim.keymap.set("n", "gh", "0")
+vim.keymap.set("n", "gl", "$")
+vim.keymap.set("n", "gs", "^")
+vim.keymap.set("n", "gt", "H")
+vim.keymap.set("n", "gc", "M")
+vim.keymap.set("n", "gb", "L")
+vim.keymap.set("n", "ge", "G")
+vim.keymap.set("n", "U", "<C-r>")
+vim.keymap.set("n", "<leader>w", "<C-w>")
 
 -- <leader>n to copy filename of buffer under the cursor to system clipboard
 vim.keymap.set("n", "<leader>n", ':let @+=fnamemodify(expand("%"), ":~:.")<CR>', { silent = true })
@@ -138,7 +150,7 @@ require("paq")({
   "savq/paq-nvim",
   "tpope/vim-fugitive",
   "tpope/vim-rhubarb",
-  "tpope/vim-unimpaired",
+  "tummetott/unimpaired.nvim",
   "tpope/vim-sleuth",
   "tpope/vim-repeat",
   "tpope/vim-rsi",
@@ -154,7 +166,6 @@ require("paq")({
   "nvim-lua/plenary.nvim",
   "nvim-treesitter/nvim-treesitter",
   "nvim-treesitter/nvim-treesitter-textobjects",
-  "windwp/nvim-autopairs",
   "preservim/vim-markdown",
   "nvim-lualine/lualine.nvim",
   "AndrewRadev/tagalong.vim",
@@ -173,20 +184,30 @@ require("paq")({
   "hrsh7th/cmp-vsnip",
   "hrsh7th/nvim-cmp",
   "pmizio/typescript-tools.nvim",
+  "epwalsh/obsidian.nvim",
 })
 
 -- Misc. plugins
 require("Comment").setup()
-require("nvim-autopairs").setup()
 require("fidget").setup({ text = { spinner = "dots" } })
 require("nvim-surround").setup()
 vim.cmd("colorscheme base16-tomorrow-night")
+require("unimpaired").setup()
 
 -- Markdown settings
 vim.g.vim_markdown_new_list_item_indent = 2
 vim.g.vim_markdown_math = 1
 vim.g.vim_markdown_frontmatter = 1
-vim.cmd([[autocmd FileType markdown set conceallevel=0]])
+require("obsidian").setup({
+  disable_frontmatter = true,
+  mappings = {},
+  workspaces = {
+    {
+      name = "Notes",
+      path = os.getenv("NOTES"),
+    },
+  },
+})
 
 -- oil.nvim
 require("oil").setup({
@@ -224,8 +245,8 @@ require("lualine").setup({
 vim.o.laststatus = 2
 
 -- Zen mode
-vim.keymap.set("n", "<leader>w", ":Goyo<CR>", { silent = true })
-vim.cmd([[let g:pencil#conceallevel = 0]])
+vim.keymap.set("n", "<leader>z", ":Goyo<CR>", { silent = true })
+vim.cmd([[let g:pencil#conceallevel = 2]])
 vim.cmd([[
   function! s:goyo_enter()
     call pencil#init({'wrap': 'soft'})
@@ -397,15 +418,15 @@ cmp.setup.filetype("markdown", { sources = {} })
 cmp.setup.filetype("text", { sources = {} })
 
 vim.keymap.set("i", "<M-\\>", "<CMD>Copilot panel<CR>", { silent = true })
-vim.g.copilot_filetypes = { text = false, markdown = false }
+vim.cmd([[let g:copilot_filetypes = { '*': v:false }]])
 
 --- LSP
-vim.keymap.set("n", "gh", vim.lsp.buf.hover)
-vim.keymap.set("n", "gi", vim.lsp.buf.implementation)
+vim.keymap.set("n", "<leader>k", vim.lsp.buf.hover)
 vim.keymap.set("n", "gd", vim.lsp.buf.definition)
-vim.keymap.set("n", "gt", vim.lsp.buf.type_definition)
+vim.keymap.set("n", "gi", vim.lsp.buf.implementation)
+vim.keymap.set("n", "gy", vim.lsp.buf.type_definition)
 vim.keymap.set("n", "gr", vim.lsp.buf.references)
-vim.keymap.set("n", "gn", vim.lsp.buf.rename)
+vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename)
 
 -- Open the full message for the first diagnostic under the cursor in a buffer
 -- (useful for very long TypeScript errors)
