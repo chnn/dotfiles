@@ -2,7 +2,6 @@
 vim.o.shortmess = "filnxtToOFcI"
 vim.o.showmode = false
 vim.o.showcmd = false
-vim.o.statusline = "%f %h%m%r%w%= %-(%l,%c%)"
 
 -- Panes
 vim.o.wrap = false
@@ -57,28 +56,31 @@ vim.diagnostic.config({
 })
 vim.keymap.set("n", "[d", function()
   vim.diagnostic.goto_prev({ severity = diagnostic_severity })
-end)
+end, { desc = "Go to next diagnostic" })
 vim.keymap.set("n", "]d", function()
   vim.diagnostic.goto_next({ severity = diagnostic_severity })
-end)
+end, { desc = "Go to previous diagnostic" })
 vim.keymap.set("n", "<leader>j", function()
   vim.diagnostic.setqflist({ open = true, severity = diagnostic_severity })
-end)
+end, { desc = "Open diagnostics in quickfix list" })
 
 -- Use space as leader
 vim.g.mapleader = " "
 
 -- Show whitespace
 vim.o.list = true
-vim.cmd([[hi NonText ctermfg=11]])
 
 -- Use ripgrep for :grep
 vim.o.grepprg = "rg --vimgrep --hidden --iglob '!.git'"
 vim.keymap.set("n", "<leader>/", ":grep ")
 
 -- <leader>g to grep for visual selection or word under cursor
-vim.keymap.set("n", "<leader>g", ':silent grep"<C-R><C-W>"<CR>:copen<CR>', { silent = true })
-vim.keymap.set("v", "<leader>g", '"sy:silent grep"<C-R>s"<CR>:copen<CR>', { silent = true })
+vim.keymap.set(
+  "v",
+  "<leader>g",
+  '"sy:silent grep"<C-R>s"<CR>:copen<CR>',
+  { silent = true, desc = "Grep for selection" }
+)
 
 -- Automatically open the quickfix window on :grep
 vim.cmd([[
@@ -93,48 +95,41 @@ augroup end
 -- the clipboard, otherwise delete it. Paste is remapped to always paste from
 -- the system clipboard, and yanks (y) and cuts (x) are sent to the system
 -- clipboard as well. The default delete (d) behavior is left untouched.
-vim.keymap.set({ "n", "x" }, "x", '"*x')
-vim.keymap.set({ "n", "x" }, "y", '"*y')
-vim.keymap.set({ "n", "x" }, "p", '"*p')
-vim.keymap.set({ "n", "x" }, "P", '"*P')
+vim.keymap.set({ "n", "x" }, "x", '"*x', { desc = "Cut to system clipboard" })
+vim.keymap.set({ "n", "x" }, "y", '"*y', { desc = "Yank to system clipboard" })
+vim.keymap.set({ "n", "x" }, "p", '"*p', { desc = "Paste after cursor from system clipboard" })
+vim.keymap.set({ "n", "x" }, "P", '"*P', { desc = "Paste before cursor from system clipboard" })
 
 -- Various Helix-like keybindings
-vim.keymap.set("n", "gh", "0")
-vim.keymap.set("n", "gl", "$")
-vim.keymap.set("n", "gs", "^")
-vim.keymap.set("n", "gt", "H")
-vim.keymap.set("n", "gc", "M")
-vim.keymap.set("n", "gb", "L")
-vim.keymap.set("n", "ge", "G")
-vim.keymap.set("n", "U", "<C-r>")
-vim.keymap.set("n", "<leader>w", "<C-w>")
+vim.keymap.set("n", "gh", "0", { desc = "Go to start of line" })
+vim.keymap.set("n", "gl", "$", { desc = "Go to end of line" })
+vim.keymap.set("n", "gs", "^", { desc = "Go to first non-whitespace character of line" })
+vim.keymap.set("n", "U", "<C-r>", { desc = "Redo" })
 
 -- <leader>n to copy filename of buffer under the cursor to system clipboard
-vim.keymap.set("n", "<leader>n", ':let @+=fnamemodify(expand("%"), ":~:.")<CR>', { silent = true })
-
--- Clear highlights
-vim.cmd([[nmap <silent> <C-_> :nohlsearch<CR>:match<CR>:diffupdate<CR>]])
+vim.keymap.set(
+  "n",
+  "<leader>n",
+  ':let @+=fnamemodify(expand("%"), ":~:.")<CR>',
+  { silent = true, desc = "Copy path of current buffer to clipboard" }
+)
 
 -- Keep selected text selected when fixing indentation
-vim.keymap.set("v", "<", "<gv")
-vim.keymap.set("v", ">", ">gv")
+vim.keymap.set("v", "<", "<gv", { desc = "Decrease selection indent" })
+vim.keymap.set("v", ">", ">gv", { desc = "Increase selection indent" })
 
 -- Quicker window navigation keybindings
-vim.keymap.set("n", "<C-J>", "<C-W><C-J>")
-vim.keymap.set("n", "<C-K>", "<C-W><C-K>")
-vim.keymap.set("n", "<C-L>", "<C-W><C-L>")
-vim.keymap.set("n", "<C-H>", "<C-W><C-H>")
-vim.keymap.set("n", "<C-_>", "<C-W><C-_>")
-vim.keymap.set("n", "<C-=>", "<C-W><C-=>")
-vim.keymap.set("n", "<C-q>", "<C-W><C-q>")
-vim.keymap.set("n", "<C-s>", "<C-W>s")
-
--- Edit vimrc keybindings
-vim.keymap.set("n", "<leader>ev", ":e $MYVIMRC<CR>", { silent = true })
-vim.keymap.set("n", "<leader>sv", ":source $MYVIMRC<CR>", { silent = true })
+vim.keymap.set("n", "<C-J>", "<C-W><C-J>", { desc = "Go to pane below" })
+vim.keymap.set("n", "<C-K>", "<C-W><C-K>", { desc = "Go to pane above" })
+vim.keymap.set("n", "<C-L>", "<C-W><C-L>", { desc = "Go to pane to right" })
+vim.keymap.set("n", "<C-H>", "<C-W><C-H>", { desc = "Go to pane to left" })
+vim.keymap.set("n", "<C-_>", "<C-W><C-_>", { desc = "Expand pane" })
+vim.keymap.set("n", "<C-=>", "<C-W><C-=>", { desc = "Equalize panes" })
+vim.keymap.set("n", "<C-q>", "<C-W><C-q>", { desc = "Close pane" })
+vim.keymap.set("n", "<C-s>", "<C-W>s", { desc = "Split pane" })
 
 -- Exit terminal mode with Esc
-vim.cmd([[tnoremap <Esc> <C-\><C-n>:q!<CR>]])
+vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { desc = "Exit terminal insertion" })
 
 -- Close all buffers but this one with :Rlw ("reload workspace")
 vim.cmd([[command! Rlw %bd|e#]])
@@ -142,348 +137,21 @@ vim.cmd([[command! Rlw %bd|e#]])
 -- Write file with today's date prepended with :Wt
 vim.cmd([[command! -nargs=1 Wt exe 'w ' . strftime("%F") . ' ' . "<args>"]])
 
--- If paq is not installed:
---
---     git clone --depth=1 https://github.com/savq/paq-nvim.git ~/.local/share/nvim/site/pack/paqs/start/paq-nvim
---
-require("paq")({
-  "savq/paq-nvim",
-  "tpope/vim-fugitive",
-  "tpope/vim-rhubarb",
-  "tummetott/unimpaired.nvim",
-  "tpope/vim-sleuth",
-  "tpope/vim-repeat",
-  "tpope/vim-rsi",
-  "tpope/vim-abolish",
-  "godlygeek/tabular",
-  "neoclide/jsonc.vim",
-  "kylechui/nvim-surround",
-  "wellle/targets.vim",
-  "RRethy/nvim-base16",
-  "junegunn/goyo.vim",
-  "reedes/vim-pencil",
-  "numToStr/Comment.nvim",
-  "nvim-lua/plenary.nvim",
-  "nvim-treesitter/nvim-treesitter",
-  "nvim-treesitter/nvim-treesitter-textobjects",
-  "preservim/vim-markdown",
-  "nvim-lualine/lualine.nvim",
-  "AndrewRadev/tagalong.vim",
-  "stevearc/oil.nvim",
-  "stevearc/conform.nvim",
-  "github/copilot.vim",
-  "neovim/nvim-lspconfig",
-  { "ibhagwan/fzf-lua", branch = "main" },
-  { "j-hui/fidget.nvim", branch = "legacy" },
-  "hrsh7th/cmp-nvim-lsp",
-  "hrsh7th/cmp-buffer",
-  "hrsh7th/cmp-path",
-  "hrsh7th/cmp-cmdline",
-  "hrsh7th/vim-vsnip",
-  "hrsh7th/vim-vsnip-integ",
-  "hrsh7th/cmp-vsnip",
-  "hrsh7th/nvim-cmp",
-  "pmizio/typescript-tools.nvim",
-  "epwalsh/obsidian.nvim",
-})
-
--- Misc. plugins
-require("Comment").setup()
-require("fidget").setup({ text = { spinner = "dots" } })
-require("nvim-surround").setup()
-vim.cmd("colorscheme base16-tomorrow-night")
-require("unimpaired").setup()
-
--- Markdown settings
-vim.g.vim_markdown_new_list_item_indent = 2
-vim.g.vim_markdown_math = 1
-vim.g.vim_markdown_frontmatter = 1
-require("obsidian").setup({
-  disable_frontmatter = true,
-  mappings = {},
-  workspaces = {
-    {
-      name = "Notes",
-      path = os.getenv("NOTES"),
-    },
+-- Bootstrap lazy.nvim and load plugins
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+require("lazy").setup("plugins", {
+  change_detection = {
+    notify = false,
   },
-})
-
--- oil.nvim
-require("oil").setup({
-  default_file_explorer = false,
-  delete_to_trash = true,
-  skip_confirm_for_simple_edits = true,
-})
-vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
-
--- Statusline
-require("lualine").setup({
-  options = {
-    icons_enabled = false,
-    section_separators = { left = "", right = "" },
-    component_separators = { left = "", right = "" },
-    theme = "base16",
-  },
-  sections = {
-    lualine_a = {},
-    lualine_b = { "mode" },
-    lualine_c = { { "filename", path = 1 }, "diff" },
-    lualine_x = { { "diagnostics", sections = { "error", "warn" } } },
-    lualine_y = { "filetype" },
-    lualine_z = {},
-  },
-  inactive_sections = {
-    lualine_a = {},
-    lualine_b = {},
-    lualine_c = { { "filename", path = 1 } },
-    lualine_x = {},
-    lualine_y = {},
-    lualine_z = {},
-  },
-})
-vim.o.laststatus = 2
-
--- Zen mode
-vim.keymap.set("n", "<leader>z", ":Goyo<CR>", { silent = true })
-vim.cmd([[let g:pencil#conceallevel = 2]])
-vim.cmd([[
-  function! s:goyo_enter()
-    call pencil#init({'wrap': 'soft'})
-    lua require('lualine').hide()
-    hi clear StatusLine " Fix ^^^ from showing at bottom of buffer
-  endfunction
-
-  function! s:goyo_leave()
-    call pencil#init({'wrap': 'off'})
-  endfunction
-
-  augroup GoyoSettings
-    autocmd!
-    autocmd! User GoyoEnter nested call <SID>goyo_enter()
-    autocmd! User GoyoLeave nested call <SID>goyo_leave()
-  augroup end
-]])
-
--- Fzf
-vim.keymap.set("n", "<M-p>", ":FzfLua files<CR>", { silent = true })
-vim.keymap.set("n", "<leader>f", ":FzfLua files<CR>", { silent = true })
-vim.keymap.set("n", "<leader>b", ":FzfLua buffers<CR>", { silent = true })
-vim.keymap.set("n", "<leader>l", ":FzfLua live_grep<CR>", { silent = true })
-vim.keymap.set("n", "<leader>s", ":FzfLua lsp_document_symbols<CR>", { silent = true })
-vim.keymap.set("n", "<leader>S", ":FzfLua lsp_workspace_symbols<CR>", { silent = true })
-vim.keymap.set("n", "<leader>d", ":FzfLua diagnostics_document<CR>", { silent = true })
-vim.keymap.set("n", "<leader>D", ":FzfLua diagnostics_workspace<CR>", { silent = true })
-require("fzf-lua").setup({
-  files = { no_header = true },
-  buffers = { no_header = true },
-  live_grep = { no_header = true },
-  winopts = {
-    preview = { layout = "vertical" },
-  },
-})
-
--- Format on save
-require("conform").setup({
-  formatters = {
-    stylua = {
-      command = "stylua",
-      args = { "--indent-type", "Spaces", "--indent-width", "2", "-" },
-    },
-  },
-  formatters_by_ft = {
-    javascript = { { "prettierd", "prettier" } },
-    css = { { "prettierd", "prettier" } },
-    javascript = { { "prettierd", "prettier" } },
-    javascriptreact = { { "prettierd", "prettier" } },
-    json = { { "prettierd", "prettier" } },
-    typescript = { { "prettierd", "prettier" } },
-    typescriptreact = { { "prettierd", "prettier" } },
-    rust = { "rustfmt" },
-    lua = { "stylua" },
-  },
-  format_after_save = {
-    lsp_fallback = false,
-  },
-})
-
--- Treesitter
-require("nvim-treesitter.configs").setup({
-  ensure_installed = {
-    "lua",
-    "html",
-    "css",
-    "javascript",
-    "typescript",
-    "python",
-    "tsx",
-    "ruby",
-    "hcl",
-    "markdown",
-    "markdown_inline",
-    "bash",
-    "yaml",
-    "query",
-    "json",
-    "hurl",
-  },
-
-  highlight = {
-    enable = true,
-    additional_vim_regex_highlighting = false,
-  },
-
-  indent = {
-    enable = true,
-  },
-
-  incremental_selection = {
-    enable = true,
-    keymaps = {
-      init_selection = "<A-o>",
-      node_incremental = "<A-o>",
-      scope_incremental = "<A-O>",
-      node_decremental = "<A-i>",
-    },
-  },
-
-  textobjects = {
-    select = {
-      enable = true,
-      lookahead = true,
-      keymaps = {
-        ["af"] = "@function.outer",
-        ["if"] = "@function.inner",
-        ["ic"] = "@comment.inner",
-        ["ac"] = "@comment.outer",
-        ["ia"] = "@parameter.inner",
-        ["aa"] = "@parameter.outer",
-      },
-    },
-
-    move = {
-      enable = true,
-
-      goto_next_start = {
-        ["]f"] = "@function.outer",
-      },
-
-      goto_next_end = {
-        ["]F"] = "@function.outer",
-      },
-
-      goto_previous_start = {
-        ["[f"] = "@function.outer",
-      },
-
-      goto_previous_end = {
-        ["[F"] = "@function.outer",
-      },
-    },
-  },
-})
-
--- Completion
-local completeopt = "menu,menuone,noinsert,noselect,preview"
-vim.o.completeopt = completeopt
-vim.o.updatetime = 300
-local cmp = require("cmp")
-cmp.setup({
-  completion = { completeopt = completeopt },
-
-  sources = cmp.config.sources({
-    { name = "buffer" },
-  }, {
-    { name = "nvim_lsp" },
-    { name = "buffer" },
-    { name = "path" },
-  }),
-
-  snippet = {
-    expand = function(args)
-      vim.fn["vsnip#anonymous"](args.body)
-    end,
-  },
-
-  mapping = {
-    ["<C-n>"] = cmp.mapping(cmp.mapping.select_next_item()),
-    ["<C-p>"] = cmp.mapping(cmp.mapping.select_prev_item()),
-    ["<CR>"] = cmp.mapping.confirm({ select = false }),
-    ["<C-b>"] = cmp.mapping.scroll_docs(-4),
-    ["<C-f>"] = cmp.mapping.scroll_docs(4),
-    ["<C-e>"] = cmp.mapping.abort(),
-  },
-})
-cmp.setup.filetype("markdown", { sources = {} })
-cmp.setup.filetype("text", { sources = {} })
-
-vim.keymap.set("i", "<M-\\>", "<CMD>Copilot panel<CR>", { silent = true })
-vim.cmd([[let g:copilot_filetypes = { '*': v:false }]])
-
---- LSP
-vim.keymap.set("n", "<leader>k", vim.lsp.buf.hover)
-vim.keymap.set("n", "gd", vim.lsp.buf.definition)
-vim.keymap.set("n", "gi", vim.lsp.buf.implementation)
-vim.keymap.set("n", "gy", vim.lsp.buf.type_definition)
-vim.keymap.set("n", "gr", vim.lsp.buf.references)
-vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename)
-
--- Open the full message for the first diagnostic under the cursor in a buffer
--- (useful for very long TypeScript errors)
-vim.keymap.set("n", "ge", function()
-  local lnum = vim.api.nvim_eval("line('.') - 1")
-  local d = vim.diagnostic.get(0, { lnum = lnum, severity_sort = true })[1]
-
-  if d == nil then
-    return
-  end
-
-  -- Using a tmpfile because I can't figure out how to escape | and " when
-  -- pasting a register using :put
-  local tmpfile_path = vim.fn.stdpath("cache") .. "/diagnostic"
-  local f = io.open(tmpfile_path, "w")
-  f:write(d.message)
-  f:close()
-  vim.api.nvim_command("pedit " .. tmpfile_path)
-end)
-
-local nvim_lsp = require("lspconfig")
-local capabilities = require("cmp_nvim_lsp").default_capabilities()
-
-nvim_lsp.jsonls.setup({ capabilities = capabilities })
-nvim_lsp.rust_analyzer.setup({ capabilities = capabilities, single_file_support = false })
-
-nvim_lsp.eslint.setup({
-  capabilities = capabilities,
-  single_file_support = false,
-  settings = {
-    rulesCustomizations = {
-      { rule = "prettier/prettier", severity = "off" },
-      { rule = "arca/import-ordering", severity = "off" },
-      { rule = "arca/newline-after-import-section", severity = "off" },
-      { rule = "quotes", severity = "off" },
-    },
-  },
-})
-
-local api = require("typescript-tools.api")
-require("typescript-tools").setup({
-  separate_diagnostic_server = false,
-  tsserver_file_preferences = {
-    importModuleSpecifier = "non-relative",
-    importModuleSpecifierEnding = "minimal",
-  },
-  handlers = {
-    ["textDocument/publishDiagnostics"] = api.filter_diagnostics({
-      80006, -- "may be converted to an async function"
-      6133, -- "is assigned to a value but never used" (dupe of ESLint)
-    }),
-  },
-  on_attach = function(client, bufnr)
-    -- Use built-in gq formatexpr which works better for comments
-    vim.o.formatexpr = ""
-
-    -- Disable highlighting from tsserver
-    client.server_capabilities.semanticTokensProvider = nil
-  end,
 })
