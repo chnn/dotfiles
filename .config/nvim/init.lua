@@ -72,7 +72,6 @@ vim.o.list = true
 
 -- Use ripgrep for :grep
 vim.o.grepprg = "rg --vimgrep --hidden --iglob '!.git'"
-vim.keymap.set("n", "<leader>/", ":grep ")
 
 -- <leader>g to grep for visual selection or word under cursor
 vim.keymap.set(
@@ -128,6 +127,15 @@ vim.keymap.set("n", "<C-=>", "<C-W><C-=>", { desc = "Equalize panes" })
 vim.keymap.set("n", "<C-q>", "<C-W><C-q>", { desc = "Close pane" })
 vim.keymap.set("n", "<C-s>", "<C-W>s", { desc = "Split pane" })
 
+-- Toggle statusline visibility
+vim.keymap.set("n", "yo<space>", function()
+  if vim.o.laststatus == 1 then
+    vim.o.laststatus = 2
+  else
+    vim.o.laststatus = 1
+  end
+end, { silent = true, desc = "Toggle statusline visibility" })
+
 -- Exit terminal mode with Esc
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { desc = "Exit terminal insertion" })
 
@@ -136,6 +144,33 @@ vim.cmd([[command! Rlw %bd|e#]])
 
 -- Write file with today's date prepended with :Wt
 vim.cmd([[command! -nargs=1 Wt exe 'w ' . strftime("%F") . ' ' . "<args>"]])
+
+-- Diagnostics keybindings
+vim.keymap.set("n", "<leader>k", vim.lsp.buf.hover, { desc = "Hover" })
+vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
+vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { desc = "Go to implementation" })
+vim.keymap.set("n", "gy", vim.lsp.buf.type_definition, { desc = "Go to type definition" })
+vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "Open references in quickfix list" })
+vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, { desc = "Rename symbol" })
+
+-- Open the full message for the first diagnostic under the cursor in a buffer
+-- (useful for very long TypeScript errors)
+vim.keymap.set("n", "ge", function()
+  local lnum = vim.api.nvim_eval("line('.') - 1")
+  local d = vim.diagnostic.get(0, { lnum = lnum, severity_sort = true })[1]
+
+  if d == nil then
+    return
+  end
+
+  -- Using a tmpfile because I can't figure out how to escape | and " when
+  -- pasting a register using :put
+  local tmpfile_path = vim.fn.stdpath("cache") .. "/diagnostic"
+  local f = io.open(tmpfile_path, "w")
+  f:write(d.message)
+  f:close()
+  vim.api.nvim_command("pedit " .. tmpfile_path)
+end)
 
 -- Bootstrap lazy.nvim and load plugins
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"

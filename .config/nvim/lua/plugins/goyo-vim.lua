@@ -3,7 +3,7 @@ return {
     "junegunn/goyo.vim",
     dependencies = { "reedes/vim-pencil" },
     config = function()
-      vim.keymap.set("n", "<leader>z", ":Goyo<CR>", { silent = true })
+      vim.keymap.set("n", "<leader>z", ":Goyo<CR>", { silent = true, desc = "Toggle focus mode" })
       vim.cmd([[let g:pencil#conceallevel = 2]])
       vim.cmd([[
         function! s:goyo_enter()

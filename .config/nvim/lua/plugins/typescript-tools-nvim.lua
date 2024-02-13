@@ -20,7 +20,7 @@ return {
           vim.o.formatexpr = ""
 
           -- Disable highlighting from tsserver
-          client.server_capabilities.semanticTokensProvider = nil
+          client.server_capabilities.semanticTokensProvider = function() end
         end,
       })
     end,
