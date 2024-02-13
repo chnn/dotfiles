@@ -20,8 +20,9 @@ return {
           rust = { "rustfmt" },
           lua = { "stylua" },
         },
-        format_after_save = {
+        format_on_save = {
           lsp_fallback = false,
+          timeout_ms = 500,
         },
       })
     end,
