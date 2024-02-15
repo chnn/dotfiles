@@ -98,6 +98,12 @@ vim.keymap.set({ "n", "x" }, "x", '"*x', { desc = "Cut to system clipboard" })
 vim.keymap.set({ "n", "x" }, "y", '"*y', { desc = "Yank to system clipboard" })
 vim.keymap.set({ "n", "x" }, "p", '"*p', { desc = "Paste after cursor from system clipboard" })
 vim.keymap.set({ "n", "x" }, "P", '"*P', { desc = "Paste before cursor from system clipboard" })
+vim.keymap.set(
+  { "n", "x" },
+  "<leader>v",
+  "'`[' . strpart(getregtype(), 0, 1) . '`]'",
+  { expr = true, desc = "Select last paste" }
+)
 
 -- Various Helix-like keybindings
 vim.keymap.set("n", "gh", "0", { desc = "Go to start of line" })

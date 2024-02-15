@@ -1,1 +1,1 @@
-return { { "tummetott/unimpaired.nvim", config = true } }
+return { "tummetott/unimpaired.nvim", config = true }
