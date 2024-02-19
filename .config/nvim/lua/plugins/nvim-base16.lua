@@ -1,6 +1,6 @@
 return {
   "RRethy/nvim-base16",
   config = function()
-    vim.cmd("colorscheme base16-tomorrow-night")
+    vim.cmd("colorscheme base16-ia-dark")
   end,
 }

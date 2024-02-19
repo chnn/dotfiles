@@ -6,7 +6,6 @@ vim.o.showcmd = false
 -- Panes
 vim.o.wrap = false
 vim.o.number = true
-vim.o.relativenumber = false
 vim.o.ruler = true
 vim.o.cursorline = false
 vim.o.signcolumn = "yes"
@@ -39,30 +38,6 @@ vim.o.inccommand = "split"
 -- Colors
 vim.o.background = "dark"
 vim.o.termguicolors = true
-
--- Diagnostics
-local diagnostic_severity = { min = vim.diagnostic.severity.WARN }
-vim.diagnostic.config({
-  virtual_text = false,
-  signs = { severity = diagnostic_severity },
-  underline = { severity = diagnostic_severity },
-  update_in_insert = false,
-  severity_sort = true,
-  float = {
-    format = function(d)
-      return "(" .. d.source .. ") " .. d.message
-    end,
-  },
-})
-vim.keymap.set("n", "[d", function()
-  vim.diagnostic.goto_prev({ severity = diagnostic_severity })
-end, { desc = "Go to next diagnostic" })
-vim.keymap.set("n", "]d", function()
-  vim.diagnostic.goto_next({ severity = diagnostic_severity })
-end, { desc = "Go to previous diagnostic" })
-vim.keymap.set("n", "<leader>j", function()
-  vim.diagnostic.setqflist({ open = true, severity = diagnostic_severity })
-end, { desc = "Open diagnostics in quickfix list" })
 
 -- Use space as leader
 vim.g.mapleader = " "
@@ -105,23 +80,19 @@ vim.keymap.set(
   { expr = true, desc = "Select last paste" }
 )
 
--- Various Helix-like keybindings
-vim.keymap.set("n", "gh", "0", { desc = "Go to start of line" })
-vim.keymap.set("n", "gl", "$", { desc = "Go to end of line" })
-vim.keymap.set("n", "gs", "^", { desc = "Go to first non-whitespace character of line" })
-vim.keymap.set("n", "U", "<C-r>", { desc = "Redo" })
-
--- <leader>n to copy filename of buffer under the cursor to system clipboard
-vim.keymap.set(
-  "n",
-  "<leader>n",
-  ':let @+=fnamemodify(expand("%"), ":~:.")<CR>',
-  { silent = true, desc = "Copy path of current buffer to clipboard" }
-)
+-- Navigate soft-lines by default
+vim.keymap.set("n", "j", "gj", { desc = "Move cursor down" })
+vim.keymap.set("n", "k", "gk", { desc = "Move cursor up" })
 
 -- Keep selected text selected when fixing indentation
 vim.keymap.set("v", "<", "<gv", { desc = "Decrease selection indent" })
 vim.keymap.set("v", ">", ">gv", { desc = "Increase selection indent" })
+
+-- Various Helix-like keybindings
+vim.keymap.set("n", "gh", "g0", { desc = "Go to start of line" })
+vim.keymap.set("n", "gl", "g$", { desc = "Go to end of line" })
+vim.keymap.set("n", "gs", "g^", { desc = "Go to first non-whitespace character of line" })
+vim.keymap.set("n", "U", "<C-r>", { desc = "Redo" })
 
 -- Quicker window navigation keybindings
 vim.keymap.set("n", "<C-J>", "<C-W><C-J>", { desc = "Go to pane below" })
@@ -132,6 +103,14 @@ vim.keymap.set("n", "<C-_>", "<C-W><C-_>", { desc = "Expand pane" })
 vim.keymap.set("n", "<C-=>", "<C-W><C-=>", { desc = "Equalize panes" })
 vim.keymap.set("n", "<C-q>", "<C-W><C-q>", { desc = "Close pane" })
 vim.keymap.set("n", "<C-s>", "<C-W>s", { desc = "Split pane" })
+
+-- <leader>n to copy filename of buffer under the cursor to system clipboard
+vim.keymap.set(
+  "n",
+  "<leader>n",
+  ':let @+=fnamemodify(expand("%"), ":~:.")<CR>',
+  { silent = true, desc = "Copy path of current buffer to clipboard" }
+)
 
 -- Toggle statusline visibility
 vim.keymap.set("n", "yo<space>", function()
@@ -151,13 +130,37 @@ vim.cmd([[command! Rlw %bd|e#]])
 -- Write file with today's date prepended with :Wt
 vim.cmd([[command! -nargs=1 Wt exe 'w ' . strftime("%F") . ' ' . "<args>"]])
 
--- Diagnostics keybindings
+-- LSP keybindings
 vim.keymap.set("n", "<leader>k", vim.lsp.buf.hover, { desc = "Hover" })
 vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
 vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { desc = "Go to implementation" })
 vim.keymap.set("n", "gy", vim.lsp.buf.type_definition, { desc = "Go to type definition" })
 vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "Open references in quickfix list" })
 vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, { desc = "Rename symbol" })
+
+-- Diagnostics
+local diagnostic_severity = { min = vim.diagnostic.severity.WARN }
+vim.diagnostic.config({
+  virtual_text = false,
+  signs = { severity = diagnostic_severity },
+  underline = { severity = diagnostic_severity },
+  update_in_insert = false,
+  severity_sort = true,
+  float = {
+    format = function(d)
+      return "(" .. d.source .. ") " .. d.message
+    end,
+  },
+})
+vim.keymap.set("n", "[d", function()
+  vim.diagnostic.goto_prev({ severity = diagnostic_severity })
+end, { desc = "Go to next diagnostic" })
+vim.keymap.set("n", "]d", function()
+  vim.diagnostic.goto_next({ severity = diagnostic_severity })
+end, { desc = "Go to previous diagnostic" })
+vim.keymap.set("n", "<leader>j", function()
+  vim.diagnostic.setqflist({ open = true, severity = diagnostic_severity })
+end, { desc = "Open diagnostics in quickfix list" })
 
 -- Open the full message for the first diagnostic under the cursor in a buffer
 -- (useful for very long TypeScript errors)
