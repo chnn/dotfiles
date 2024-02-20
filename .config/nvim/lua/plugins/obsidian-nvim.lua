@@ -27,7 +27,6 @@ return {
 
     completion = {
       preferred_link_style = "markdown",
-      use_path_only = true,
     },
 
     note_id_func = function(title)

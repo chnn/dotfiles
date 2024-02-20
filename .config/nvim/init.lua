@@ -73,12 +73,18 @@ vim.keymap.set({ "n", "x" }, "x", '"*x', { desc = "Cut to system clipboard" })
 vim.keymap.set({ "n", "x" }, "y", '"*y', { desc = "Yank to system clipboard" })
 vim.keymap.set({ "n", "x" }, "p", '"*p', { desc = "Paste after cursor from system clipboard" })
 vim.keymap.set({ "n", "x" }, "P", '"*P', { desc = "Paste before cursor from system clipboard" })
-vim.keymap.set(
-  { "n", "x" },
-  "<leader>v",
-  "'`[' . strpart(getregtype(), 0, 1) . '`]'",
-  { expr = true, desc = "Select last paste" }
-)
+vim.keymap.set("n", "=p", ":put *<CR>`[v`]=", {
+  desc = "Paste linewise on next line and adjust indent",
+  silent = true,
+})
+vim.keymap.set("n", "=P", ":put! *<CR>`[v`]=", {
+  desc = "Paste linewise on previous line and adjust indent",
+  silent = true,
+})
+vim.keymap.set({ "n", "x" }, "<leader>v", "'`[' . strpart(getregtype(), 0, 1) . '`]'", {
+  desc = "Select last paste",
+  expr = true,
+})
 
 -- Navigate soft-lines by default
 vim.keymap.set("n", "j", "gj", { desc = "Move cursor down" })
