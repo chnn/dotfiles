@@ -40,6 +40,12 @@ return {
       ":FzfLua diagnostics_workspace<CR>",
       { silent = true, desc = "Show workspace diagnostics picker" }
     )
+    vim.keymap.set(
+      "n",
+      "<leader>a",
+      ":FzfLua lsp_code_actions<CR>",
+      { silent = true, desc = "Show available code actions" }
+    )
 
     vim.keymap.set("n", "<leader>,", function()
       fzf.files({ cmd = "fd", cwd = "~/.config/nvim" })
