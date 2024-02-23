@@ -1,7 +1,4 @@
-theme = "gruvbox"
+theme = "base16-ia-dark"
 
 [editor]
 color-modes = true
-
-[editor.soft-wrap]
-enable = true
