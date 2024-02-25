@@ -1,3 +1,6 @@
+[language-server.efm]
+command = "efm-langserver"
+
 [language-server.eslint]
 args = ["--stdio"]
 command = "vscode-eslint-language-server"
@@ -23,12 +26,12 @@ documentFormatting = false
 
 [[language]]
 name = "typescript"
-language-servers = [ "typescript-language-server", "eslint" ]
-formatter = { command = 'prettierd', args = ["file.ts"] }
+language-servers = ["typescript-language-server", {name = "efm", only-features = [ "diagnostics" ]}]
+formatter = { command = 'prettier', args = ["--parser", "typescript"] }
 auto-format = true
 
 [[language]]
 name = "tsx"
-language-servers = [ "typescript-language-server", "eslint" ]
-formatter = { command = 'prettierd', args = ["file.tsx"] }
+language-servers = ["typescript-language-server", {name = "efm", only-features = [ "diagnostics" ]}]
+formatter = { command = 'prettier', args = ["--parser", "typescript"] }
 auto-format = true
