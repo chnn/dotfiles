@@ -9,18 +9,30 @@ return {
     "hrsh7th/cmp-vsnip",
   },
   config = function()
-    local completeopt = "menu,menuone,noinsert,preview"
-    vim.o.completeopt = completeopt
-    vim.o.updatetime = 300
     local cmp = require("cmp")
+    local completeopt = "menu,menuone,noinsert,preview"
+
+    local buffer = {
+      name = "buffer",
+      option = {
+        get_bufnrs = function()
+          local bufs = {}
+          for _, win in ipairs(vim.api.nvim_list_wins()) do
+            bufs[vim.api.nvim_win_get_buf(win)] = true
+          end
+          return vim.tbl_keys(bufs)
+        end,
+      },
+    }
+
     cmp.setup({
       completion = { completeopt = completeopt },
 
       sources = cmp.config.sources({
-        { name = "buffer" },
+        buffer,
       }, {
         { name = "nvim_lsp" },
-        { name = "buffer" },
+        buffer,
         { name = "path" },
       }),
 
@@ -39,7 +51,11 @@ return {
         ["<C-e>"] = cmp.mapping.abort(),
       },
     })
+
     cmp.setup.filetype("markdown", { sources = {} })
     cmp.setup.filetype("text", { sources = {} })
+
+    vim.o.completeopt = completeopt
+    vim.o.updatetime = 300
   end,
 }

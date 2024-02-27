@@ -20,5 +20,7 @@ return {
           autocmd! User GoyoLeave nested call <SID>goyo_leave()
         augroup end
         ]])
+
+    -- TODO: Switch gh, gl, gs to respect soft-wrapping
   end,
 }

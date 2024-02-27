@@ -45,6 +45,10 @@ vim.g.mapleader = " "
 -- Show whitespace
 vim.o.list = true
 
+-- Do not timeout for combo key presses
+vim.o.timeout = false
+vim.o.ttimeout = true
+
 -- Use ripgrep for :grep
 vim.o.grepprg = "rg --vimgrep --hidden --iglob '!.git'"
 
@@ -65,19 +69,16 @@ augroup AutoOpenQuickFix
 augroup end
 ]])
 
--- Alternative improved clipboard behavior: Yank or cut text if you want it in
--- the clipboard, otherwise delete it. Paste is remapped to always paste from
--- the system clipboard, and yanks (y) and cuts (x) are sent to the system
--- clipboard as well. The default delete (d) behavior is left untouched.
-vim.keymap.set({ "n", "x" }, "x", '"*x', { desc = "Cut to system clipboard" })
-vim.keymap.set({ "n", "x" }, "y", '"*y', { desc = "Yank to system clipboard" })
-vim.keymap.set({ "n", "x" }, "p", '"*p', { desc = "Paste after cursor from system clipboard" })
-vim.keymap.set({ "n", "x" }, "P", '"*P', { desc = "Paste before cursor from system clipboard" })
-vim.keymap.set("n", "=p", ":put *<CR>`[v`]=", {
+-- Additional copy/paste keymaps
+vim.keymap.set({ "n", "x" }, "<M-d>", '"_x', { desc = "Delete to black hole register" })
+vim.keymap.set({ "n", "x" }, "<leader>y", '"*y', { desc = "Yank to system clipboard" })
+vim.keymap.set({ "n", "x" }, "<leader>p", '"*p', { desc = "Paste after cursor from system clipboard" })
+vim.keymap.set({ "n", "x" }, "<leader>P", '"*P', { desc = "Paste before cursor from system clipboard" })
+vim.keymap.set("n", "=p", ":put <CR>`[v`]=", {
   desc = "Paste linewise on next line and adjust indent",
   silent = true,
 })
-vim.keymap.set("n", "=P", ":put! *<CR>`[v`]=", {
+vim.keymap.set("n", "=P", ":put! <CR>`[v`]=", {
   desc = "Paste linewise on previous line and adjust indent",
   silent = true,
 })
@@ -95,10 +96,14 @@ vim.keymap.set("v", "<", "<gv", { desc = "Decrease selection indent" })
 vim.keymap.set("v", ">", ">gv", { desc = "Increase selection indent" })
 
 -- Various Helix-like keybindings
-vim.keymap.set("n", "gh", "g0", { desc = "Go to start of line" })
-vim.keymap.set("n", "gl", "g$", { desc = "Go to end of line" })
-vim.keymap.set("n", "gs", "g^", { desc = "Go to first non-whitespace character of line" })
-vim.keymap.set("n", "U", "<C-r>", { desc = "Redo" })
+vim.keymap.set({ "n", "x" }, "gh", "0", { desc = "Go to start of line" })
+vim.keymap.set({ "n", "x" }, "0", "<Nop>", { desc = "Do nothing" })
+vim.keymap.set({ "n", "x" }, "gl", "$", { desc = "Go to end of line" })
+vim.keymap.set({ "n", "x" }, "$", "<Nop>", { desc = "Do nothing" })
+vim.keymap.set({ "n", "x" }, "gs", "^", { desc = "Go to first non-whitespace character of line" })
+vim.keymap.set({ "n", "x" }, "^", "<Nop>", { desc = "Do nothing" })
+vim.keymap.set({ "n", "x" }, "U", "<C-r>", { desc = "Redo" })
+vim.keymap.set({ "n", "x" }, "<C-r>", "<Nop>", { desc = "Do nothing" })
 
 -- Quicker window navigation keybindings
 vim.keymap.set("n", "<C-J>", "<C-W><C-J>", { desc = "Go to pane below" })

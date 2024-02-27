@@ -23,6 +23,12 @@ return {
           end,
           opts = { noremap = false, expr = true, buffer = true },
         },
+        ["<leader>x"] = {
+          action = function()
+            return require("obsidian").util.toggle_checkbox()
+          end,
+          opts = { buffer = true },
+        },
       },
 
       preferred_link_style = "markdown",

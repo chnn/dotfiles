@@ -9,7 +9,7 @@ return {
       keymaps = {
         ["g?"] = "actions.show_help",
         ["<CR>"] = "actions.select",
-        ["<C-l>"] = "actions.refresh",
+        -- ["<C-l>"] = "actions.refresh",
         ["-"] = "actions.parent",
         ["_"] = "actions.open_cwd",
         ["`"] = "actions.cd",
