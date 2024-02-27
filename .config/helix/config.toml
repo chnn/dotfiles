@@ -2,3 +2,13 @@ theme = "base16-ia-dark"
 
 [editor]
 color-modes = true
+
+[editor.cursor-shape]
+insert = "bar"
+
+[editor.soft-wrap]
+wrap-indicator = ""
+wrap-at-text-width = true
+
+[keys.normal." "]
+z = ":set soft-wrap.enable true"
