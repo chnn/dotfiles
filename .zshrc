@@ -16,28 +16,17 @@ export PATH="$VOLTA_HOME/bin:$PATH"
 # Homebrew
 [ -f /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
 
-# Broot
-[ -f ~/.config/broot/launcher/bash/br ] && source ~/.config/broot/launcher/bash/br
-
-# cd
-command -v zoxide &> /dev/null && eval "$(zoxide init zsh)"
-
-# atuin
-eval "$(atuin init zsh)"
-
-# # Ruby
-# source $(brew --prefix)/opt/chruby/share/chruby/chruby.sh
-# source $(brew --prefix)/opt/chruby/share/chruby/auto.sh
-# chruby ruby-3.1.3
-
 # FZF
 export FZF_DEFAULT_COMMAND="rg --files --sortr=created --hidden --iglob '!.git'"
 export FZF_DEFAULT_OPTS='--layout=reverse'
-
 [ -f ~/.fzf.zsh ] && . ~/.fzf.zsh
 
-# Stripe
-[ -f ~/.work.zshrc ] && source ~/.work.zshrc
+# fzf-tab
+autoload -U compinit; compinit
+[ -f ~/Dev/fzf-tab/fzf-tab.plugin.zsh ] && . ~/Dev/fzf-tab/fzf-tab.plugin.zsh
+
+# cd
+command -v zoxide &> /dev/null && eval "$(zoxide init zsh)"
 
 # Edit current command with ^J
 autoload -U edit-command-line
@@ -96,16 +85,16 @@ gcopr() {
 }
 
 nj() {
-  local filename="$(date '+%F').txt"
+  local filename="$(date '+%F').md"
 
   if [ $# -gt 0 ]; then
-    filename="$(date '+%F') $1.txt"
+    filename="$(date '+%F') $1.md"
   fi
 
   cd $JOURNAL
 
-  if test -f "template.txt" && ! test -f $filename; then
-    cp template.txt $filename
+  if test -f "template.md" && ! test -f $filename; then
+    cp template.md $filename
   fi
 
   $EDITOR $filename
