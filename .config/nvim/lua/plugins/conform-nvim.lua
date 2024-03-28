@@ -3,6 +3,10 @@ return {
   "stevearc/conform.nvim",
   config = function()
     require("conform").setup({
+      format_on_save = {
+        lsp_fallback = false,
+        timeout_ms = 500,
+      },
       formatters = {
         stylua = {
           command = "stylua",
@@ -12,6 +16,7 @@ return {
       formatters_by_ft = {
         javascript = { { "prettierd", "prettier" } },
         css = { { "prettierd", "prettier" } },
+        less = { { "prettierd", "prettier" } },
         javascript = { { "prettierd", "prettier" } },
         javascriptreact = { { "prettierd", "prettier" } },
         json = { { "prettierd", "prettier" } },
@@ -20,10 +25,10 @@ return {
         rust = { "rustfmt" },
         lua = { "stylua" },
       },
-      format_on_save = {
-        lsp_fallback = false,
-        timeout_ms = 500,
-      },
     })
+
+    vim.keymap.set("n", "<leader>=", function()
+      require("conform").format({ async = true, quiet = true })
+    end, { desc = "Format buffer" })
   end,
 }

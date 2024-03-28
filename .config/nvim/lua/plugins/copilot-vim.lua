@@ -1,8 +1,14 @@
 return {
-
-  "github/copilot.vim",
+  "zbirenbaum/copilot.lua",
+  cmd = "Copilot",
+  event = "InsertEnter",
   config = function()
-    vim.keymap.set("i", "<M-\\>", "<CMD>Copilot panel<CR>", { silent = true, desc = "Show Copilot suggestions" })
-    vim.cmd([[let g:copilot_filetypes = { '*': v:false }]])
+    require("copilot").setup({
+      filetypes = {
+        typescript = true,
+        typescriptreact = true,
+        ["."] = false,
+      },
+    })
   end,
 }

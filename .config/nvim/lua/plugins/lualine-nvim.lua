@@ -12,7 +12,7 @@ return {
         lualine_a = { "mode" },
         lualine_b = {},
         lualine_c = { { "filename", path = 1 }, "diff" },
-        lualine_x = { { "diagnostics", sections = { "error", "warn" } } },
+        lualine_x = { { "diagnostics", sections = { "error", "warn" } }, "location" },
         lualine_y = { "filetype" },
         lualine_z = {},
       },

@@ -7,7 +7,7 @@ vim.o.showcmd = false
 vim.o.wrap = false
 vim.o.number = true
 vim.o.ruler = true
-vim.o.cursorline = false
+vim.o.cursorline = true
 vim.o.signcolumn = "yes"
 vim.o.mouse = ""
 vim.o.conceallevel = 2
@@ -71,6 +71,7 @@ augroup end
 
 -- Additional copy/paste keymaps
 vim.keymap.set({ "n", "x" }, "<M-d>", '"_x', { desc = "Delete to black hole register" })
+vim.keymap.set("x", "p", '"_dP', { desc = "Paste without yanking selected text" })
 vim.keymap.set({ "n", "x" }, "<leader>y", '"*y', { desc = "Yank to system clipboard" })
 vim.keymap.set({ "n", "x" }, "<leader>p", '"*p', { desc = "Paste after cursor from system clipboard" })
 vim.keymap.set({ "n", "x" }, "<leader>P", '"*P', { desc = "Paste before cursor from system clipboard" })
@@ -90,6 +91,9 @@ vim.keymap.set({ "n", "x" }, "<leader>v", "'`[' . strpart(getregtype(), 0, 1) . 
 -- Navigate soft-lines by default
 vim.keymap.set("n", "j", "gj", { desc = "Move cursor down" })
 vim.keymap.set("n", "k", "gk", { desc = "Move cursor up" })
+
+-- Better indentation for soft-wrapped bullets in markdown files
+vim.cmd([[autocmd FileType markdown set briopt+=list:-1]])
 
 -- Keep selected text selected when fixing indentation
 vim.keymap.set("v", "<", "<gv", { desc = "Decrease selection indent" })
@@ -118,7 +122,7 @@ vim.keymap.set("n", "<C-s>", "<C-W>s", { desc = "Split pane" })
 -- <leader>n to copy filename of buffer under the cursor to system clipboard
 vim.keymap.set(
   "n",
-  "<leader>n",
+  "<leader>p",
   ':let @+=fnamemodify(expand("%"), ":~:.")<CR>',
   { silent = true, desc = "Copy path of current buffer to clipboard" }
 )
@@ -142,15 +146,8 @@ vim.cmd([[command! Rlw %bd|e#]])
 vim.cmd([[command! -nargs=1 Wt exe 'w ' . strftime("%F") . ' ' . "<args>"]])
 
 -- LSP keybindings
-vim.keymap.set("n", "<leader>k", vim.lsp.buf.hover, { desc = "Hover" })
-vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
-vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { desc = "Go to implementation" })
-vim.keymap.set("n", "gy", vim.lsp.buf.type_definition, { desc = "Go to type definition" })
-vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "Open references in quickfix list" })
-vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, { desc = "Rename symbol" })
-
--- Diagnostics
 local diagnostic_severity = { min = vim.diagnostic.severity.WARN }
+
 vim.diagnostic.config({
   virtual_text = false,
   signs = { severity = diagnostic_severity },
@@ -163,19 +160,21 @@ vim.diagnostic.config({
     end,
   },
 })
+
+vim.keymap.set("n", "<leader>k", vim.lsp.buf.hover, { desc = "Hover" })
+vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
+vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { desc = "Go to implementation" })
+vim.keymap.set("n", "gy", vim.lsp.buf.type_definition, { desc = "Go to type definition" })
+vim.keymap.set("n", "<leader>r", vim.lsp.buf.references, { desc = "Open references in quickfix list" })
+vim.keymap.set("n", "<leader>n", vim.lsp.buf.rename, { desc = "Rename symbol" })
+vim.keymap.set("n", "<leader>c", vim.diagnostic.reset, { desc = "Reset diagnostics" })
 vim.keymap.set("n", "[d", function()
   vim.diagnostic.goto_prev({ severity = diagnostic_severity })
 end, { desc = "Go to next diagnostic" })
 vim.keymap.set("n", "]d", function()
   vim.diagnostic.goto_next({ severity = diagnostic_severity })
 end, { desc = "Go to previous diagnostic" })
-vim.keymap.set("n", "<leader>j", function()
-  vim.diagnostic.setqflist({ open = true, severity = diagnostic_severity })
-end, { desc = "Open diagnostics in quickfix list" })
-
--- Open the full message for the first diagnostic under the cursor in a buffer
--- (useful for very long TypeScript errors)
-vim.keymap.set("n", "ge", function()
+vim.keymap.set("n", "<leader>e", function()
   local lnum = vim.api.nvim_eval("line('.') - 1")
   local d = vim.diagnostic.get(0, { lnum = lnum, severity_sort = true })[1]
 
@@ -190,7 +189,7 @@ vim.keymap.set("n", "ge", function()
   f:write(d.message)
   f:close()
   vim.api.nvim_command("pedit " .. tmpfile_path)
-end)
+end, { desc = "Open diagnostic message in new buffer" })
 
 -- Bootstrap lazy.nvim and load plugins
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"

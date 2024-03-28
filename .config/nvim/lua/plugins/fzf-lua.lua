@@ -46,6 +46,13 @@ return {
       ":FzfLua lsp_code_actions<CR>",
       { silent = true, desc = "Show available code actions" }
     )
+    vim.keymap.set(
+      "n",
+      "<leader>:",
+      ":FzfLua command_history<CR>",
+      { silent = true, desc = "Show command history picker" }
+    )
+    vim.keymap.set("n", "<leader>/", ":FzfLua builtin<CR>", { silent = true, desc = "Show pickers picker" })
 
     vim.keymap.set("n", "<leader>,", function()
       fzf.files({ cmd = "fd", cwd = "~/.config/nvim" })

@@ -10,7 +10,7 @@ return {
   },
   config = function()
     local cmp = require("cmp")
-    local completeopt = "menu,menuone,noinsert,preview"
+    local completeopt = "menu,menuone,noselect,noinsert,preview"
 
     local buffer = {
       name = "buffer",
