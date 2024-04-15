@@ -36,7 +36,6 @@ vim.o.hlsearch = true
 vim.o.inccommand = "split"
 
 -- Colors
-vim.o.background = "dark"
 vim.o.termguicolors = true
 
 -- Use space as leader
@@ -101,13 +100,8 @@ vim.keymap.set("v", ">", ">gv", { desc = "Increase selection indent" })
 
 -- Various Helix-like keybindings
 vim.keymap.set({ "n", "x" }, "gh", "0", { desc = "Go to start of line" })
-vim.keymap.set({ "n", "x" }, "0", "<Nop>", { desc = "Do nothing" })
 vim.keymap.set({ "n", "x" }, "gl", "$", { desc = "Go to end of line" })
-vim.keymap.set({ "n", "x" }, "$", "<Nop>", { desc = "Do nothing" })
 vim.keymap.set({ "n", "x" }, "gs", "^", { desc = "Go to first non-whitespace character of line" })
-vim.keymap.set({ "n", "x" }, "^", "<Nop>", { desc = "Do nothing" })
-vim.keymap.set({ "n", "x" }, "U", "<C-r>", { desc = "Redo" })
-vim.keymap.set({ "n", "x" }, "<C-r>", "<Nop>", { desc = "Do nothing" })
 
 -- Quicker window navigation keybindings
 vim.keymap.set("n", "<C-J>", "<C-W><C-J>", { desc = "Go to pane below" })

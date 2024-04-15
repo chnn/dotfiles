@@ -26,6 +26,6 @@ return {
       },
     })
 
-    vim.o.laststatus = 2
+    vim.o.laststatus = 1
   end,
 }

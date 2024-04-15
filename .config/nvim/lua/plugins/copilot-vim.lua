@@ -1,14 +1,6 @@
 return {
-  "zbirenbaum/copilot.lua",
-  cmd = "Copilot",
-  event = "InsertEnter",
+  "github/copilot.vim",
   config = function()
-    require("copilot").setup({
-      filetypes = {
-        typescript = true,
-        typescriptreact = true,
-        ["."] = false,
-      },
-    })
+    vim.cmd([[let g:copilot_filetypes = { '*': v:false }]])
   end,
 }
