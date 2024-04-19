@@ -24,6 +24,7 @@ return {
         typescriptreact = { { "prettierd", "prettier" } },
         rust = { "rustfmt" },
         lua = { "stylua" },
+        sql = { "sql_formatter" },
       },
     })
 

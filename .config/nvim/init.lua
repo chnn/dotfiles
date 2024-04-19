@@ -161,7 +161,6 @@ vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { desc = "Go to implementa
 vim.keymap.set("n", "gy", vim.lsp.buf.type_definition, { desc = "Go to type definition" })
 vim.keymap.set("n", "<leader>r", vim.lsp.buf.references, { desc = "Open references in quickfix list" })
 vim.keymap.set("n", "<leader>n", vim.lsp.buf.rename, { desc = "Rename symbol" })
-vim.keymap.set("n", "<leader>c", vim.diagnostic.reset, { desc = "Reset diagnostics" })
 vim.keymap.set("n", "[d", function()
   vim.diagnostic.goto_prev({ severity = diagnostic_severity })
 end, { desc = "Go to next diagnostic" })

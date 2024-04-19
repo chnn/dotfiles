@@ -13,7 +13,24 @@ return {
       },
     })
 
-    vim.keymap.set("n", "<leader>f", ":FzfLua files<CR>", { silent = true, desc = "Show file picker" })
+    -- File picker
+    local files_cwd = nil
+    vim.keymap.set("n", "<leader>f", function()
+      fzf.files({ cwd = files_cwd })
+    end, { silent = true, desc = "Show file picker" })
+    vim.keymap.set("n", "<leader>F", function()
+      fzf.files()
+    end, { silent = true, desc = "Show file picker" })
+    vim.keymap.set("n", "<leader>c", function()
+      fzf.fzf_exec("fd --type d", {
+        actions = {
+          ["default"] = function(selected)
+            files_cwd = selected[1]
+          end,
+        },
+      })
+    end, { silent = true, desc = "Scope file picker to subdirectory" })
+
     vim.keymap.set("n", "<leader>b", ":FzfLua buffers<CR>", { silent = true, desc = "Show buffer picker" })
     vim.keymap.set("n", "<leader>l", ":FzfLua live_grep<CR>", { silent = true, desc = "Show live grep picker" })
     vim.keymap.set(
