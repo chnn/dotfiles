@@ -34,6 +34,7 @@ return {
       group = vim.api.nvim_create_augroup("laststatus2", { clear = true }),
       callback = function(opts)
         vim.o.laststatus = 2
+        vim.o.cursorline = true
       end,
     })
   end,
