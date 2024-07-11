@@ -6,6 +6,9 @@ return {
       delete_to_trash = false,
       skip_confirm_for_simple_edits = true,
       use_default_keymaps = false,
+      lsp_file_methods = {
+        timeout_ms = 10000,
+      },
       keymaps = {
         ["g?"] = "actions.show_help",
         ["<CR>"] = "actions.select",

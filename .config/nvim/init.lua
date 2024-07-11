@@ -142,6 +142,12 @@ vim.cmd([[command! -nargs=1 Wt exe 'w ' . strftime("%F") . ' ' . "<args>"]])
 -- LSP keybindings
 local diagnostic_severity = { min = vim.diagnostic.severity.WARN }
 
+-- Replace `\n` with actual newlines and remove `\` escape chars from quotes
+vim.api.nvim_create_user_command("DecodeSQL", function()
+  vim.cmd([[%s/\\n/\r/g]])
+  vim.cmd([[%s/\\"/"/g]])
+end, {})
+
 vim.diagnostic.config({
   virtual_text = false,
   signs = { severity = diagnostic_severity },
