@@ -113,7 +113,7 @@ vim.keymap.set("n", "<C-=>", "<C-W><C-=>", { desc = "Equalize panes" })
 vim.keymap.set("n", "<C-q>", "<C-W><C-q>", { desc = "Close pane" })
 vim.keymap.set("n", "<C-s>", "<C-W>s", { desc = "Split pane" })
 
--- <leader>n to copy filename of buffer under the cursor to system clipboard
+-- <leader>p to copy filename of buffer under the cursor to system clipboard
 vim.keymap.set(
   "n",
   "<leader>p",
