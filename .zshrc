@@ -76,6 +76,10 @@ alias gpr='gh pr view --web'
 alias yr='yarn run $(cat package.json | jq -r ".scripts | keys[]" | fzf)'
 alias pjs="cat package.json | jq '.scripts'"
 
+port() {
+  sudo lsof -iTCP -sTCP:LISTEN -n -P | awk 'NR>1 {print $9, $1, $2}' | sed 's/.*://' | while read port process pid; do echo "Port $port: $(ps -p $pid -o command= | sed 's/^-//') (PID: $pid)"; done | sort -n
+}
+
 gprs() {
   gh pr view --web $(gh pr list -L 100 | fzf | sd '^([0-9]+).*' '$1')
 }
