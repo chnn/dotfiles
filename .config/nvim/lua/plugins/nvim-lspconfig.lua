@@ -27,7 +27,7 @@ return {
       },
     })
 
-    nvim_lsp.tsserver.setup({
+    nvim_lsp.ts_ls.setup({
       capabilities = capabilities,
       filetypes = {
         "javascript",

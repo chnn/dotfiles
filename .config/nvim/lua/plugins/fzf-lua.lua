@@ -5,9 +5,9 @@ return {
     local fzf = require("fzf-lua")
 
     fzf.setup({
-      files = { no_header = true },
-      buffers = { no_header = true },
-      live_grep = { no_header = true },
+      files = { no_header = true, git_icons = false },
+      buffers = { no_header = true, git_icons = false },
+      live_grep = { no_header = true, git_icons = false },
       winopts = {
         preview = { layout = "vertical" },
       },
