@@ -1,0 +1,52 @@
+{
+  "tab_bar": {
+    "show": false
+  },
+  "assistant": {
+    "default_model": {
+      "provider": "copilot_chat",
+      "model": "gpt-4o"
+    },
+    "version": "2"
+  },
+  "copilot": {
+    // "disabled_globs": ["*"]
+  },
+  "git": {
+    "inline_blame": {
+      "enabled": false
+    }
+  },
+  "theme": "Atelier Plateau Dark",
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false
+  },
+  "vim_mode": true,
+  "vim": {
+    "use_system_clipboard": "never"
+  },
+  "ui_font_size": 14,
+  "ui_font_family": ".SystemUIFont",
+  "buffer_font_family": "JetBrainsMono Nerd Font",
+  "buffer_font_weight": 300,
+  "buffer_font_size": 14,
+  "terminal": {
+    "font_size": 14,
+    "font_family": "JetBrainsMono Nerd Font"
+  },
+  "lsp": {
+    "vtsls": {
+      "settings": {
+        "typescript": {
+          "preferences": {
+            "importModuleSpecifier": "non-relative"
+          },
+          "tsserver": {
+            "maxTsServerMemory": 16184
+          }
+        }
+      }
+    }
+  }
+}

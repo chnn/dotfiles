@@ -1,0 +1,46 @@
+[
+  {
+    "context": "vim_mode == normal",
+    "bindings": {
+      "space f": "file_finder::Toggle"
+    }
+  },
+  {
+    "context": "Editor && vim_mode == normal",
+    "bindings": {
+      // More comfortable start/end of line keybindings
+      "g s": "vim::FirstNonWhitespace",
+      "g l": "vim::EndOfLine",
+
+      "space =": "editor::Format",
+      "space a": "editor::ToggleCodeActions",
+      "] space": "editor::NewlineBelow",
+      "[ space": "editor::NewlineAbove"
+    }
+  },
+  {
+    "context": "Editor && (vim_mode == normal || vim_mode == visual)",
+    "bindings": {
+      // Treesitter incremental selection keybindings
+      "alt-o": "editor::SelectLargerSyntaxNode",
+      "alt-i": "editor::SelectSmallerSyntaxNode"
+    }
+  },
+  {
+    "context": "Editor && vim_mode == visual && !VimWaiting && !VimObject",
+    "bindings": {
+      // Surround words after visual selection
+      "shift-s": ["vim::PushOperator", { "AddSurrounds": {} }]
+    }
+  },
+  {
+    "context": "ProjectPanel || CollabPanel || OutlinePanel || ChatPanel || VimControl || EmptyPane || SharedScreen || MarkdownPreview || KeyContextView",
+    "bindings": {
+      // Faster window switching keybindings
+      "ctrl-h": ["workspace::ActivatePaneInDirection", "Left"],
+      "ctrl-l": ["workspace::ActivatePaneInDirection", "Right"],
+      "ctrl-k": ["workspace::ActivatePaneInDirection", "Up"],
+      "ctrl-j": ["workspace::ActivatePaneInDirection", "Down"]
+    }
+  }
+]
