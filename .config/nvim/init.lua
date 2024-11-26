@@ -68,12 +68,20 @@ augroup AutoOpenQuickFix
 augroup end
 ]])
 
--- Additional copy/paste keymaps
-vim.keymap.set({ "n", "x" }, "<M-d>", '"_x', { desc = "Delete to black hole register" })
+-- Saner delete/cut behavior. Assumes that any deletion, cut, or change starts
+-- with a selection (like Helix). Use `d` to delete and `x` to cut a selection.
+-- Changing a selection with `c` or pasting a selection with `p` will not copy
+-- the selection to the keyboard
+vim.keymap.set("x", "d", '"_x', { desc = "Delete without yanking selected text" })
+vim.keymap.set("x", "c", '"_c', { desc = "Change without yanking selected text" })
 vim.keymap.set("x", "p", '"_dP', { desc = "Paste without yanking selected text" })
+
+-- Keymaps for yanking to / pasting from the system cliipboard
 vim.keymap.set({ "n", "x" }, "<leader>y", '"*y', { desc = "Yank to system clipboard" })
 vim.keymap.set({ "n", "x" }, "<leader>p", '"*p', { desc = "Paste after cursor from system clipboard" })
 vim.keymap.set({ "n", "x" }, "<leader>P", '"*P', { desc = "Paste before cursor from system clipboard" })
+
+-- Additional paste keymaps
 vim.keymap.set("n", "=p", ":put <CR>`[v`]=", {
   desc = "Paste linewise on next line and adjust indent",
   silent = true,
@@ -93,6 +101,9 @@ vim.keymap.set("n", "k", "gk", { desc = "Move cursor up" })
 
 -- Better indentation for soft-wrapped bullets in markdown files
 vim.cmd([[autocmd FileType markdown set briopt+=list:-1]])
+
+-- Use `<leader>x` to complete the current markdown bullet
+vim.keymap.set("n", "<leader>x", ":.s/\\[ \\]/[x]<CR>:noh<CR>", { silent = true })
 
 -- Keep selected text selected when fixing indentation
 vim.keymap.set("v", "<", "<gv", { desc = "Decrease selection indent" })

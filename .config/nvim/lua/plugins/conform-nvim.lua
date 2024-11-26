@@ -11,19 +11,26 @@ return {
           command = "stylua",
           args = { "--indent-type", "Spaces", "--indent-width", "2", "-" },
         },
+        sql_formatter = {
+          command = "sql-formatter",
+          args = {
+            "-c",
+            [[{"language": "postgresql", "tabWidth": 2, "keywordCase": "lower", "dataTypeCase": "lower", "functionCase": "lower"}]],
+          },
+        },
       },
       formatters_by_ft = {
-        javascript = { "prettierd", "prettier", stop_after_first = true },
         css = { "prettierd", "prettier", stop_after_first = true },
-        less = { "prettierd", "prettier", stop_after_first = true },
+        go = { "gofmt", "goimports" },
         javascript = { "prettierd", "prettier", stop_after_first = true },
         javascriptreact = { "prettierd", "prettier", stop_after_first = true },
         json = { "prettierd", "prettier", stop_after_first = true },
+        less = { "prettierd", "prettier", stop_after_first = true },
+        lua = { "stylua" },
+        rust = { "rustfmt" },
+        terraform = { "terraform_fmt" },
         typescript = { "prettierd", "prettier", stop_after_first = true },
         typescriptreact = { "prettierd", "prettier", stop_after_first = true },
-        rust = { "rustfmt" },
-        lua = { "stylua" },
-        sql = { "sql_formatter" },
       },
     })
 

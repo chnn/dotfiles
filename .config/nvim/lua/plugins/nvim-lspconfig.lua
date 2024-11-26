@@ -46,5 +46,27 @@ return {
         vim.o.formatexpr = ""
       end,
     })
+
+    nvim_lsp.gopls.setup({
+      capabilities = capabilities,
+      cmd = { "gopls", "--remote=auto" },
+      settings = {
+        gopls = {
+          directoryFilters = {
+            "-bazel-bin",
+            "-bazel-out",
+            "-bazel-testlogs",
+            "-bazel-mypkg",
+          },
+          completeUnimported = true,
+          usePlaceholders = true,
+          analyses = {
+            unusedparams = true,
+          },
+          staticcheck = true,
+          gofumpt = true,
+        },
+      },
+    })
   end,
 }
