@@ -14,25 +14,63 @@ return {
     })
 
     -- File picker
-    local files_cwd = nil
+    local working_dirs = nil
+
+    local set_working_dirs = function(dirs)
+      working_dirs = dirs
+    end
+
+    local get_working_dirs = function()
+      if working_dirs == nil then
+        return {}
+      else
+        return working_dirs
+      end
+    end
+
+    function escape_for_bash(path)
+      path = path:gsub("([%s%$%&%`\"'\\%(%);<>|])", "\\%1")
+      return path
+    end
+
+    local get_working_dirs_str = function()
+      local dirs = get_working_dirs()
+
+      if #dirs == 0 then
+        return ""
+      end
+
+      local result = ""
+
+      for i = 1, #dirs do
+        result = result .. " " .. escape_for_bash(dirs[i])
+      end
+
+      return result
+    end
+
     vim.keymap.set("n", "<leader>f", function()
-      fzf.files({ cwd = files_cwd })
-    end, { silent = true, desc = "Show file picker" })
+      fzf.files({ cmd = "fd -tf . " .. get_working_dirs_str() })
+    end, { silent = true, desc = "Show scoped file picker" })
+
     vim.keymap.set("n", "<leader>F", function()
-      fzf.files()
+      fzf.files({ cmd = "fd ." })
     end, { silent = true, desc = "Show file picker" })
+
     vim.keymap.set("n", "<leader>c", function()
-      fzf.fzf_exec("fd --type d", {
+      fzf.fzf_exec("fd -td", {
+        fzf_opts = {
+          ["--multi"] = true,
+        },
         actions = {
           ["default"] = function(selected)
-            files_cwd = selected[1]
+            set_working_dirs(selected)
           end,
         },
       })
-    end, { silent = true, desc = "Scope file picker to subdirectory" })
+    end, { silent = true, desc = "Scope file picker to subdirectories" })
 
     vim.keymap.set("n", "<leader>b", ":FzfLua buffers<CR>", { silent = true, desc = "Show buffer picker" })
-    vim.keymap.set("n", "<leader>l", ":FzfLua live_grep<CR>", { silent = true, desc = "Show live grep picker" })
     vim.keymap.set(
       "n",
       "<leader>s",
