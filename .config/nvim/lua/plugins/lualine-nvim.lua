@@ -9,7 +9,7 @@ return {
         icons_enabled = false,
         section_separators = { left = "", right = "" },
         component_separators = { left = "", right = "" },
-        theme = "lavish",
+        theme = "base16",
       },
       sections = {
         lualine_a = { "mode" },
