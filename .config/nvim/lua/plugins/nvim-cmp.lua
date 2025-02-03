@@ -29,8 +29,6 @@ return {
       completion = { completeopt = completeopt },
 
       sources = cmp.config.sources({
-        buffer,
-      }, {
         { name = "nvim_lsp" },
         buffer,
         { name = "path" },
