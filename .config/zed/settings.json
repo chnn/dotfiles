@@ -1,6 +1,8 @@
 {
+  "cursor_blink": false,
+  "scrollbar": { "show": "never" },
   "tab_bar": {
-    "show": false
+    "show": true
   },
   "assistant": {
     "default_model": {
@@ -10,7 +12,7 @@
     "version": "2"
   },
   "copilot": {
-    // "disabled_globs": ["*"]
+    "disabled_globs": ["*.md", "*.txt"]
   },
   "git": {
     "inline_blame": {
@@ -38,12 +40,12 @@
   "lsp": {
     "vtsls": {
       "settings": {
+        "vtsls": {
+          "autoUseWorkspaceTsdk": true
+        },
         "typescript": {
           "preferences": {
             "importModuleSpecifier": "non-relative"
-          },
-          "tsserver": {
-            "maxTsServerMemory": 16184
           }
         }
       }

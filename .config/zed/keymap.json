@@ -1,11 +1,5 @@
 [
   {
-    "context": "vim_mode == normal",
-    "bindings": {
-      "space f": "file_finder::Toggle"
-    }
-  },
-  {
     "context": "Editor && vim_mode == normal",
     "bindings": {
       // More comfortable start/end of line keybindings
@@ -14,8 +8,14 @@
 
       "space =": "editor::Format",
       "space a": "editor::ToggleCodeActions",
+      "space k": "editor::Hover",
+      "space n": "editor::Rename",
+      "space f": "file_finder::Toggle",
+      "space b": "tab_switcher::Toggle",
       "] space": "editor::NewlineBelow",
-      "[ space": "editor::NewlineAbove"
+      "[ space": "editor::NewlineAbove",
+      "] e": "editor::MoveLineDown",
+      "[ e": "editor::MoveLineUp"
     }
   },
   {
