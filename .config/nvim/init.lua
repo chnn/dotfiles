@@ -109,9 +109,6 @@ vim.keymap.set("n", "<leader>x", ":.s/\\[ \\]/[x]<CR>:noh<CR>", { silent = true 
 vim.keymap.set("v", "<", "<gv", { desc = "Decrease selection indent" })
 vim.keymap.set("v", ">", ">gv", { desc = "Increase selection indent" })
 
--- Various Helix-like keybindings
-vim.keymap.set({ "n", "x" }, "gh", "0", { desc = "Go to start of line" })
-vim.keymap.set({ "n", "x" }, "gl", "$", { desc = "Go to end of line" })
 vim.keymap.set({ "n", "x" }, "gs", "^", { desc = "Go to first non-whitespace character of line" })
 
 -- Quicker window navigation keybindings
@@ -127,7 +124,7 @@ vim.keymap.set("n", "<C-s>", "<C-W>s", { desc = "Split pane" })
 -- <leader>p to copy filename of buffer under the cursor to system clipboard
 vim.keymap.set(
   "n",
-  "<leader>p",
+  "<C-k>p",
   ':let @+=fnamemodify(expand("%"), ":~:.")<CR>',
   { silent = true, desc = "Copy path of current buffer to clipboard" }
 )
@@ -172,12 +169,6 @@ vim.diagnostic.config({
   },
 })
 
-vim.keymap.set("n", "<leader>k", vim.lsp.buf.hover, { desc = "Hover" })
-vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
-vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { desc = "Go to implementation" })
-vim.keymap.set("n", "gy", vim.lsp.buf.type_definition, { desc = "Go to type definition" })
-vim.keymap.set("n", "<leader>a", vim.lsp.buf.code_action, { desc = "Show code actions" })
-vim.keymap.set("n", "<leader>r", vim.lsp.buf.references, { desc = "Open references in quickfix list" })
 vim.keymap.set("n", "<leader>n", vim.lsp.buf.rename, { desc = "Rename symbol" })
 vim.keymap.set("n", "[d", function()
   vim.diagnostic.goto_prev({ severity = diagnostic_severity })

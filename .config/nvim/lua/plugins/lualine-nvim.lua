@@ -33,7 +33,7 @@ return {
 
     vim.api.nvim_create_autocmd("FileType", {
       desc = "Show statusbar for code files",
-      pattern = { "typescript", "typescriptreact", "css", "less", "html", "lua", "rs", "sql" },
+      pattern = { "typescript", "typescriptreact", "css", "less", "html", "lua", "rs", "sql", "go" },
       group = vim.api.nvim_create_augroup("laststatus2", { clear = true }),
       callback = function(opts)
         vim.o.laststatus = 2
