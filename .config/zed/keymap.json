@@ -2,15 +2,9 @@
   {
     "context": "Editor && vim_mode == normal",
     "bindings": {
-      // More comfortable start/end of line keybindings
       "g s": "vim::FirstNonWhitespace",
-      "g l": "vim::EndOfLine",
-
       "space =": "editor::Format",
-      "space a": "editor::ToggleCodeActions",
-      "space k": "editor::Hover",
       "space n": "editor::Rename",
-      "space f": "file_finder::Toggle",
       "space b": "tab_switcher::Toggle",
       "] space": "editor::NewlineBelow",
       "[ space": "editor::NewlineAbove",
@@ -30,17 +24,17 @@
     "context": "Editor && vim_mode == visual && !VimWaiting && !VimObject",
     "bindings": {
       // Surround words after visual selection
-      "shift-s": ["vim::PushOperator", { "AddSurrounds": {} }]
+      "shift-s": "vim::PushAddSurrounds"
     }
   },
   {
     "context": "ProjectPanel || CollabPanel || OutlinePanel || ChatPanel || VimControl || EmptyPane || SharedScreen || MarkdownPreview || KeyContextView",
     "bindings": {
       // Faster window switching keybindings
-      "ctrl-h": ["workspace::ActivatePaneInDirection", "Left"],
-      "ctrl-l": ["workspace::ActivatePaneInDirection", "Right"],
-      "ctrl-k": ["workspace::ActivatePaneInDirection", "Up"],
-      "ctrl-j": ["workspace::ActivatePaneInDirection", "Down"]
+      "ctrl-h": "workspace::ActivatePaneLeft",
+      "ctrl-l": "workspace::ActivatePaneRight",
+      "ctrl-k": "workspace::ActivatePaneUp",
+      "ctrl-j": "workspace::ActivatePaneDown"
     }
   }
 ]

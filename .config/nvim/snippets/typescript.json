@@ -1,0 +1,6 @@
+{
+  "index": {
+    "prefix": "index",
+    "body": ["export * from './${1}';"]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "rfc": {
+    "prefix": "rfc",
+    "body": [
+      "import * as React from 'react';",
+      "",
+      "export const ${1:MyComponent} = ({",
+      "}: {",
+      "}) => {",
+      "    return 'TODO: Implement ${1}'",
+      "}"
+    ]
+  }
+}

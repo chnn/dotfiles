@@ -6,13 +6,17 @@ return {
     bigfile = { enabled = true },
     notifier = { enabled = true },
     picker = {
-      layout = { preset = "ivy_split", preview = false },
+      layout = { preset = "ivy", preview = false },
       formatters = {
         file = { truncate = 80 },
+      },
+      icons = {
+        files = { enabled = false },
       },
       win = {
         input = {
           keys = {
+            ["<Esc>"] = { "close", mode = { "n", "i" } },
             ["<C-u>"] = { "<C-o>cc", mode = { "i" }, expr = true },
           },
         },
@@ -49,11 +53,6 @@ return {
       desc = "Open smart file picker",
     },
     {
-      "<D-.>",
-      vim.lsp.buf.code_action,
-      desc = "Show code actions",
-    },
-    {
       "<space>b",
       function()
         Snacks.picker.buffers()
@@ -61,42 +60,21 @@ return {
       desc = "Open buffer picker",
     },
     {
-      "<space>r",
-      function()
-        Snacks.picker.lsp_references()
-      end,
-      desc = "Show references",
-    },
-    {
-      "<space><space>f",
+      "<space>F",
       function()
         Snacks.picker.files()
       end,
       desc = "Open file picker",
     },
     {
-      "<space><space>m",
-      function()
-        Snacks.picker.recent()
-      end,
-      desc = "Open recent files picker",
-    },
-    {
-      "<space><space>d",
-      function()
-        Snacks.picker.diagnostics_buffer()
-      end,
-      desc = "Open diagnostics picker",
-    },
-    {
-      "<space><space>/",
+      "<space>/",
       function()
         Snacks.picker()
       end,
       desc = "Open pickers picker",
     },
     {
-      "<space><space>,",
+      "<space>,",
       function()
         Snacks.picker.files({
           dirs = { "~/.config/nvim" },
@@ -105,7 +83,7 @@ return {
       desc = "Edit config",
     },
     {
-      "<space><space>r",
+      "<space>r",
       function()
         Snacks.picker.resume()
       end,

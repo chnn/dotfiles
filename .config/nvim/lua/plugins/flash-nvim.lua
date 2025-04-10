@@ -1,14 +1,12 @@
 return {
   "folke/flash.nvim",
   event = "VeryLazy",
-  opts = {
-    modes = {
-      search = {
-        enabled = true,
+  config = function()
+    require("flash").setup({
+      modes = {
+        search = { enabled = true },
+        char = { enabled = false },
       },
-      char = {
-        enabled = false,
-      },
-    },
-  },
+    })
+  end,
 }

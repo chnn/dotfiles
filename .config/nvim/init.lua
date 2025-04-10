@@ -10,7 +10,7 @@ vim.o.ruler = true
 vim.o.cursorline = false
 vim.o.signcolumn = "yes"
 vim.o.mouse = ""
-vim.o.conceallevel = 2
+vim.o.conceallevel = 1
 vim.opt.fillchars:append({ vert = " ", eob = " " })
 
 -- Folds
@@ -34,9 +34,6 @@ vim.o.expandtab = true
 vim.o.incsearch = true
 vim.o.hlsearch = true
 vim.o.inccommand = "split"
-
--- Colors
-vim.o.termguicolors = true
 
 -- Use space as leader
 vim.g.mapleader = " "
@@ -68,32 +65,30 @@ augroup AutoOpenQuickFix
 augroup end
 ]])
 
--- Saner delete/cut behavior. Assumes that any deletion, cut, or change starts
--- with a selection (like Helix). Use `d` to delete and `x` to cut a selection.
--- Changing a selection with `c` or pasting a selection with `p` will not copy
--- the selection to the keyboard
-vim.keymap.set("x", "d", '"_x', { desc = "Delete without yanking selected text" })
-vim.keymap.set("x", "c", '"_c', { desc = "Change without yanking selected text" })
-vim.keymap.set("x", "p", '"_dP', { desc = "Paste without yanking selected text" })
+-- -- Saner delete/cut behavior. Assumes that any deletion, cut, or change starts
+-- -- with a selection (like Helix). Use `d` to delete and `x` to cut a selection.
+-- -- Changing a selection with `c` or pasting a selection with `p` will not copy
+-- -- the selection to the keyboard
+-- vim.keymap.set("x", "d", '"_x', { desc = "Delete without yanking selected text" })
+-- vim.keymap.set("x", "c", '"_c', { desc = "Change without yanking selected text" })
+-- vim.keymap.set("x", "p", '"_dP', { desc = "Paste without yanking selected text" })
 
--- Keymaps for yanking to / pasting from the system cliipboard
+-- Keymap for yanking to the system cliipboard
 vim.keymap.set({ "n", "x" }, "<leader>y", '"*y', { desc = "Yank to system clipboard" })
-vim.keymap.set({ "n", "x" }, "<leader>p", '"*p', { desc = "Paste after cursor from system clipboard" })
-vim.keymap.set({ "n", "x" }, "<leader>P", '"*P', { desc = "Paste before cursor from system clipboard" })
-
--- Additional paste keymaps
-vim.keymap.set("n", "=p", ":put <CR>`[v`]=", {
-  desc = "Paste linewise on next line and adjust indent",
-  silent = true,
-})
-vim.keymap.set("n", "=P", ":put! <CR>`[v`]=", {
-  desc = "Paste linewise on previous line and adjust indent",
-  silent = true,
-})
-vim.keymap.set({ "n", "x" }, "<leader>v", "'`[' . strpart(getregtype(), 0, 1) . '`]'", {
-  desc = "Select last paste",
-  expr = true,
-})
+--
+-- -- Additional paste keymaps
+-- vim.keymap.set("n", "=p", ":put <CR>`[v`]=", {
+--   desc = "Paste linewise on next line and adjust indent",
+--   silent = true,
+-- })
+-- vim.keymap.set("n", "=P", ":put! <CR>`[v`]=", {
+--   desc = "Paste linewise on previous line and adjust indent",
+--   silent = true,
+-- })
+-- vim.keymap.set({ "n", "x" }, "<leader>v", "'`[' . strpart(getregtype(), 0, 1) . '`]'", {
+--   desc = "Select last paste",
+--   expr = true,
+-- })
 
 -- Navigate soft-lines by default
 vim.keymap.set("n", "j", "gj", { desc = "Move cursor down" })
@@ -110,6 +105,7 @@ vim.keymap.set("v", "<", "<gv", { desc = "Decrease selection indent" })
 vim.keymap.set("v", ">", ">gv", { desc = "Increase selection indent" })
 
 vim.keymap.set({ "n", "x" }, "gs", "^", { desc = "Go to first non-whitespace character of line" })
+vim.keymap.set("n", "<C-/>", ":nohlsearch<CR>", { noremap = true, silent = true })
 
 -- Quicker window navigation keybindings
 vim.keymap.set("n", "<C-J>", "<C-W><C-J>", { desc = "Go to pane below" })
@@ -147,35 +143,26 @@ vim.cmd([[command! Rlw %bd|e#]])
 -- Write file with today's date prepended with :Wt
 vim.cmd([[command! -nargs=1 Wt exe 'w ' . strftime("%F") . ' ' . "<args>"]])
 
--- LSP keybindings
-local diagnostic_severity = { min = vim.diagnostic.severity.WARN }
-
 -- Replace `\n` with actual newlines and remove `\` escape chars from quotes
 vim.api.nvim_create_user_command("DecodeSQL", function()
   vim.cmd([[%s/\\n/\r/g]])
   vim.cmd([[%s/\\"/"/g]])
 end, {})
 
+-- LSP keybindings
+
+local diagnostic_severity = { min = vim.diagnostic.severity.WARN }
+
 vim.diagnostic.config({
-  virtual_text = false,
   signs = { severity = diagnostic_severity },
   underline = { severity = diagnostic_severity },
-  update_in_insert = false,
+  update_in_insert = true,
   severity_sort = true,
-  float = {
-    format = function(d)
-      return "(" .. d.source .. ") " .. d.message
-    end,
-  },
+  jump = { float = true, severity = diagnostic_severity },
 })
 
-vim.keymap.set("n", "<leader>n", vim.lsp.buf.rename, { desc = "Rename symbol" })
-vim.keymap.set("n", "[d", function()
-  vim.diagnostic.goto_prev({ severity = diagnostic_severity })
-end, { desc = "Go to next diagnostic" })
-vim.keymap.set("n", "]d", function()
-  vim.diagnostic.goto_next({ severity = diagnostic_severity })
-end, { desc = "Go to previous diagnostic" })
+vim.keymap.set("n", "<D-.>", vim.lsp.buf.code_action, { desc = "Show code actions" })
+
 vim.keymap.set("n", "<leader>e", function()
   local lnum = vim.api.nvim_eval("line('.') - 1")
   local d = vim.diagnostic.get(0, { lnum = lnum, severity_sort = true })[1]

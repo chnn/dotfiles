@@ -1,10 +1,14 @@
 {
+  "features": {
+    "edit_prediction_provider": "zed"
+  },
   "cursor_blink": false,
   "scrollbar": { "show": "never" },
   "tab_bar": {
     "show": true
   },
   "assistant": {
+    "button": false,
     "default_model": {
       "provider": "copilot_chat",
       "model": "gpt-4o"
@@ -14,12 +18,16 @@
   "copilot": {
     "disabled_globs": ["*.md", "*.txt"]
   },
+  "edit_predictions": {
+    "disabled_globs": ["*.md", "*.txt"]
+    // "mode": "subtle"
+  },
   "git": {
     "inline_blame": {
       "enabled": false
     }
   },
-  "theme": "Atelier Plateau Dark",
+  "theme": "Base16 Humanoid light",
   "telemetry": {
     "diagnostics": false,
     "metrics": false
@@ -32,10 +40,16 @@
   "ui_font_family": ".SystemUIFont",
   "buffer_font_family": "JetBrainsMono Nerd Font",
   "buffer_font_weight": 300,
-  "buffer_font_size": 14,
+  "buffer_font_size": null,
   "terminal": {
     "font_size": 14,
     "font_family": "JetBrainsMono Nerd Font"
+  },
+  "gutter": { "code_actions": false },
+  "toolbar": {
+    "quick_actions": false,
+    "breadcrumbs": false,
+    "selections_menu": false
   },
   "lsp": {
     "vtsls": {
@@ -50,5 +64,20 @@
         }
       }
     }
+  },
+  "project_panel": {
+    "button": false
+  },
+  "outline_panel": {
+    "button": false
+  },
+  "collaboration_panel": {
+    "button": false
+  },
+  "chat_panel": {
+    "button": "never"
+  },
+  "notification_panel": {
+    "button": false
   }
 }

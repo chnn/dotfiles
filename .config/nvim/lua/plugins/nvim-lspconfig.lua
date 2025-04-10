@@ -1,14 +1,11 @@
 return {
   "neovim/nvim-lspconfig",
   dependencies = {
-    "hrsh7th/cmp-nvim-lsp",
+    "saghen/blink.cmp",
   },
   config = function()
     local nvim_lsp = require("lspconfig")
-    local capabilities = require("cmp_nvim_lsp").default_capabilities()
-
-    nvim_lsp.jsonls.setup({ capabilities = capabilities })
-    nvim_lsp.rust_analyzer.setup({ capabilities = capabilities, single_file_support = false })
+    local capabilities = require("blink.cmp").get_lsp_capabilities()
 
     nvim_lsp.eslint.setup({
       capabilities = capabilities,
@@ -29,16 +26,18 @@ return {
 
     nvim_lsp.ts_ls.setup({
       capabilities = capabilities,
-      filetypes = {
-        "javascript",
-        "typescript",
-        "typescriptreact",
-        "typescript.tsx",
-      },
       flags = { debounce_text_changes = 500 },
       init_options = {
         preferences = {
           importModuleSpecifierPreference = "non-relative",
+          autoImportSpecifierExcludeRegexes = { "^packages" },
+        },
+        tsserver = {
+          maxTsServerMemory = 32768,
+          watchOptions = {
+            excludeDirectories = { "**/node_modules", "**/.yarn", "**/.sarif" },
+            excludeFiles = { ".pnp.cjs" },
+          },
         },
       },
       on_attach = function(client, bufnr)
