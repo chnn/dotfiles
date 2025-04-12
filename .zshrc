@@ -51,7 +51,7 @@ setopt SHARE_HISTORY
 
 # Alias'
 alias e="$EDITOR"
-alias ls="exa -l"
+alias ls="ls -l"
 alias cat="bat"
 alias f="ranger"
 alias tma="tmux attach -d || tmux"
