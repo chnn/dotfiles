@@ -7,11 +7,11 @@
   "tab_bar": {
     "show": true
   },
-  "assistant": {
+  "agent": {
     "button": false,
     "default_model": {
-      "provider": "copilot_chat",
-      "model": "gpt-4o"
+      "provider": "zed.dev",
+      "model": "claude-3-7-sonnet-latest"
     },
     "version": "2"
   },
@@ -40,10 +40,11 @@
   "ui_font_family": ".SystemUIFont",
   "buffer_font_family": "JetBrainsMono Nerd Font",
   "buffer_font_weight": 300,
-  "buffer_font_size": null,
+  "buffer_font_size": 15,
   "terminal": {
-    "font_size": 14,
-    "font_family": "JetBrainsMono Nerd Font"
+    "font_size": 15,
+    "font_family": "JetBrainsMono Nerd Font",
+    "font_weight": 300
   },
   "gutter": { "code_actions": false },
   "toolbar": {

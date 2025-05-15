@@ -2,10 +2,19 @@ return {
   "stevearc/conform.nvim",
   config = function()
     require("conform").setup({
-      format_on_save = {
-        lsp_fallback = false,
-        timeout_ms = 500,
-      },
+      format_on_save = function(bufnr)
+        -- Disable autoformat on certain filetypes
+        local ignore_filetypes = { "sql", "json" }
+        if vim.tbl_contains(ignore_filetypes, vim.bo[bufnr].filetype) then
+          return
+        end
+        -- Disable autoformat for files in a certain path
+        local bufname = vim.api.nvim_buf_get_name(bufnr)
+        if bufname:match("/node_modules/") then
+          return
+        end
+        return { timeout_ms = 500, lsp_format = false }
+      end,
       formatters = {
         stylua = {
           command = "stylua",
@@ -24,6 +33,7 @@ return {
         go = { "gofmt", "goimports" },
         javascript = { "prettierd", "prettier", stop_after_first = true },
         javascriptreact = { "prettierd", "prettier", stop_after_first = true },
+        sql = { "sql_formatter" },
         json = { "prettierd", "prettier", stop_after_first = true },
         less = { "prettierd", "prettier", stop_after_first = true },
         lua = { "stylua" },
