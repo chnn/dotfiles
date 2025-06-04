@@ -1,61 +1,44 @@
 {
-  "indent_guides": {
-    "enabled": false
-  },
-  "features": {
-    "edit_prediction_provider": "zed"
-  },
-  "cursor_blink": false,
-  "scrollbar": { "show": "never" },
-  "tab_bar": {
-    "show": true
-  },
   "agent": {
-    "button": false,
     "default_model": {
-      "provider": "zed.dev",
-      "model": "claude-3-7-sonnet-latest"
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-latest"
     },
     "version": "2"
   },
-  "copilot": {
-    "disabled_globs": ["*.md", "*.txt"]
-  },
-  "edit_predictions": {
-    "disabled_globs": ["*.md", "*.txt"]
-    // "mode": "subtle"
-  },
-  "git": {
-    "inline_blame": {
-      "enabled": false
-    }
-  },
-  "theme": "Base16 Humanoid light",
-  "telemetry": {
-    "diagnostics": false,
-    "metrics": false
-  },
-  "vim_mode": true,
-  "vim": {
-    "use_system_clipboard": "never"
-  },
-  "ui_font_size": 14,
-  "ui_font_family": ".SystemUIFont",
   "buffer_font_family": "JetBrainsMono Nerd Font",
-  "buffer_font_weight": 300,
   "buffer_font_size": 15,
-  "terminal": {
-    "font_size": 15,
-    "font_family": "JetBrainsMono Nerd Font",
-    "font_weight": 300
+  "buffer_font_weight": 300,
+  "collaboration_panel": { "button": false },
+  "copilot": { "disabled_globs": ["*.md", "*.txt"] },
+  "cursor_blink": false,
+  "edit_predictions": {
+    "disabled_globs": ["*.md", "*.txt"],
+    "mode": "subtle"
   },
+  "features": { "edit_prediction_provider": "zed" },
+  "git": { "inline_blame": { "enabled": false } },
   "gutter": { "code_actions": false },
-  "toolbar": {
-    "quick_actions": false,
-    "breadcrumbs": false,
-    "selections_menu": false
-  },
+  "indent_guides": { "enabled": false },
   "lsp": {
+    "eslint": {
+      "settings": {
+        "nodePath": ".yarn/sdks",
+        "rulesCustomizations": [
+          // Disable annoying autofixable rules
+          { "rule": "prettier/prettier", "severity": "off" },
+          { "rule": "arca/import-ordering", "severity": "off" },
+          { "rule": "arca/newline-after-import-section", "severity": "off" },
+          {
+            "rule": "@typescript-eslint/consistent-type-imports",
+            "severity": "off"
+          },
+          { "rule": "quotes", "severity": "off" },
+          { "rule": "import/no-duplicates", "severity": "off" },
+          { "rule": "unused-imports/no-unused-imports", "severity": "off" }
+        ]
+      }
+    },
     "vtsls": {
       "settings": {
         "vtsls": {
@@ -69,19 +52,24 @@
       }
     }
   },
-  "project_panel": {
-    "button": false
+  "tab_bar": { "show": true },
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false
   },
-  "outline_panel": {
-    "button": false
+  "terminal": {
+    "font_size": 15,
+    "font_family": "JetBrainsMono Nerd Font",
+    "font_weight": 300
   },
-  "collaboration_panel": {
-    "button": false
+  "theme": "Base16 Default Dark",
+  "toolbar": {
+    "quick_actions": true,
+    "breadcrumbs": false,
+    "selections_menu": true
   },
-  "chat_panel": {
-    "button": "never"
-  },
-  "notification_panel": {
-    "button": false
-  }
+  "ui_font_family": ".SystemUIFont",
+  "ui_font_size": 14,
+  "vim": { "use_system_clipboard": "never" },
+  "vim_mode": true
 }
