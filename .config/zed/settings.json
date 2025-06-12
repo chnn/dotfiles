@@ -20,6 +20,14 @@
   "git": { "inline_blame": { "enabled": false } },
   "gutter": { "code_actions": false },
   "indent_guides": { "enabled": false },
+  "languages": {
+    "TypeScript": {
+      "language_servers": ["typescript-language-server", "!vtsls"]
+    },
+    "TSX": {
+      "language_servers": ["typescript-language-server", "!vtsls"]
+    }
+  },
   "lsp": {
     "eslint": {
       "settings": {

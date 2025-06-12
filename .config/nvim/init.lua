@@ -41,6 +41,11 @@ vim.g.mapleader = " "
 -- Show whitespace
 vim.o.list = true
 
+-- Load .nvim.lua files in cwd and all parents if on the trust list
+--
+-- To mark a file as trusted, open it and run `:trust`
+vim.o.exrc = true
+
 -- Do not timeout for combo key presses
 vim.o.timeout = false
 vim.o.ttimeout = true
@@ -65,30 +70,8 @@ augroup AutoOpenQuickFix
 augroup end
 ]])
 
--- -- Saner delete/cut behavior. Assumes that any deletion, cut, or change starts
--- -- with a selection (like Helix). Use `d` to delete and `x` to cut a selection.
--- -- Changing a selection with `c` or pasting a selection with `p` will not copy
--- -- the selection to the keyboard
--- vim.keymap.set("x", "d", '"_x', { desc = "Delete without yanking selected text" })
--- vim.keymap.set("x", "c", '"_c', { desc = "Change without yanking selected text" })
--- vim.keymap.set("x", "p", '"_dP', { desc = "Paste without yanking selected text" })
-
 -- Keymap for yanking to the system cliipboard
 vim.keymap.set({ "n", "x" }, "<leader>y", '"*y', { desc = "Yank to system clipboard" })
---
--- -- Additional paste keymaps
--- vim.keymap.set("n", "=p", ":put <CR>`[v`]=", {
---   desc = "Paste linewise on next line and adjust indent",
---   silent = true,
--- })
--- vim.keymap.set("n", "=P", ":put! <CR>`[v`]=", {
---   desc = "Paste linewise on previous line and adjust indent",
---   silent = true,
--- })
--- vim.keymap.set({ "n", "x" }, "<leader>v", "'`[' . strpart(getregtype(), 0, 1) . '`]'", {
---   desc = "Select last paste",
---   expr = true,
--- })
 
 -- Navigate soft-lines by default
 vim.keymap.set("n", "j", "gj", { desc = "Move cursor down" })
@@ -117,7 +100,7 @@ vim.keymap.set("n", "<C-=>", "<C-W><C-=>", { desc = "Equalize panes" })
 vim.keymap.set("n", "<C-q>", "<C-W><C-q>", { desc = "Close pane" })
 vim.keymap.set("n", "<C-s>", "<C-W>s", { desc = "Split pane" })
 
--- <leader>p to copy filename of buffer under the cursor to system clipboard
+-- Shortcut to copy filename of buffer under the cursor to system clipboard
 vim.keymap.set(
   "n",
   "<C-k>p",
