@@ -1,0 +1,11 @@
+# theme = dark:humanoid-dark,light:humanoid-light
+# theme = base16-default-dark
+theme = one-light
+font-style = Medium
+font-size = 16
+adjust-cell-width = -10%
+window-new-tab-position = end
+
+# disable ligatures
+font-feature = -calt,-liga,-dlig
+keybind = shift+enter=text:\n
