@@ -1,13 +1,13 @@
 return {
   "saghen/blink.cmp",
   version = "1.*",
-  dependencies = {
-    "milanglacier/minuet-ai.nvim",
-  },
   config = function()
     require("blink-cmp").setup({
+      fuzzy = { implementation = "rust" },
       completion = {
-        documentation = { auto_show = true },
+        documentation = {
+          auto_show = true,
+        },
         list = {
           selection = {
             auto_insert = false,
@@ -16,7 +16,6 @@ return {
       },
       keymap = {
         preset = "enter",
-        ["<A-l>"] = require("minuet").make_blink_map(),
       },
       signature = { enabled = true },
       sources = {
@@ -33,16 +32,12 @@ return {
           }, vim.bo.filetype) then
             return 1000
           else
-            return 1
+            return 3
           end
         end,
         providers = {
           lsp = {
             async = true,
-          },
-          minuet = {
-            name = "minuet",
-            module = "minuet.blink",
           },
         },
       },

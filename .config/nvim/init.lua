@@ -10,7 +10,7 @@ vim.o.ruler = true
 vim.o.cursorline = false
 vim.o.signcolumn = "yes"
 vim.o.mouse = ""
-vim.o.conceallevel = 1
+vim.o.conceallevel = 0
 vim.opt.fillchars:append({ vert = " ", eob = " " })
 
 -- Folds
@@ -139,12 +139,22 @@ local diagnostic_severity = { min = vim.diagnostic.severity.WARN }
 vim.diagnostic.config({
   signs = { severity = diagnostic_severity },
   underline = { severity = diagnostic_severity },
-  update_in_insert = true,
+  update_in_insert = false,
   severity_sort = true,
   jump = { float = true, severity = diagnostic_severity },
 })
 
 vim.keymap.set("n", "<D-.>", vim.lsp.buf.code_action, { desc = "Show code actions" })
+
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+  callback = function(ev)
+    local client = vim.lsp.get_client_by_id(ev.data.client_id)
+    if client then
+      client.server_capabilities.semanticTokensProvider = nil
+    end
+  end,
+})
 
 vim.keymap.set("n", "<leader>e", function()
   local lnum = vim.api.nvim_eval("line('.') - 1")

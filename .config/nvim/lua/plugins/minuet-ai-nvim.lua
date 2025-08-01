@@ -7,10 +7,18 @@ return {
     require("minuet").setup({
       provider = "claude",
       provider_options = {
-        claude = { model = "claude-opus-4-20250514" },
-        gemini = {
-          -- model = "gemini-2.5-flash-preview-05-20",
-          model = "gemini-2.5-pro-preview-05-06",
+        claude = { model = "claude-sonnet-4-20250514" },
+        gemini = { model = "gemini-2.5-flash" },
+      },
+      virtualtext = {
+        auto_trigger_ft = {},
+        keymap = {
+          accept = "<A-CR>",
+          prev = "<A-[>",
+          next = "<A-l>",
+          dismiss = "<A-e>",
+          -- accept_line = "<A-a>",
+          -- accept_n_lines = "<A-z>",
         },
       },
     })

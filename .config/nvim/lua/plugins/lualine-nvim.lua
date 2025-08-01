@@ -10,9 +10,9 @@ return {
       sections = {
         lualine_a = { "mode" },
         lualine_b = {},
-        lualine_c = { { "filename", path = 1 }, "diff" },
+        lualine_c = { { "filename", path = 1 } },
         lualine_x = { { "diagnostics", sections = { "error", "warn" } }, "location" },
-        lualine_y = { "filetype" },
+        lualine_y = {},
         lualine_z = {},
       },
       inactive_sections = {

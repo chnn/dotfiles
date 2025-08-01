@@ -4,8 +4,7 @@
     "body": [
       "import * as React from 'react';",
       "",
-      "export const ${1:MyComponent} = ({",
-      "}: {",
+      "export const ${1:MyComponent} = (props: {",
       "}) => {",
       "    return 'TODO: Implement ${1}'",
       "}"
