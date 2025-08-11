@@ -1,6 +1,4 @@
-# theme = dark:humanoid-dark,light:humanoid-light
-# theme = base16-default-dark
-theme = one-light
+theme = melange_dark
 font-style = Medium
 font-size = 16
 adjust-cell-width = -10%
