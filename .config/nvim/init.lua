@@ -25,11 +25,6 @@ vim.o.directory = vim.fn.stdpath("cache") .. "/swap"
 vim.o.backupdir = vim.fn.stdpath("cache") .. "/backup"
 vim.o.undodir = vim.fn.stdpath("cache") .. "/undo"
 
--- Identation
-vim.o.shiftwidth = 2
-vim.o.tabstop = 2
-vim.o.expandtab = true
-
 -- Search and replace
 vim.o.incsearch = true
 vim.o.hlsearch = true
@@ -81,7 +76,24 @@ vim.keymap.set("n", "k", "gk", { desc = "Move cursor up" })
 vim.cmd([[autocmd FileType markdown set briopt+=list:-1]])
 
 -- Use `<leader>x` to complete the current markdown bullet
-vim.keymap.set("n", "<leader>x", ":.s/\\[ \\]/[x]<CR>:noh<CR>", { silent = true })
+vim.keymap.set("n", "<leader>x", function()
+  local line = vim.api.nvim_get_current_line()
+  local row = vim.api.nvim_win_get_cursor(0)[1]
+
+  local unchecked_pattern = "^(%s*- )%[ %](.*)$"
+  local checked_pattern = "^(%s*- )%[x%](.*)$"
+
+  local new_line
+  if line:match(unchecked_pattern) then
+    new_line = line:gsub(unchecked_pattern, "%1[x]%2")
+  elseif line:match(checked_pattern) then
+    new_line = line:gsub(checked_pattern, "%1[ ]%2")
+  else
+    return
+  end
+
+  vim.api.nvim_buf_set_lines(0, row - 1, row, false, { new_line })
+end, { desc = "Toggle markdown checkbox" })
 
 -- Keep selected text selected when fixing indentation
 vim.keymap.set("v", "<", "<gv", { desc = "Decrease selection indent" })
@@ -117,9 +129,6 @@ vim.keymap.set("n", "yo<space>", function()
   end
 end, { silent = true, desc = "Toggle statusline visibility" })
 
--- Exit terminal mode with Esc
-vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { desc = "Exit terminal insertion" })
-
 -- Close all buffers but this one with :Rlw ("reload workspace")
 vim.cmd([[command! Rlw %bd|e#]])
 
@@ -127,12 +136,10 @@ vim.cmd([[command! Rlw %bd|e#]])
 vim.cmd([[command! -nargs=1 Wt exe 'w ' . strftime("%F") . ' ' . "<args>"]])
 
 -- Replace `\n` with actual newlines and remove `\` escape chars from quotes
-vim.api.nvim_create_user_command("DecodeSQL", function()
+vim.api.nvim_create_user_command("DecodeJSONString", function()
   vim.cmd([[%s/\\n/\r/g]])
   vim.cmd([[%s/\\"/"/g]])
 end, {})
-
--- LSP keybindings
 
 local diagnostic_severity = { min = vim.diagnostic.severity.WARN }
 
@@ -151,27 +158,36 @@ vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(ev)
     local client = vim.lsp.get_client_by_id(ev.data.client_id)
     if client then
+      -- Disable highlighting from LSP servers (prefer Treesitter)
       client.server_capabilities.semanticTokensProvider = nil
     end
   end,
 })
 
-vim.keymap.set("n", "<leader>e", function()
-  local lnum = vim.api.nvim_eval("line('.') - 1")
-  local d = vim.diagnostic.get(0, { lnum = lnum, severity_sort = true })[1]
+local function open_diagnostic_in_buffer()
+  -- Get diagnostics at current cursor position
+  local diagnostics = vim.diagnostic.get(0, { lnum = vim.fn.line(".") - 1 })
 
-  if d == nil then
+  if #diagnostics == 0 then
+    vim.notify("No diagnostics found at cursor position", vim.log.levels.INFO)
     return
   end
 
-  -- Using a tmpfile because I can't figure out how to escape | and " when
-  -- pasting a register using :put
-  local tmpfile_path = vim.fn.stdpath("cache") .. "/diagnostic"
-  local f = io.open(tmpfile_path, "w")
-  f:write(d.message)
-  f:close()
-  vim.api.nvim_command("pedit " .. tmpfile_path)
-end, { desc = "Open diagnostic message in new buffer" })
+  local diagnostic = diagnostics[1]
+
+  local buf = vim.api.nvim_create_buf(false, true)
+  vim.api.nvim_buf_set_option(buf, "buftype", "nofile")
+  vim.api.nvim_buf_set_option(buf, "bufhidden", "wipe")
+  vim.api.nvim_buf_set_option(buf, "filetype", "markdown")
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, { diagnostic.message })
+  vim.cmd("split")
+  vim.api.nvim_win_set_buf(0, buf)
+  vim.api.nvim_buf_set_option(buf, "modifiable", false)
+  vim.api.nvim_buf_set_option(buf, "readonly", true)
+end
+
+vim.api.nvim_create_user_command("DiagnosticOpen", open_diagnostic_in_buffer, {})
+vim.keymap.set("n", "<leader>do", open_diagnostic_in_buffer, { desc = "Open diagnostic in buffer" })
 
 -- Bootstrap lazy.nvim and load plugins
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"

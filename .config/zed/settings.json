@@ -70,14 +70,14 @@
     "font_family": "JetBrainsMono Nerd Font",
     "font_weight": 300
   },
-  "theme": "Base16 Default Dark",
+  "theme": "Melange Light",
   "toolbar": {
     "quick_actions": true,
     "breadcrumbs": false,
     "selections_menu": true
   },
   "ui_font_family": ".SystemUIFont",
-  "ui_font_size": 14,
+  "ui_font_size": 16,
   "vim": { "use_system_clipboard": "never" },
   "vim_mode": true
 }

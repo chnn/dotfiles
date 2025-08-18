@@ -1,6 +1,7 @@
-return {
-  "razak17/tailwind-fold.nvim",
-  opts = {},
-  dependencies = { "nvim-treesitter/nvim-treesitter" },
-  ft = { "typescriptreact" },
-}
+return {}
+-- return {
+--   "razak17/tailwind-fold.nvim",
+--   opts = {},
+--   dependencies = { "nvim-treesitter/nvim-treesitter" },
+--   ft = { "typescriptreact" },
+-- }
