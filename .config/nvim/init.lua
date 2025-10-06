@@ -10,7 +10,7 @@ vim.o.ruler = true
 vim.o.cursorline = false
 vim.o.signcolumn = "yes"
 vim.o.mouse = ""
-vim.o.conceallevel = 0
+vim.o.conceallevel = 2
 vim.opt.fillchars:append({ vert = " ", eob = " " })
 
 -- Folds
@@ -35,6 +35,12 @@ vim.g.mapleader = " "
 
 -- Show whitespace
 vim.o.list = true
+
+-- Default indent settings
+vim.o.expandtab = true
+vim.o.tabstop = 4 -- Display width of tab char
+vim.o.shiftwidth = 4 -- Number of spaces used for indentation not in insert mode (with >>, ==, etc.)
+vim.o.softtabstop = 4 -- How many spaces are inserted when pressing <Tab> in insert mode
 
 -- Load .nvim.lua files in cwd and all parents if on the trust list
 --
@@ -141,14 +147,12 @@ vim.api.nvim_create_user_command("DecodeJSONString", function()
   vim.cmd([[%s/\\"/"/g]])
 end, {})
 
-local diagnostic_severity = { min = vim.diagnostic.severity.WARN }
-
 vim.diagnostic.config({
-  signs = { severity = diagnostic_severity },
-  underline = { severity = diagnostic_severity },
+  signs = { severity = vim.diagnostic.severity.ERROR },
+  underline = { severity = vim.diagnostic.severity.ERROR },
   update_in_insert = false,
   severity_sort = true,
-  jump = { float = true, severity = diagnostic_severity },
+  jump = { float = true, severity = vim.diagnostic.severity.ERROR },
 })
 
 vim.keymap.set("n", "<D-.>", vim.lsp.buf.code_action, { desc = "Show code actions" })
@@ -179,7 +183,7 @@ local function open_diagnostic_in_buffer()
   vim.api.nvim_buf_set_option(buf, "buftype", "nofile")
   vim.api.nvim_buf_set_option(buf, "bufhidden", "wipe")
   vim.api.nvim_buf_set_option(buf, "filetype", "markdown")
-  vim.api.nvim_buf_set_lines(buf, 0, -1, false, { diagnostic.message })
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, vim.split(diagnostic.message, "\n"))
   vim.cmd("split")
   vim.api.nvim_win_set_buf(0, buf)
   vim.api.nvim_buf_set_option(buf, "modifiable", false)
@@ -188,6 +192,16 @@ end
 
 vim.api.nvim_create_user_command("DiagnosticOpen", open_diagnostic_in_buffer, {})
 vim.keymap.set("n", "<leader>do", open_diagnostic_in_buffer, { desc = "Open diagnostic in buffer" })
+
+local function open_diagnostic_float_and_focus()
+  local float_win = vim.diagnostic.open_float()
+  if float_win then
+    vim.api.nvim_set_current_win(float_win)
+  end
+end
+
+-- Map to a key
+vim.keymap.set("n", "<leader>df", open_diagnostic_float_and_focus, { desc = "Open and focus diagnostic float" })
 
 -- Bootstrap lazy.nvim and load plugins
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"

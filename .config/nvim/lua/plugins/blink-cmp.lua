@@ -10,12 +10,25 @@ return {
         },
         list = {
           selection = {
-            auto_insert = false,
+            preselect = false,
+            auto_insert = true,
           },
+        },
+        trigger = {
+          prefetch_on_insert = false,
+
+          show_on_blocked_trigger_characters = function(ctx)
+            if vim.bo.filetype == "markdown" then
+              return { " ", "\n", "\t", ".", "/", "(", "[" }
+            end
+
+            return { " ", "\n", "\t" }
+          end,
         },
       },
       keymap = {
         preset = "enter",
+        ["<A-]>"] = require("minuet").make_blink_map(),
       },
       signature = { enabled = true },
       sources = {
@@ -25,19 +38,21 @@ return {
           "buffer",
           "path",
         },
-        min_keyword_length = function()
-          if vim.tbl_contains({
-            "text",
-            "markdown",
-          }, vim.bo.filetype) then
-            return 1000
-          else
-            return 3
-          end
-        end,
+
+        per_filetype = {
+          markdown = { "snippets", "lsp", "path" },
+        },
+
+        min_keyword_length = 3,
+
         providers = {
-          lsp = {
+          lsp = { async = true },
+          minuet = {
+            name = "minuet",
+            module = "minuet.blink",
             async = true,
+            timeout_ms = 3000,
+            score_offset = 50,
           },
         },
       },

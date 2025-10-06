@@ -46,6 +46,17 @@ return {
       desc = "Go to type definition",
     },
     {
+      "gs",
+      function()
+        Snacks.picker.lsp_symbols({
+          filter = {
+            default = true,
+          },
+        })
+      end,
+      desc = "Go to type definition",
+    },
+    {
       "<D-p>",
       function()
         Snacks.picker.smart()

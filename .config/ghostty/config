@@ -4,7 +4,6 @@ font-size = 16
 adjust-cell-width = -10%
 adjust-cell-height = 5%
 window-new-tab-position = end
-desktop-notifications = true
 
 # disable ligatures
 font-feature = -calt,-liga,-dlig

@@ -1,0 +1,23 @@
+{
+  "rfc": {
+    "prefix": "beforeafter",
+    "body": [
+      "<table>",
+      "    <tbody>",
+      "        <tr>",
+      "            <th><b>Before</b></th>",
+      "            <th><b>After</b></th>",
+      "        </tr>",
+      "        <tr>",
+      "            <td>",
+      "                <!-- Insert before image here -->",
+      "            </td>",
+      "            <td>",
+      "                <!-- Insert after image here -->",
+      "            </td>",
+      "        </tr>",
+      "    </tbody>",
+      "</table>"
+    ]
+  }
+}
