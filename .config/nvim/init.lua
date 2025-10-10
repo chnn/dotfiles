@@ -189,18 +189,13 @@ local function open_diagnostic_in_buffer()
   vim.api.nvim_buf_set_option(buf, "modifiable", false)
   vim.api.nvim_buf_set_option(buf, "readonly", true)
 end
-
 vim.api.nvim_create_user_command("DiagnosticOpen", open_diagnostic_in_buffer, {})
 vim.keymap.set("n", "<leader>do", open_diagnostic_in_buffer, { desc = "Open diagnostic in buffer" })
 
 local function open_diagnostic_float_and_focus()
-  local float_win = vim.diagnostic.open_float()
-  if float_win then
-    vim.api.nvim_set_current_win(float_win)
-  end
+  vim.diagnostic.open_float()
+  vim.diagnostic.open_float()
 end
-
--- Map to a key
 vim.keymap.set("n", "<leader>df", open_diagnostic_float_and_focus, { desc = "Open and focus diagnostic float" })
 
 -- Bootstrap lazy.nvim and load plugins

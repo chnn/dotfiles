@@ -7,7 +7,14 @@ return {
       function()
         vim.cmd("Obsidian today")
       end,
-      desc = "Open file picker",
+      desc = "Open today's note",
+    },
+    {
+      "<space>nn",
+      function()
+        vim.cmd("Obsidian new")
+      end,
+      desc = "Create a new note",
     },
     {
       "<space>nb",
@@ -23,11 +30,18 @@ return {
       end,
       desc = "Open grep for notes",
     },
+    {
+      "<space>np",
+      function()
+        vim.cmd("Obsidian quick_switch")
+      end,
+      desc = "Open a note",
+    },
   },
   opts = {
     workspaces = { { name = "Notes", path = "~/Documents/Notes" } },
     legacy_commands = false,
-    disable_frontmatter = true,
+    frontmatter = { enabled = false },
     footer = { enabled = false },
     picker = { name = "snacks.pick" },
     ui = { enable = false, ignore_conceal_warn = true },

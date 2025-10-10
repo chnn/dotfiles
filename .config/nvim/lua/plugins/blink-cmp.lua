@@ -5,48 +5,32 @@ return {
     require("blink-cmp").setup({
       fuzzy = { implementation = "rust" },
       completion = {
-        documentation = {
-          auto_show = true,
-        },
+        documentation = { auto_show = true },
         list = {
           selection = {
             preselect = false,
             auto_insert = true,
           },
         },
-        trigger = {
-          prefetch_on_insert = false,
-
-          show_on_blocked_trigger_characters = function(ctx)
-            if vim.bo.filetype == "markdown" then
-              return { " ", "\n", "\t", ".", "/", "(", "[" }
-            end
-
-            return { " ", "\n", "\t" }
-          end,
-        },
+        -- trigger = { prefetch_on_insert = false },
       },
       keymap = {
         preset = "enter",
-        ["<A-]>"] = require("minuet").make_blink_map(),
+        ["<C-a>"] = require("minuet").make_blink_map(),
+        ["<C-l>"] = {
+          function(cmp)
+            cmp.show({ providers = { "lsp" } })
+          end,
+        },
       },
       signature = { enabled = true },
       sources = {
-        default = {
-          "snippets",
-          "lsp",
-          "buffer",
-          "path",
-        },
-
-        per_filetype = {
-          markdown = { "snippets", "lsp", "path" },
-        },
-
         min_keyword_length = 3,
-
+        default = { "snippets", "path", "buffer" },
+        per_filetype = {
+          markdown = { "snippets", "path" },
+        },
         providers = {
-          lsp = { async = true },
           minuet = {
             name = "minuet",
             module = "minuet.blink",
