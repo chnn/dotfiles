@@ -9,17 +9,21 @@ return {
         list = {
           selection = {
             preselect = false,
-            auto_insert = true,
+            auto_insert = false,
           },
         },
-        -- trigger = { prefetch_on_insert = false },
+        trigger = { prefetch_on_insert = false },
       },
       keymap = {
         preset = "enter",
-        ["<C-a>"] = require("minuet").make_blink_map(),
+        ["<C-S-l>"] = require("minuet").make_blink_map(),
         ["<C-l>"] = {
           function(cmp)
-            cmp.show({ providers = { "lsp" } })
+            if vim.bo.filetype == "markdown" then
+              cmp.show({ providers = { "buffer" } })
+            else
+              cmp.show({ providers = { "lsp" } })
+            end
           end,
         },
       },
@@ -27,9 +31,7 @@ return {
       sources = {
         min_keyword_length = 3,
         default = { "snippets", "path", "buffer" },
-        per_filetype = {
-          markdown = { "snippets", "path" },
-        },
+        per_filetype = { markdown = { "snippets", "path" } },
         providers = {
           minuet = {
             name = "minuet",

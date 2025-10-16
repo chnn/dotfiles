@@ -3,3 +3,11 @@
 [ui]
 pager = "delta"
 diff-formatter = ":git"
+
+[aliases]
+l = ["log", "-r", "(trunk()..@):: | (trunk()..@)-"]
+lpr = ["log", "-r", "pr_base()-..@"]
+
+[revset-aliases]
+"pr_head()" = "heads(trunk()..@ & tracked_remote_bookmarks())"
+"pr_base()" = "coalesce(heads(trunk()..pr_head()- & tracked_remote_bookmarks()), trunk())"

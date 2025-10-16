@@ -1,20 +1,11 @@
 return {
   "stevearc/conform.nvim",
   config = function()
+    vim.keymap.set("n", "<leader>=", function()
+      require("conform").format({ async = true, quiet = true })
+    end, { desc = "Format buffer" })
+
     require("conform").setup({
-      format_on_save = function(bufnr)
-        -- Disable autoformat on certain filetypes
-        local ignore_filetypes = { "sql", "json" }
-        if vim.tbl_contains(ignore_filetypes, vim.bo[bufnr].filetype) then
-          return
-        end
-        -- Disable autoformat for files in a certain path
-        local bufname = vim.api.nvim_buf_get_name(bufnr)
-        if bufname:match("/node_modules/") then
-          return
-        end
-        return { timeout_ms = 500, lsp_format = false }
-      end,
       formatters = {
         stylua = {
           command = "stylua",
@@ -29,23 +20,30 @@ return {
         },
       },
       formatters_by_ft = {
-        css = { "prettierd", "prettier", stop_after_first = true },
+        css = { "prettier" },
         go = { "gofmt", "goimports" },
-        javascript = { "prettierd", "prettier", stop_after_first = true },
-        javascriptreact = { "prettierd", "prettier", stop_after_first = true },
+        javascript = { "prettier" },
+        javascriptreact = { "prettier" },
         sql = { "sql_formatter" },
-        json = { "prettierd", "prettier", stop_after_first = true },
-        less = { "prettierd", "prettier", stop_after_first = true },
+        json = { "prettier" },
+        less = { "prettier" },
         lua = { "stylua" },
         rust = { "rustfmt" },
         terraform = { "terraform_fmt" },
-        typescript = { "prettierd", "prettier", stop_after_first = true },
-        typescriptreact = { "prettierd", "prettier", stop_after_first = true },
+        typescript = { "prettier" },
+        typescriptreact = { "prettier" },
       },
     })
 
-    vim.keymap.set("n", "<leader>=", function()
-      require("conform").format({ async = true, quiet = true })
-    end, { desc = "Format buffer" })
+    -- Set up on a per-project basis with something like this in .nvim.lua:
+    --
+    --     require("conform").setup({
+    --       format_on_save = { timeout_ms = 2000, lsp_format = "fallback" },
+    --       formatters_by_ft = {
+    --         less = { "prettierd" },
+    --         typescript = { lsp_format = "fallback" },
+    --         typescriptreact = { lsp_format = "fallback" },
+    --       },
+    --     })
   end,
 }

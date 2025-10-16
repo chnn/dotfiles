@@ -1,6 +1,5 @@
 return {
   "obsidian-nvim/obsidian.nvim",
-  version = "*",
   keys = {
     {
       "<space>nt",
@@ -51,7 +50,7 @@ return {
 
     note_id_func = function(title)
       if title ~= nil then
-        return os.date("%Y-%m-%d") .. " " .. title:gsub("[^A-Za-z0-9- ]", ""):lower()
+        return os.date("%Y-%m-%d") .. " " .. title:gsub("[^A-Za-z0-9-_]", ""):lower()
       else
         local suffix = ""
 
@@ -59,7 +58,7 @@ return {
           suffix = suffix .. string.char(math.random(65, 90))
         end
 
-        return tostring(os.time()) .. "-" .. suffix
+        return os.date("%Y-%m-%d") .. "_" .. suffix
       end
     end,
   },

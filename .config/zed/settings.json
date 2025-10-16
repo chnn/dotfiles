@@ -1,16 +1,15 @@
 {
   "agent": {
-    "default_model": {
+    "inline_assistant_model": {
       "provider": "anthropic",
-      "model": "claude-sonnet-4-latest"
+      "model": "claude-sonnet-4-5-latest"
     },
-    "version": "2"
+    "model_parameters": []
   },
   "buffer_font_family": "JetBrainsMono Nerd Font",
-  "buffer_font_size": 15,
+  "buffer_font_size": 15.0,
   "buffer_font_weight": 300,
   "collaboration_panel": { "button": false },
-  "copilot": { "disabled_globs": ["*.md", "*.txt"] },
   "cursor_blink": false,
   "edit_predictions": {
     "disabled_globs": ["*.md", "*.txt"],
@@ -18,48 +17,7 @@
   },
   "features": { "edit_prediction_provider": "zed" },
   "git": { "inline_blame": { "enabled": false } },
-  "gutter": { "code_actions": false },
   "indent_guides": { "enabled": false },
-  "languages": {
-    "TypeScript": {
-      "language_servers": ["typescript-language-server", "!vtsls"]
-    },
-    "TSX": {
-      "language_servers": ["typescript-language-server", "!vtsls"]
-    }
-  },
-  "lsp": {
-    "eslint": {
-      "settings": {
-        "nodePath": ".yarn/sdks",
-        "rulesCustomizations": [
-          // Disable annoying autofixable rules
-          { "rule": "prettier/prettier", "severity": "off" },
-          { "rule": "arca/import-ordering", "severity": "off" },
-          { "rule": "arca/newline-after-import-section", "severity": "off" },
-          {
-            "rule": "@typescript-eslint/consistent-type-imports",
-            "severity": "off"
-          },
-          { "rule": "quotes", "severity": "off" },
-          { "rule": "import/no-duplicates", "severity": "off" },
-          { "rule": "unused-imports/no-unused-imports", "severity": "off" }
-        ]
-      }
-    },
-    "vtsls": {
-      "settings": {
-        "vtsls": {
-          "autoUseWorkspaceTsdk": true
-        },
-        "typescript": {
-          "preferences": {
-            "importModuleSpecifier": "non-relative"
-          }
-        }
-      }
-    }
-  },
   "tab_bar": { "show": true },
   "telemetry": {
     "diagnostics": false,
@@ -70,7 +28,7 @@
     "font_family": "JetBrainsMono Nerd Font",
     "font_weight": 300
   },
-  "theme": "Melange Light",
+  "theme": "Melange Dark",
   "toolbar": {
     "quick_actions": true,
     "breadcrumbs": false,

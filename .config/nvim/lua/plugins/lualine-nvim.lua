@@ -1,7 +1,9 @@
 return {
   "nvim-lualine/lualine.nvim",
+  dependencies = { "savq/melange-nvim" },
   config = function()
     require("lualine").setup({
+      extensions = { "oil" },
       options = {
         icons_enabled = false,
         section_separators = { left = "", right = "" },

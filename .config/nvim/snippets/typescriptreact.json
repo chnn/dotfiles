@@ -6,8 +6,12 @@
       "",
       "export const ${1:MyComponent} = (props: {",
       "}) => {",
-      "    return 'TODO: Implement ${1}'",
+      "    return <>TODO</>",
       "}"
     ]
+  },
+  "import": {
+    "prefix": "imp",
+    "body": ["import {${1}} from '${2}';"]
   }
 }
