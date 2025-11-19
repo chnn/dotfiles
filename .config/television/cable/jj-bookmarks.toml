@@ -1,0 +1,8 @@
+[metadata]
+name = "jj-bookmarks"
+description = "A channel to switch to a jj bookmark."
+requirements = ["jj"]
+
+[source]
+output = "{strip_ansi|split:\\::0}"
+command = "jj bookmark list --sort committer-date-"

@@ -7,6 +7,7 @@ diff-formatter = ":git"
 [aliases]
 l = ["log", "-r", "(trunk()..@):: | (trunk()..@)-"]
 lpr = ["log", "-r", "pr_base()-..@"]
+bl = ["bookmark", "list", "--sort", "committer-date-"]
 
 [revset-aliases]
 "pr_head()" = "heads(trunk()..@ & tracked_remote_bookmarks())"
