@@ -110,12 +110,13 @@ return {
       gh = {},
     })
 
-    local function grep_and_paste()
+    vim.keymap.set("n", "<leader>i", function()
       local target_buf = vim.api.nvim_get_current_buf()
       local target_win = vim.api.nvim_get_current_win()
-      local cursor_pos = vim.api.nvim_win_get_cursor(target_win)
+      local word = vim.fn.expand("<cword>")
 
       Snacks.picker.grep({
+        search = "import.*" .. word,
         confirm = function(picker, item)
           if not item then
             return
@@ -134,13 +135,10 @@ return {
           vim.api.nvim_set_current_win(target_win)
           vim.api.nvim_set_current_buf(target_buf)
 
-          -- Insert the line at the current cursor position and move cursor
+          -- Prepend import line to file
           vim.api.nvim_buf_set_lines(target_buf, 0, 0, false, { content })
-          vim.api.nvim_win_set_cursor(target_win, { 1, 0 })
         end,
       })
-    end
-
-    vim.api.nvim_create_user_command("GrepAndPaste", grep_and_paste, {})
+    end, { desc = "Search and paste import strings" })
   end,
 }

@@ -38,7 +38,7 @@ return {
     },
   },
   opts = {
-    workspaces = { { name = "Notes", path = "~/Documents/Notes" } },
+    workspaces = { { name = "Notes", path = os.getenv("NOTES") } },
     legacy_commands = false,
     frontmatter = { enabled = false },
     footer = { enabled = false },
@@ -50,7 +50,7 @@ return {
 
     note_id_func = function(title)
       if title ~= nil then
-        return os.date("%Y-%m-%d") .. " " .. title:gsub("[^A-Za-z0-9-_]", ""):lower()
+        return os.date("%Y-%m-%d") .. " " .. title:gsub("[^A-Za-z0-9-_ ]", ""):lower()
       else
         local suffix = ""
 
