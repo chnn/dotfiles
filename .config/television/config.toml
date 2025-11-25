@@ -250,7 +250,7 @@ fallback_channel = "files"
 "git-log" = ["git log", "git show"]
 "docker-images" = ["docker run"]
 "git-repos" = ["nvim", "code", "hx", "git clone"]
-"jj-bookmarks" = ["jj new", "jj edit"]
+"jj-bookmarks" = ["jj new", "jj edit", "gh pr create -H", "jj bookmark set"]
 
 
 [shell_integration.keybindings]

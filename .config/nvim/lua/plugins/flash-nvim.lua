@@ -4,6 +4,7 @@ return {
   opts = {
     modes = {
       treesitter = { label = { after = false } },
+      char = { enabled = false },
     },
   },
   keys = {

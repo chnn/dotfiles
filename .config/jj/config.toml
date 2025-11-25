@@ -8,6 +8,8 @@ diff-formatter = ":git"
 l = ["log", "-r", "(trunk()..@):: | (trunk()..@)-"]
 lpr = ["log", "-r", "pr_base()-..@"]
 bl = ["bookmark", "list", "--sort", "committer-date-"]
+tug = ["bookmark", "move", "--from", "heads(::@- & bookmarks())", "--to", "@"]
+tug- = ["bookmark", "move", "--from", "heads(::@- & bookmarks())", "--to", "@-"]
 
 [revset-aliases]
 "pr_head()" = "heads(trunk()..@ & tracked_remote_bookmarks())"
