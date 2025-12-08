@@ -8,6 +8,7 @@ return {
           hi clear StatusLine
           setlocal linebreak
           setlocal wrap
+          setlocal nocursorline
         endfunction
 
         function! s:goyo_leave()

@@ -14,3 +14,9 @@
 
 [merge]
 	conflictstyle = zdiff3
+
+[fetch]
+	prune = true
+
+[rerere]
+	enabled = true

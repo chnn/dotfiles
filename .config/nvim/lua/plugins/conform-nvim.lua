@@ -11,39 +11,35 @@ return {
           command = "stylua",
           args = { "--indent-type", "Spaces", "--indent-width", "2", "-" },
         },
-        sql_formatter = {
-          command = "sql-formatter",
-          args = {
-            "-c",
-            [[{"language": "postgresql", "tabWidth": 2, "keywordCase": "lower", "dataTypeCase": "lower", "functionCase": "lower"}]],
-          },
-        },
       },
+      -- Default formatters; can be overridden on a per-project basis with
+      -- something like this in .nvim.lua:
+      --
+      --     require("conform").setup({
+      --       format_on_save = {
+      --         timeout_ms = 2000,
+      --         lsp_format = "fallback",
+      --       },
+      --       formatters_by_ft = {
+      --         less = { "prettierd" },
+      --         typescript = { lsp_format = "prefer" },
+      --         typescriptreact = { lsp_format = "prefer" },
+      --       },
+      --     })
+      --
       formatters_by_ft = {
         css = { "prettier" },
-        go = { "gofmt", "goimports" },
         javascript = { "prettier" },
         javascriptreact = { "prettier" },
-        sql = { "sql_formatter" },
         json = { "prettier" },
         less = { "prettier" },
+        typescript = { "prettier" },
+        typescriptreact = { "prettier" },
+        go = { "gofmt", "goimports" },
         lua = { "stylua" },
         rust = { "rustfmt" },
         terraform = { "terraform_fmt" },
-        typescript = { "prettier" },
-        typescriptreact = { "prettier" },
       },
     })
-
-    -- Set up on a per-project basis with something like this in .nvim.lua:
-    --
-    --     require("conform").setup({
-    --       format_on_save = { timeout_ms = 2000, lsp_format = "fallback" },
-    --       formatters_by_ft = {
-    --         less = { "prettierd" },
-    --         typescript = { lsp_format = "fallback" },
-    --         typescriptreact = { lsp_format = "fallback" },
-    --       },
-    --     })
   end,
 }

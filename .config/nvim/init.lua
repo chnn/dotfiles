@@ -157,6 +157,10 @@ vim.keymap.set("n", "<leader>nt", function()
 end, { desc = "Create daily note" })
 
 vim.diagnostic.config({
+  virtual_text = {
+    source = "if_many",
+    severity = { min = vim.diagnostic.severity.ERROR },
+  },
   signs = { severity = vim.diagnostic.severity.ERROR },
   underline = { severity = vim.diagnostic.severity.ERROR },
   update_in_insert = false,

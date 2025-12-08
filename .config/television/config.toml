@@ -246,6 +246,9 @@ fallback_channel = "files"
   "git rebase",
   "git pull",
   "git push",
+  "gb -D",
+  "git switch",
+  "git switch -c"
 ]
 "git-log" = ["git log", "git show"]
 "docker-images" = ["docker run"]
