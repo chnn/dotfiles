@@ -120,6 +120,42 @@ vim.api.nvim_create_user_command("DecodeJSONString", function()
   vim.cmd([[%s/\\"/"/g]])
 end, {})
 
+-- Create a new note in the $NOTES directory
+vim.keymap.set("n", "<leader>nn", function()
+  local notes_dir = os.getenv("NOTES")
+  if not notes_dir then
+    vim.notify("$NOTES environment variable is not set", vim.log.levels.ERROR)
+    return
+  end
+
+  vim.ui.input({ prompt = "title: " }, function(title)
+    if not title or title == "" then
+      return
+    end
+
+    local date = os.date("%Y-%m-%d")
+    local filename = date .. " " .. title .. ".md"
+    local filepath = notes_dir .. "/" .. filename
+
+    vim.cmd.edit(filepath)
+  end)
+end, { desc = "Create new note" })
+
+-- Create a daily note
+vim.keymap.set("n", "<leader>nt", function()
+  local notes_dir = os.getenv("NOTES")
+  if not notes_dir then
+    vim.notify("$NOTES environment variable is not set", vim.log.levels.ERROR)
+    return
+  end
+
+  local date = os.date("%Y-%m-%d")
+  local filename = date .. ".md"
+  local filepath = notes_dir .. "/days/" .. filename
+
+  vim.cmd.edit(filepath)
+end, { desc = "Create daily note" })
+
 vim.diagnostic.config({
   signs = { severity = vim.diagnostic.severity.ERROR },
   underline = { severity = vim.diagnostic.severity.ERROR },

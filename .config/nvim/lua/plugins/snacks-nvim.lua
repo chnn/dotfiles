@@ -79,6 +79,24 @@ return {
       end,
       desc = "Resume last picker",
     },
+    {
+      "<space>ng",
+      function()
+        Snacks.picker.grep({
+          dirs = { os.getenv("NOTES") },
+        })
+      end,
+      desc = "Open grep for notes",
+    },
+    {
+      "<space>np",
+      function()
+        Snacks.picker.files({
+          dirs = { os.getenv("NOTES") },
+        })
+      end,
+      desc = "Open a note",
+    },
   },
   config = function()
     local Snacks = require("snacks")
