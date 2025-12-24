@@ -1,0 +1,7 @@
+[metadata]
+name = "package-json-scripts"
+description = "A channel to read from scripts in the cwd package.json"
+requirements = ["fx"]
+
+[source]
+command = "fx ./package.json 'Object.keys(x.scripts)' list"
