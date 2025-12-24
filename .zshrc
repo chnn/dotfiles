@@ -6,26 +6,22 @@ export PATH="$HOME/.local/bin:/usr/local/bin:/usr/local/sbin:$PATH"
 export NOTES="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes"
 export JOURNAL="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/Journal"
 
-# Rust
+# Cargo
 export PATH="$HOME/.cargo/bin:$PATH"
-
-# JavaScript
-export VOLTA_HOME="$HOME/.volta"
-export PATH="$VOLTA_HOME/bin:$PATH"
 
 # Homebrew
 [ -f /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
 
-# FZF
-export FZF_DEFAULT_COMMAND="rg --files --sortr=created --hidden --iglob '!.git'"
-export FZF_DEFAULT_OPTS='--layout=reverse'
-[ -f ~/.fzf.zsh ] && . ~/.fzf.zsh
+# Volta
+export VOLTA_HOME="$HOME/.volta"
+export PATH="$VOLTA_HOME/bin:$PATH"
 
-# fzf-tab
-autoload -U compinit; compinit
-[ -f ~/Dev/fzf-tab/fzf-tab.plugin.zsh ] && . ~/Dev/fzf-tab/fzf-tab.plugin.zsh
+# Television
+autoload -Uz compinit
+compinit
+eval "$(tv init zsh)"
 
-# cd
+# zoxide
 command -v zoxide &> /dev/null && eval "$(zoxide init zsh)"
 
 # Edit current command with ^J
@@ -35,11 +31,8 @@ bindkey '^J' edit-command-line
 
 # Prompt
 autoload -U colors && colors
-autoload -Uz vcs_info
-precmd () { vcs_info }
 setopt prompt_subst
-zstyle ':vcs_info:git*' formats "%F{magenta}%b%f "
-PROMPT='%F{blue}%3~%f ${vcs_info_msg_0_}$ '
+PROMPT='%F{blue}%3~%f $ '
 
 # History
 HISTFILE=~/.zsh_history
@@ -49,7 +42,7 @@ setopt APPEND_HISTORY
 setopt INC_APPEND_HISTORY
 setopt SHARE_HISTORY
 
-# Alias'
+# Aliases
 alias e="$EDITOR"
 alias ls="ls -l"
 alias cat="bat"
@@ -75,6 +68,8 @@ alias gbb='gh browse -b $(git branch --show-current)'
 alias gpr='gh pr view --web'
 alias yr='yarn run $(cat package.json | jq -r ".scripts | keys[]" | fzf)'
 alias pjs="cat package.json | jq '.scripts'"
+alias pr="pnpm run"
+alias px="pnpm exec"
 
 port() {
   sudo lsof -iTCP -sTCP:LISTEN -n -P | awk 'NR>1 {print $9, $1, $2}' | sed 's/.*://' | while read port process pid; do echo "Port $port: $(ps -p $pid -o command= | sed 's/^-//') (PID: $pid)"; done | sort -n
