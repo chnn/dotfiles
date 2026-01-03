@@ -114,6 +114,31 @@ vim.cmd([[command! Rlw %bd|e#]])
 -- Write file with today's date prepended with :Wt
 vim.cmd([[command! -nargs=1 Wt exe 'w ' . strftime("%F") . ' ' . "<args>"]])
 
+-- Write file in the $NOTES directory with today's date prepended with :Wn
+vim.api.nvim_create_user_command("Wn", function(opts)
+  local title = opts.args
+  if title == "" then
+    vim.notify("Usage: :Wn <title>", vim.log.levels.ERROR)
+    return
+  end
+
+  local notes_dir = os.getenv("NOTES")
+  if not notes_dir then
+    vim.notify("$NOTES environment variable is not set", vim.log.levels.ERROR)
+    return
+  end
+
+  local date = os.date("%Y-%m-%d")
+  local filename = date .. " " .. title
+  local filepath = notes_dir .. "/" .. filename
+
+  vim.cmd("write " .. vim.fn.fnameescape(filepath))
+  vim.notify("Saved to " .. filepath, vim.log.levels.INFO)
+end, {
+  nargs = 1,
+  desc = "Write buffer to $NOTES folder with date prefix",
+})
+
 -- Replace `\n` with actual newlines and remove `\` escape chars from quotes
 vim.api.nvim_create_user_command("DecodeJSONString", function()
   vim.cmd([[%s/\\n/\r/g]])

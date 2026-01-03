@@ -13,5 +13,13 @@
   "import": {
     "prefix": "imp",
     "body": ["import {${1}} from '${2}';"]
+  },
+  "useMemo": {
+    "prefix": "useM",
+    "body": [
+      "const ${1} = useMemo(() => {",
+      "    $2",
+      "}, []);"
+    ]
   }
 }

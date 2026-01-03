@@ -1,5 +1,7 @@
 #:schema https://jj-vcs.github.io/jj/latest/config-schema.json
 
+fsmonitor.backend = "watchman"
+
 [ui]
 pager = "delta"
 diff-formatter = ":git"
