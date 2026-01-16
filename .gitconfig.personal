@@ -14,9 +14,13 @@
 
 [merge]
 	conflictstyle = zdiff3
+	tool = nvimdiff
 
 [fetch]
 	prune = true
 
 [rerere]
 	enabled = true
+
+[mergetool]
+	prompt = false
