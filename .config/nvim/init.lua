@@ -111,130 +111,11 @@ end, { silent = true, desc = "Toggle statusline visibility" })
 -- Close all buffers but this one with :Rlw ("reload workspace")
 vim.cmd([[command! Rlw %bd|e#]])
 
--- Write file with today's date prepended with :Wt
-vim.cmd([[command! -nargs=1 Wt exe 'w ' . strftime("%F") . ' ' . "<args>"]])
-
--- Write file in the $NOTES directory with today's date prepended with :Wn
-vim.api.nvim_create_user_command("Wn", function(opts)
-  local title = opts.args
-  if title == "" then
-    vim.notify("Usage: :Wn <title>", vim.log.levels.ERROR)
-    return
-  end
-
-  local notes_dir = os.getenv("NOTES")
-  if not notes_dir then
-    vim.notify("$NOTES environment variable is not set", vim.log.levels.ERROR)
-    return
-  end
-
-  local date = os.date("%Y-%m-%d")
-  local filename = date .. " " .. title
-  local filepath = notes_dir .. "/" .. filename
-
-  vim.cmd("write " .. vim.fn.fnameescape(filepath))
-  vim.notify("Saved to " .. filepath, vim.log.levels.INFO)
-end, {
-  nargs = 1,
-  desc = "Write buffer to $NOTES folder with date prefix",
-})
-
 -- Replace `\n` with actual newlines and remove `\` escape chars from quotes
 vim.api.nvim_create_user_command("DecodeJSONString", function()
   vim.cmd([[%s/\\n/\r/g]])
   vim.cmd([[%s/\\"/"/g]])
 end, {})
-
--- Create a new note in the $NOTES directory
-vim.keymap.set("n", "<leader>nn", function()
-  local notes_dir = os.getenv("NOTES")
-  if not notes_dir then
-    vim.notify("$NOTES environment variable is not set", vim.log.levels.ERROR)
-    return
-  end
-
-  vim.ui.input({ prompt = "title: " }, function(title)
-    if not title or title == "" then
-      return
-    end
-
-    local date = os.date("%Y-%m-%d")
-    local filename = date .. " " .. title .. ".md"
-    local filepath = notes_dir .. "/" .. filename
-
-    vim.cmd.edit(filepath)
-  end)
-end, { desc = "Create new note" })
-
--- Create a daily note
-vim.keymap.set("n", "<leader>nt", function()
-  local notes_dir = os.getenv("NOTES")
-  if not notes_dir then
-    vim.notify("$NOTES environment variable is not set", vim.log.levels.ERROR)
-    return
-  end
-
-  local date = os.date("%Y-%m-%d")
-  local filename = date .. ".md"
-  local filepath = notes_dir .. "/days/" .. filename
-
-  vim.cmd.edit(filepath)
-end, { desc = "Create daily note" })
-
-vim.diagnostic.config({
-  virtual_text = {
-    source = "if_many",
-    severity = { min = vim.diagnostic.severity.ERROR },
-  },
-  signs = { severity = vim.diagnostic.severity.ERROR },
-  underline = { severity = vim.diagnostic.severity.ERROR },
-  update_in_insert = false,
-  severity_sort = true,
-  jump = { float = true, severity = vim.diagnostic.severity.ERROR },
-})
-
-vim.keymap.set("n", "<D-.>", vim.lsp.buf.code_action, { desc = "Show code actions" })
-
-vim.api.nvim_create_autocmd("LspAttach", {
-  group = vim.api.nvim_create_augroup("UserLspConfig", {}),
-  callback = function(ev)
-    local client = vim.lsp.get_client_by_id(ev.data.client_id)
-    if client then
-      -- Disable highlighting from LSP servers (prefer Treesitter)
-      client.server_capabilities.semanticTokensProvider = nil
-    end
-  end,
-})
-
-local function open_diagnostic_in_buffer()
-  -- Get diagnostics at current cursor position
-  local diagnostics = vim.diagnostic.get(0, { lnum = vim.fn.line(".") - 1 })
-
-  if #diagnostics == 0 then
-    vim.notify("No diagnostics found at cursor position", vim.log.levels.INFO)
-    return
-  end
-
-  local diagnostic = diagnostics[1]
-
-  local buf = vim.api.nvim_create_buf(false, true)
-  vim.api.nvim_buf_set_option(buf, "buftype", "nofile")
-  vim.api.nvim_buf_set_option(buf, "bufhidden", "wipe")
-  vim.api.nvim_buf_set_option(buf, "filetype", "markdown")
-  vim.api.nvim_buf_set_lines(buf, 0, -1, false, vim.split(diagnostic.message, "\n"))
-  vim.cmd("split")
-  vim.api.nvim_win_set_buf(0, buf)
-  vim.api.nvim_buf_set_option(buf, "modifiable", false)
-  vim.api.nvim_buf_set_option(buf, "readonly", true)
-end
-vim.api.nvim_create_user_command("DiagnosticOpen", open_diagnostic_in_buffer, {})
-vim.keymap.set("n", "<leader>do", open_diagnostic_in_buffer, { desc = "Open diagnostic in buffer" })
-
-local function open_diagnostic_float_and_focus()
-  vim.diagnostic.open_float()
-  vim.diagnostic.open_float()
-end
-vim.keymap.set("n", "<leader>df", open_diagnostic_float_and_focus, { desc = "Open and focus diagnostic float" })
 
 -- Bootstrap lazy.nvim and load plugins
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -254,3 +135,7 @@ require("lazy").setup("plugins", {
     notify = false,
   },
 })
+
+-- Additional config
+require("notes")
+require("diagnostics")

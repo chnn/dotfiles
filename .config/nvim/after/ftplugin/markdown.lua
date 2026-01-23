@@ -21,8 +21,8 @@ vim.keymap.set("n", "<leader>x", function()
   vim.api.nvim_buf_set_lines(0, row - 1, row, false, { new_line })
 end, { desc = "Toggle markdown checkbox" })
 
--- Better gx keybinding
-vim.keymap.set("n", "gx", function()
+-- Go to a link or URL with `gd`
+vim.keymap.set("n", "gd", function()
   local line = vim.api.nvim_get_current_line()
   local col = vim.api.nvim_win_get_cursor(0)[2] + 1 -- 1-indexed
 
@@ -57,7 +57,7 @@ vim.keymap.set("n", "gx", function()
     else
       -- It's a file path, resolve relative to current file's directory
       local current_file = vim.fn.expand("%:p:h")
-      local full_path = current_file .. "/" .. link_target
+      local full_path = current_file .. "/" .. link_target .. ".md"
 
       -- Normalize the path (resolve .. and .)
       full_path = vim.fn.fnamemodify(full_path, ":p")
@@ -90,4 +90,4 @@ vim.keymap.set("n", "gx", function()
       vim.ui.open(word)
     end
   end
-end, { desc = "Open link under cursor" })
+end, { desc = "Open link under cursor", buffer = true })
