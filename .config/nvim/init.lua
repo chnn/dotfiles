@@ -92,12 +92,27 @@ vim.keymap.set("n", "<C-q>", "<C-W><C-q>", { desc = "Close pane" })
 vim.keymap.set("n", "<C-s>", "<C-W>s", { desc = "Split pane" })
 
 -- Shortcut to copy filename of buffer under the cursor to system clipboard
-vim.keymap.set(
-  "n",
-  "<C-k>p",
-  ':let @+=fnamemodify(expand("%"), ":~:.")<CR>',
-  { silent = true, desc = "Copy path of current buffer to clipboard" }
-)
+-- In visual mode, appends line range (e.g., src/myFile.ts:30-34)
+local function copy_file_path()
+  local path = vim.fn.fnamemodify(vim.fn.expand("%"), ":~:.")
+  local mode = vim.fn.mode()
+  if mode == "v" or mode == "V" or mode == "\22" then
+    local start_line = vim.fn.line("v")
+    local end_line = vim.fn.line(".")
+    if start_line > end_line then
+      start_line, end_line = end_line, start_line
+    end
+    if start_line == end_line then
+      path = path .. ":" .. start_line
+    else
+      path = path .. ":" .. start_line .. "-" .. end_line
+    end
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", false)
+  end
+  vim.fn.setreg("+", path)
+end
+vim.keymap.set({ "n", "v" }, "<space>c", copy_file_path, { silent = true, desc = "Copy path of current buffer to clipboard" })
+vim.keymap.set({ "n", "v" }, "<D-S-c>", copy_file_path, { silent = true, desc = "Copy path of current buffer to clipboard" })
 
 -- Toggle statusline visibility
 vim.keymap.set("n", "yo<space>", function()
