@@ -147,7 +147,7 @@ wip() {
 
 wn() {
   git fetch
-  git worktree add -b "chnn/$1" "../web-ui-$1" origin/preprod
+  git worktree add --no-track -b "chnn/$1" "../web-ui-$1" origin/preprod
   cd "../web-ui-$1"
   ln -s ../web-ui/.nvim.lua ./.nvim.lua
   yarn
