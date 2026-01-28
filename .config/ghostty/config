@@ -4,6 +4,29 @@ adjust-cell-width = -10%
 adjust-cell-height = 5%
 window-new-tab-position = end
 
+# disable automatic title setting
+shell-integration-features=no-title
+
 # disable ligatures
 font-feature = -calt,-liga,-dlig
 keybind = shift+enter=text:\n
+
+# # forward shortcuts to tmux
+# # assumes tmux prefix is ctrl+space, i.e. \x00
+# # use `xxd -psd` to figure out escape sequences
+# keybind=cmd+.=text:\x20\x2e
+# keybind=cmd+p=text:\x20p
+# keybind=cmd+digit_1=text:\x00\x31
+# keybind=cmd+digit_2=text:\x00\x32
+# keybind=cmd+digit_3=text:\x00\x33
+# keybind=cmd+digit_4=text:\x00\x34
+# keybind=cmd+digit_5=text:\x00\x35
+# keybind=cmd+digit_6=text:\x00\x36
+# keybind=cmd+digit_7=text:\x00\x37
+# keybind=cmd+digit_8=text:\x00\x38
+# keybind=cmd+digit_9=text:\x00\x39
+# keybind=cmd+shift+bracket_right=text:\x00\x6e
+# keybind=cmd+shift+bracket_left=text:\x00\x70
+# keybind=cmd+shift+k=text:\x00\x28
+# keybind=cmd+shift+j=text:\x00\x29
+# keybind=cmd+shift+c=text:\x20\x63
