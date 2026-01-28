@@ -145,28 +145,10 @@ wip() {
   fi
 }
 
-mov2mp4() {
-  ffmpeg -i "$1" -vcodec h264 -acodec aac "$(echo $1 | rev | cut -c 5- | rev).mp4"
-}
-
-# Convert an input file to a GIF. Requires `ffmpeg` and `gifsicle` to be
-# installed (use Homebrew).
-#
-# Example:
-#
-#     mov2gif myscreenrecording.mov
-#
-mov2gif() {
-  ffmpeg -i "$1" -r 15 -f gif - | gifsicle > "$(echo $1 | rev | cut -c 5- | rev).gif"
-}
-
-# Requires `trash` to be installed (use brew)
-movs2gifs() {
-  cd ~/Desktop
-  for f in *.mov
-  do
-    mov2gif "$f"
-    trash "$f"
-  done
-  cd -
+wn() {
+  git fetch
+  git worktree add -b "chnn/$1" "../web-ui-$1" origin/preprod
+  cd "../web-ui-$1"
+  ln -s ../web-ui/.nvim.lua ./.nvim.lua
+  yarn
 }
