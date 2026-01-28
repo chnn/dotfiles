@@ -57,7 +57,12 @@ vim.keymap.set("n", "gd", function()
     else
       -- It's a file path, resolve relative to current file's directory
       local current_file = vim.fn.expand("%:p:h")
-      local full_path = current_file .. "/" .. link_target .. ".md"
+      local full_path
+      if link_target:match("%.md$") then
+        full_path = current_file .. "/" .. link_target
+      else
+        full_path = current_file .. "/" .. link_target .. ".md"
+      end
 
       -- Normalize the path (resolve .. and .)
       full_path = vim.fn.fnamemodify(full_path, ":p")
