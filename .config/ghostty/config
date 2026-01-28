@@ -1,4 +1,4 @@
-theme = melange_light
+theme = dark:melange_dark,light:melange_light
 font-size = 16
 adjust-cell-width = -10%
 adjust-cell-height = 5%
