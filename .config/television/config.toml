@@ -255,7 +255,7 @@ fallback_channel = "files"
 "git-repos" = ["nvim", "code", "hx", "git clone"]
 "jj-bookmarks" = ["jj new", "jj edit", "gh pr create -H", "jj bookmark set", "jj b set", "jj bookmark track", "jj b track"]
 "package-json-scripts" = ["pnpm run", "pr", "npm run", "npx", "yarn", "yarn run"]
-
+"wt-slugs" = ["wt list", "wt ls", "wt remove", "wt rm"]
 
 [shell_integration.keybindings]
 # controls which key binding should trigger tv

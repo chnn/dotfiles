@@ -1,0 +1,7 @@
+[metadata]
+name = "wt-slugs"
+description = "A channel to complete wt-slugs."
+requirements = ["wt"]
+
+[source]
+command = "wt list"
