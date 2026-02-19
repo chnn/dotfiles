@@ -38,6 +38,18 @@ vim.o.tabstop = 4 -- Display width of tab char
 vim.o.shiftwidth = 4 -- Number of spaces used for indentation not in insert mode (with >>, ==, etc.)
 vim.o.softtabstop = 4 -- How many spaces are inserted when pressing <Tab> in insert mode
 
+-- Make diffs nicer
+vim.opt.diffopt = {
+  "internal",
+  "filler",
+  "closeoff",
+  "context:12",
+  "algorithm:histogram",
+  "linematch:200",
+  "indent-heuristic",
+  "iwhite",
+}
+
 -- Load .nvim.lua files in cwd and all parents if on the trust list
 --
 -- To mark a file as trusted, open it and run `:trust`

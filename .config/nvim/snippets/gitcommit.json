@@ -1,0 +1,6 @@
+{
+  "coauth": {
+    "prefix": "coauth",
+    "body": ["Co-Authored-By: Claude <noreply@anthropic.com>"]
+  }
+}

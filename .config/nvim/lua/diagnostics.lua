@@ -11,6 +11,7 @@ vim.diagnostic.config({
 })
 
 vim.keymap.set("n", "<D-.>", vim.lsp.buf.code_action, { desc = "Show code actions" })
+vim.keymap.set("n", "<space>.", vim.lsp.buf.code_action, { desc = "Show code actions" })
 
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("UserLspConfig", {}),

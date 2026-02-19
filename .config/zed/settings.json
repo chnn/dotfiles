@@ -3,40 +3,62 @@
   "agent": {
     "inline_assistant_model": {
       "provider": "anthropic",
-      "model": "claude-sonnet-4-5-latest"
+      "model": "claude-opus-4-6-latest",
     },
-    "model_parameters": []
+    "model_parameters": [],
   },
   "buffer_font_family": "JetBrainsMono Nerd Font",
-  "buffer_font_size": 15.0,
+  "buffer_font_size": 16.0,
   "buffer_font_weight": 300,
   "collaboration_panel": { "button": false },
   "cursor_blink": false,
   "edit_predictions": {
+    "provider": "zed",
     "disabled_globs": ["*.md", "*.txt"],
-    "mode": "subtle"
+    "mode": "subtle",
   },
-  "features": { "edit_prediction_provider": "zed" },
   "git": { "inline_blame": { "enabled": false } },
   "indent_guides": { "enabled": false },
   "tab_bar": { "show": true },
   "telemetry": {
     "diagnostics": false,
-    "metrics": false
+    "metrics": false,
   },
   "terminal": {
     "font_size": 15,
     "font_family": "JetBrainsMono Nerd Font",
-    "font_weight": 300
+    "font_weight": 300,
+  },
+  "lsp": {
+    "eslint": {
+      "settings": {
+        "rulesCustomizations": [
+          { "rule": "prettier/prettier", "severity": "off" },
+          { "rule": "arca/import-ordering", "severity": "off" },
+          { "rule": "arca/newline-after-import-section", "severity": "off" },
+          {
+            "rule": "@typescript-eslint/consistent-type-imports",
+            "severity": "off",
+          },
+          { "rule": "quotes", "severity": "off" },
+          { "rule": "import/no-duplicates", "severity": "off" },
+          { "rule": "unused-imports/no-unused-imports", "severity": "off" },
+          {
+            "rule": "datadog/prevent-import-declaration-type",
+            "severity": "off",
+          },
+        ],
+      },
+    },
   },
   "theme": "Melange Dark",
   "toolbar": {
     "quick_actions": true,
     "breadcrumbs": false,
-    "selections_menu": true
+    "selections_menu": true,
   },
   "ui_font_family": ".SystemUIFont",
   "ui_font_size": 16,
   "vim": { "use_system_clipboard": "never" },
-  "vim_mode": true
+  "vim_mode": true,
 }

@@ -3,6 +3,10 @@
   "contributes": {
     "snippets": [
       {
+        "language": "gitcommit",
+        "path": "./gitcommit.json"
+      },
+      {
         "language": "typescript",
         "path": "./typescript.json"
       },
