@@ -111,8 +111,18 @@ local function copy_file_path()
   end
   vim.fn.setreg("+", path)
 end
-vim.keymap.set({ "n", "v" }, "<space>c", copy_file_path, { silent = true, desc = "Copy path of current buffer to clipboard" })
-vim.keymap.set({ "n", "v" }, "<D-S-c>", copy_file_path, { silent = true, desc = "Copy path of current buffer to clipboard" })
+vim.keymap.set(
+  { "n", "v" },
+  "<space>c",
+  copy_file_path,
+  { silent = true, desc = "Copy path of current buffer to clipboard" }
+)
+vim.keymap.set(
+  { "n", "v" },
+  "<D-S-c>",
+  copy_file_path,
+  { silent = true, desc = "Copy path of current buffer to clipboard" }
+)
 
 -- Toggle statusline visibility
 vim.keymap.set("n", "yo<space>", function()
@@ -131,6 +141,11 @@ vim.api.nvim_create_user_command("DecodeJSONString", function()
   vim.cmd([[%s/\\n/\r/g]])
   vim.cmd([[%s/\\"/"/g]])
 end, {})
+
+-- Workaround blink.cmp bug
+if vim.lsp.config then
+  vim.lsp.config("*", {})
+end
 
 -- Bootstrap lazy.nvim and load plugins
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
