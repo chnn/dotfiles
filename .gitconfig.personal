@@ -1,6 +1,12 @@
 ; [include]
 ; 	path = ./.gitconfig.personal
 
+[fetch]
+	prune = true
+
+[rerere]
+	enabled = true
+
 [core]
 	pager = delta
 
@@ -12,15 +18,15 @@
 	side-by-side = true
 	syntax-theme = base16
 
+[difftool]
+	tool = nvim_difftool
+
+[difftool "nvim_difftool"]
+	cmd = nvim -c \"packadd nvim.difftool\" -c \"DiffTool $LOCAL $REMOTE\"
+
 [merge]
 	conflictstyle = zdiff3
 	tool = nvimdiff
-
-[fetch]
-	prune = true
-
-[rerere]
-	enabled = true
 
 [mergetool]
 	prompt = false
