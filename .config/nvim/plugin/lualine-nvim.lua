@@ -11,7 +11,19 @@ require("lualine").setup({
     lualine_a = { "mode" },
     lualine_b = {},
     lualine_c = { { "filename", path = 1 } },
-    lualine_x = { { "diagnostics", sections = { "error", "warn" } }, "location" },
+    lualine_x = {
+      { "diagnostics", sections = { "error", "warn" } },
+      {
+        "lsp_status",
+        icon = "",
+        symbols = {
+          spinner = { "[L]" },
+          done = "",
+          separator = " ",
+        },
+      },
+      "location",
+    },
     lualine_y = {},
     lualine_z = {},
   },
