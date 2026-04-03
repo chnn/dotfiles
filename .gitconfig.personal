@@ -18,11 +18,11 @@
 	side-by-side = true
 	syntax-theme = base16
 
-[difftool]
-	tool = nvim_difftool
-
 [difftool "nvim_difftool"]
 	cmd = nvim -c \"packadd nvim.difftool\" -c \"DiffTool $LOCAL $REMOTE\"
+
+[difftool]
+	tool = nvim_difftool
 
 [merge]
 	conflictstyle = zdiff3
