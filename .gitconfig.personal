@@ -7,16 +7,20 @@
 [rerere]
 	enabled = true
 
-[core]
-	pager = delta
+; [core]
+; 	pager = delta
+; 
+; [interactive]
+; 	diffFilter = delta --color-only
+; 
+; [delta]
+; 	navigate = true    # use n and N to move between diff sections
+; 	side-by-side = true
+; 	syntax-theme = base16
 
-[interactive]
-	diffFilter = delta --color-only
-
-[delta]
-	navigate = true    # use n and N to move between diff sections
-	side-by-side = true
-	syntax-theme = base16
+[alias]
+    dft = -c diff.external=difft diff
+    ds = -c diff.external=difft show --ext-diff
 
 [difftool "nvim_difftool"]
 	cmd = nvim -c \"packadd nvim.difftool\" -c \"DiffTool $LOCAL $REMOTE\"

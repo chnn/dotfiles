@@ -3,16 +3,16 @@
 fsmonitor.backend = "watchman"
 
 [ui]
-pager = "delta"
-diff-formatter = ":git"
+# pager = "delta"
+# diff-formatter = ":git"
+diff-formatter = ["difft", "--color=always", "$left", "$right"]
+
+[revset-aliases]
+"pr_head()" = "heads(trunk()..@ & tracked_remote_bookmarks())"
+"pr_base()" = "coalesce(heads(trunk()..pr_head()- & tracked_remote_bookmarks()), trunk())"
 
 [aliases]
 l = ["log", "-r", "(trunk()..@):: | (trunk()..@)-"]
 lpr = ["log", "-r", "pr_base()-..@"]
 bl = ["bookmark", "list", "--sort", "committer-date-"]
-tug = ["bookmark", "move", "--from", "heads(::@- & bookmarks())", "--to", "@"]
-tug- = ["bookmark", "move", "--from", "heads(::@- & bookmarks())", "--to", "@-"]
 
-[revset-aliases]
-"pr_head()" = "heads(trunk()..@ & tracked_remote_bookmarks())"
-"pr_base()" = "coalesce(heads(trunk()..pr_head()- & tracked_remote_bookmarks()), trunk())"
