@@ -145,6 +145,43 @@ wip() {
   fi
 }
 
+# Open $EDITOR on a fresh temp file, then print the path on stdout.
+# Meant for command substitution, e.g.:
+#
+#     my_command -p "$(etmp)"
+#     gh issue create --body-file "$(etmp md)"
+#
+# Optional first arg is a file extension (no dot) so the editor picks up
+# syntax highlighting, e.g. `etmp md`, `etmp json`.
+#
+# Fails (non-zero exit -> aborts the outer command under `set -e` or when
+# the substitution is required) if the editor errors out or the file is
+# left empty.
+etmp() {
+  local ext="${1:+.$1}"
+  local file
+  file="$(mktemp /tmp/etmp.XXXXXX)" || return 1
+  if [[ -n "$ext" ]]; then
+    mv "$file" "$file$ext" || { rm -f "$file"; return 1; }
+    file="$file$ext"
+  fi
+
+  # Attach the editor to the terminal so $(etmp) only captures the path.
+  "${EDITOR:-vi}" "$file" </dev/tty >/dev/tty || {
+    print -u2 "etmp: editor exited non-zero, aborting"
+    rm -f "$file"
+    return 1
+  }
+
+  if [[ ! -s "$file" ]]; then
+    print -u2 "etmp: $file is empty, aborting"
+    rm -f "$file"
+    return 1
+  fi
+
+  print -r -- "$file"
+}
+
 wn() {
   git fetch
   git worktree add --no-track -b "chnn/$1" "../web-ui-$1" origin/preprod
