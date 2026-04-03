@@ -3,6 +3,7 @@ theme = dark:melange_dark,light:melange_light
 font-size = 18
 font-family = IosevkaTerm Nerd Font Mono
 window-new-tab-position = end
+shell-integration-features = no-title
 
 # send ctrl+space on cmd+.
 keybind=cmd+.=text:\x20\x2e
