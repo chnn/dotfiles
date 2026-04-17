@@ -43,11 +43,11 @@
       "src": "https://github.com/savq/melange-nvim"
     },
     "minuet-ai.nvim": {
-      "rev": "c843f4826fbf8b315a94264a9f291b8411b31d02",
+      "rev": "ee03326381c93f6417fa66aeb2ca85a26c0706e7",
       "src": "https://github.com/milanglacier/minuet-ai.nvim"
     },
     "nvim-lspconfig": {
-      "rev": "8a9378a822719346a0288fa004dab302ca3c0a8f",
+      "rev": "4b7fbaa239c5db6b36f424a4521ca9f1a401be33",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-rip-substitute": {

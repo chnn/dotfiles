@@ -18,10 +18,12 @@ vim.api.nvim_create_autocmd("FileType", {
   callback = function(args)
     local ft = vim.bo[args.buf].filetype
     local lang = vim.treesitter.language.get_lang(ft) or ft
-    if not pcall(vim.treesitter.language.add, lang) then
-      pcall(require("nvim-treesitter").install, { lang })
+    if not vim.treesitter.language.add(lang) then
+      local ok, task = pcall(require("nvim-treesitter").install, { lang })
+      if ok and task then
+        pcall(task.wait, task, 60000)
+      end
     end
-    -- vim.treesitter.start()
     pcall(vim.treesitter.start, args.buf)
   end,
 })
