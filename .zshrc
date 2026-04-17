@@ -3,26 +3,21 @@ set -o emacs
 export EDITOR="nvim"
 export SHELL="/bin/zsh"
 export PATH="$HOME/.local/bin:/usr/local/bin:/usr/local/sbin:$PATH"
-export NOTES="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes"
-export JOURNAL="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/Journal"
 
-# Cargo
 export PATH="$HOME/.cargo/bin:$PATH"
 
-# Homebrew
 [ -f /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
 
-# Volta
 export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
 
-# Television
 autoload -Uz compinit
 compinit
 eval "$(tv init zsh)"
 
-# zoxide
 command -v zoxide &> /dev/null && eval "$(zoxide init zsh)"
+
+[ -f $HOME/.env ] && source $HOME/.env
 
 # Edit current command with ^J
 autoload -U edit-command-line
