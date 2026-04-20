@@ -1,0 +1,97 @@
+{
+	"$schema": "https://raw.githubusercontent.com/badlogic/pi-mono/main/packages/coding-agent/src/modes/interactive/theme/theme-schema.json",
+	"name": "melange-light",
+	"vars": {
+		"bg":         "#F1F1F1",
+		"float":      "#E9E1DB",
+		"sel":        "#D9D3CE",
+		"ui":         "#A98A78",
+		"com":        "#7D6658",
+		"fg":         "#54433A",
+
+		"red":        "#C77B8B",
+		"yellow":     "#BC5C00",
+		"green":      "#6E9B72",
+		"cyan":       "#739797",
+		"blue":       "#7892BD",
+		"magenta":    "#BE79BB",
+
+		"brRed":      "#BF0021",
+		"brYellow":   "#A06D00",
+		"brGreen":    "#3A684A",
+		"brCyan":     "#3D6568",
+		"brBlue":     "#465AA4",
+		"brMagenta":  "#904180",
+
+		"dRed":       "#F1DEDF",
+		"dYellow":    "#CCA478",
+		"dGreen":     "#D0E9D1",
+		"dCyan":      "#CDE8E7",
+		"dBlue":      "#E0E2E8",
+		"dMagenta":   "#E8E0E8"
+	},
+	"colors": {
+		"accent":             "brCyan",
+		"border":             "brBlue",
+		"borderAccent":       "brCyan",
+		"borderMuted":        "ui",
+		"success":            "brGreen",
+		"error":              "brRed",
+		"warning":            "brYellow",
+		"muted":              "com",
+		"dim":                "ui",
+		"text":               "",
+		"thinkingText":       "com",
+
+		"selectedBg":         "sel",
+		"userMessageBg":      "float",
+		"userMessageText":    "",
+		"customMessageBg":    "dMagenta",
+		"customMessageText":  "",
+		"customMessageLabel": "brMagenta",
+		"toolPendingBg":      "dBlue",
+		"toolSuccessBg":      "dGreen",
+		"toolErrorBg":        "dRed",
+		"toolTitle":          "",
+		"toolOutput":         "com",
+
+		"mdHeading":          "brYellow",
+		"mdLink":             "brBlue",
+		"mdLinkUrl":          "ui",
+		"mdCode":             "brCyan",
+		"mdCodeBlock":        "brGreen",
+		"mdQuote":            "com",
+		"mdQuoteBorder":      "ui",
+		"mdCodeBlockBorder":  "ui",
+		"mdHr":               "ui",
+		"mdListBullet":       "brCyan",
+
+		"toolDiffAdded":      "brGreen",
+		"toolDiffRemoved":    "brRed",
+		"toolDiffContext":    "com",
+
+		"syntaxComment":      "ui",
+		"syntaxKeyword":      "brRed",
+		"syntaxFunction":     "yellow",
+		"syntaxVariable":     "",
+		"syntaxString":       "brGreen",
+		"syntaxNumber":       "brMagenta",
+		"syntaxType":         "brBlue",
+		"syntaxOperator":     "",
+		"syntaxPunctuation":  "com",
+
+		"thinkingOff":        "ui",
+		"thinkingMinimal":    "com",
+		"thinkingLow":        "blue",
+		"thinkingMedium":     "brBlue",
+		"thinkingHigh":       "magenta",
+		"thinkingXhigh":      "brMagenta",
+
+		"bashMode":           "brGreen"
+	},
+	"export": {
+		"pageBg": "#F1F1F1",
+		"cardBg": "#E9E1DB",
+		"infoBg": "#FAEFD8"
+	}
+}
