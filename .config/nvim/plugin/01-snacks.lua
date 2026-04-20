@@ -4,7 +4,6 @@ local Snacks = require("snacks")
 
 Snacks.setup({
   bigfile = { enabled = true },
-  notifier = { enabled = true },
   picker = {
     sources = {
       gh_issue = {},
