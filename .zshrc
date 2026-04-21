@@ -124,6 +124,9 @@ setopt APPEND_HISTORY
 setopt INC_APPEND_HISTORY
 setopt SHARE_HISTORY
 
+autoload -Uz compinit
+compinit
+
 export PATH="$HOME/.local/bin:/usr/local/bin:/usr/local/sbin:$PATH"
 
 export PATH="$HOME/.cargo/bin:$PATH"
