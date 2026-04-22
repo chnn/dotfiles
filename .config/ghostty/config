@@ -1,9 +1,45 @@
-theme = dark:melange_dark,light:melange_light
+theme = dark:base16-default-dark,light:base16-default-light
 
 font-size = 18
 font-family = IosevkaTerm Nerd Font Mono
 window-new-tab-position = end
 shell-integration-features = no-title
+macos-titlebar-style = hidden
 
-# send ctrl+space on cmd+.
+# forward shortcuts to tmux
+# assumes tmux prefix is ctrl+space, i.e. \x00
+# use `xxd -psd` to figure out escape sequences
+
+# space .
 keybind=cmd+.=text:\x20\x2e
+
+# space p
+keybind=cmd+p=text:\x20p
+
+# space c
+keybind=cmd+shift+c=text:\x20\x63
+
+# ctrl+space 1-9
+keybind=cmd+digit_1=text:\x00\x31
+keybind=cmd+digit_2=text:\x00\x32
+keybind=cmd+digit_3=text:\x00\x33
+keybind=cmd+digit_4=text:\x00\x34
+keybind=cmd+digit_5=text:\x00\x35
+keybind=cmd+digit_6=text:\x00\x36
+keybind=cmd+digit_7=text:\x00\x37
+keybind=cmd+digit_8=text:\x00\x38
+keybind=cmd+digit_9=text:\x00\x39
+
+# ctrl+space n, ctrl+space p
+keybind=cmd+shift+bracket_right=text:\x00\x6e
+keybind=cmd+shift+bracket_left=text:\x00\x70
+
+# ctrl+space (, ctrl+space )
+keybind=cmd+shift+k=text:\x00\x28
+keybind=cmd+shift+j=text:\x00\x29
+
+# ctrl+space <arrow> switches tmux panes
+keybind=cmd+alt+left=text:\x00\x1b[D
+keybind=cmd+alt+right=text:\x00\x1b[C
+keybind=cmd+alt+up=text:\x00\x1b[A
+keybind=cmd+alt+down=text:\x00\x1b[B

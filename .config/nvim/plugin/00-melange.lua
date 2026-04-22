@@ -1,2 +1,2 @@
 vim.pack.add({ "https://github.com/savq/melange-nvim" })
-vim.cmd.colorscheme("melange")
+-- vim.cmd.colorscheme("melange")

@@ -52,6 +52,10 @@ vim.keymap.set("n", "<D-p>", function()
   Snacks.picker.smart({ hidden = true })
 end, { desc = "Open smart file picker" })
 
+vim.keymap.set("n", "<space>p", function()
+  Snacks.picker.smart({ hidden = true })
+end, { desc = "Open smart file picker" })
+
 vim.keymap.set("n", "<space>b", function()
   Snacks.picker.buffers()
 end, { desc = "Open buffer picker" })
