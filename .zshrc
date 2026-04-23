@@ -73,6 +73,19 @@ j() {
   fi
 }
 
+tmux-dev() {
+  local name="${1:?Usage: tmux-dev <session-name>}"
+
+  tmux new-session -d -s "$name" -n editor
+  tmux new-window -t "$name" -n agent
+  tmux new-window -t "$name" -n dev
+  if [[ -n "$TMUX" ]]; then
+    tmux switch-client -t "$name"
+  else
+    tmux attach-session -t "$name"
+  fi
+}
+
 # Open $EDITOR on a fresh temp file, then print the path on stdout.
 # Meant for command substitution, e.g.:
 #
