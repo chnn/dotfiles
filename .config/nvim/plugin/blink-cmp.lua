@@ -29,13 +29,10 @@ require("blink-cmp").setup({
   signature = { enabled = true },
   sources = {
     min_keyword_length = 3,
-    default = { "snippets", "path", "buffer" },
+    default = { "snippets", "path", "lsp", "buffer" },
     per_filetype = { markdown = { "snippets", "path" } },
     providers = {
-      lsp = {
-        timeout_ms = 200,
-        fallbacks = {},
-      },
+      lsp = { timeout_ms = 200 },
       minuet = {
         name = "minuet",
         module = "minuet.blink",
