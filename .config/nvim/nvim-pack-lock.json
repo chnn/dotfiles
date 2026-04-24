@@ -10,7 +10,7 @@
       "version": "1.0.0 - 2.0.0"
     },
     "conform.nvim": {
-      "rev": "086a40dc7ed8242c03be9f47fbcee68699cc2395",
+      "rev": "dca1a190aa85f9065979ef35802fb77131911106",
       "src": "https://github.com/stevearc/conform.nvim"
     },
     "fidget.nvim": {
@@ -43,11 +43,11 @@
       "src": "https://github.com/savq/melange-nvim"
     },
     "minuet-ai.nvim": {
-      "rev": "ee03326381c93f6417fa66aeb2ca85a26c0706e7",
+      "rev": "2141046f480a4582072854faffbe507f202a3c55",
       "src": "https://github.com/milanglacier/minuet-ai.nvim"
     },
     "nvim-lspconfig": {
-      "rev": "4b7fbaa239c5db6b36f424a4521ca9f1a401be33",
+      "rev": "81878de76c0de4ce289513734ad80c31ec7871b8",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-rip-substitute": {
@@ -88,7 +88,7 @@
       "src": "https://github.com/Goose97/timber.nvim"
     },
     "tinted-vim": {
-      "rev": "72c2a517a2227a0a405f401bb953bada72df5003",
+      "rev": "3b6128ba023812420defc3e870714e2131a564dd",
       "src": "https://github.com/tinted-theming/tinted-vim"
     },
     "ts-comments.nvim": {

@@ -15,7 +15,6 @@ require("blink-cmp").setup({
   },
   keymap = {
     preset = "enter",
-    ["<C-S-L>"] = require("minuet").make_blink_map(),
     ["<C-l>"] = {
       function(cmp)
         if vim.bo.filetype == "markdown" then
@@ -33,13 +32,6 @@ require("blink-cmp").setup({
     per_filetype = { markdown = { "snippets", "path" } },
     providers = {
       lsp = { timeout_ms = 200 },
-      minuet = {
-        name = "minuet",
-        module = "minuet.blink",
-        async = true,
-        timeout_ms = 3000,
-        score_offset = 50,
-      },
     },
   },
 })
