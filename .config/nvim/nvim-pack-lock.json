@@ -79,6 +79,10 @@
       "rev": "12437cd1b53488e24936ec4b091c9324cafee311",
       "src": "https://github.com/godlygeek/tabular"
     },
+    "tailwind-fold.nvim": {
+      "rev": "e2ba5ee1ca9b74208709fe9d7314b8aa753b26a7",
+      "src": "https://github.com/razak17/tailwind-fold.nvim"
+    },
     "targets.vim": {
       "rev": "6325416da8f89992b005db3e4517aaef0242602e",
       "src": "https://github.com/wellle/targets.vim"
