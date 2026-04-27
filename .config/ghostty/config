@@ -38,6 +38,9 @@ keybind=cmd+shift+bracket_left=text:\x00\x70
 keybind=cmd+shift+k=text:\x00\x28
 keybind=cmd+shift+j=text:\x00\x29
 
+# cmd+w closes current tmux pane (ctrl+space x)
+keybind=cmd+w=text:\x00\x78
+
 # ctrl+space <arrow> switches tmux panes
 keybind=cmd+alt+left=text:\x00\x1b[D
 keybind=cmd+alt+right=text:\x00\x1b[C
