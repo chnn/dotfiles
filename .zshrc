@@ -8,6 +8,7 @@ alias ns='cd "$NOTES" && $EDITOR && cd -'
 alias g="git"
 alias gca="git add -A && g commit"
 alias gs='git status -sb'
+alias gco='git checkout'
 alias gsu='git status -sb -uno'
 alias gd='git diff'
 alias gdt='git difftool -d -t nvim_difftool'
