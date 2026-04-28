@@ -95,6 +95,10 @@
       "rev": "3b6128ba023812420defc3e870714e2131a564dd",
       "src": "https://github.com/tinted-theming/tinted-vim"
     },
+    "treesj": {
+      "rev": "5fa4e7ba3517f8fe743bb4488f9e9c7ce83330fc",
+      "src": "https://github.com/wansmer/treesj"
+    },
     "ts-comments.nvim": {
       "rev": "123a9fb12e7229342f807ec9e6de478b1102b041",
       "src": "https://github.com/folke/ts-comments.nvim"
