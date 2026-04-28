@@ -5,7 +5,7 @@ fsmonitor.backend = "watchman"
 [ui]
 # pager = "delta"
 # diff-formatter = ":git"
-diff-formatter = ["difft", "--color=always", "$left", "$right"]
+# diff-formatter = ["difft", "--color=always", "$left", "$right"]
 
 [revset-aliases]
 "pr_head()" = "heads(trunk()..@ & tracked_remote_bookmarks())"
