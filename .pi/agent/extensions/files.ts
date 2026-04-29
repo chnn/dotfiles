@@ -3,14 +3,17 @@
  *
  * Shows a fuzzy selector of files that have been modified (via edit/write
  * tool calls) during the current Pi session branch. Selecting a file splits
- * the current tmux pane downward and opens the file in $EDITOR.
+ * the current Ghostty pane downward and opens the file in $EDITOR via
+ * Ghostty's AppleScript API.
  *
  * Requirements:
- * - tmux (running inside a tmux session)
+ * - macOS with Ghostty >= 1.3 (AppleScript support)
+ * - osascript on PATH (standard on macOS)
  * - EDITOR (or VISUAL) set in your shell env; falls back to `vi`
  */
 
 import { execFile } from "node:child_process";
+import { platform } from "node:os";
 import { relative } from "node:path";
 import { promisify } from "node:util";
 
@@ -109,18 +112,38 @@ function resolveAbsolute(p: string, cwd: string): string {
 }
 
 // ---------------------------------------------------------------------------
-// tmux split
+// Ghostty AppleScript
 // ---------------------------------------------------------------------------
+
+function escapeAppleScriptString(s: string): string {
+  return s.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+}
 
 function shellQuote(s: string): string {
   // POSIX single-quote: close quote, escape literal ', reopen quote.
   return `'${s.replace(/'/g, "'\\''")}'`;
 }
 
-async function openInTmuxSplit(filePath: string, signal?: AbortSignal): Promise<void> {
-  const editor = "${EDITOR:-${VISUAL:-vi}}";
-  const cmd = `${editor} ${shellQuote(filePath)}`;
-  await execFileAsync("tmux", ["split-window", "-v", cmd], { signal });
+function buildOpenScript(filePath: string): string {
+  // Use the shell to resolve $EDITOR at runtime so the user's shell config
+  // wins (aliases, functions, shell-set EDITOR). Falls back to `vi`.
+  const command = `\${EDITOR:-\${VISUAL:-vi}} ${shellQuote(filePath)}`;
+  const escaped = escapeAppleScriptString(command);
+  return `
+tell application "Ghostty"
+    activate
+    set currentTerm to focused terminal of selected tab of front window
+    set newTerm to split currentTerm direction down
+    input text "${escaped}" to newTerm
+    send key "enter" to newTerm
+    focus newTerm
+end tell
+`.trim();
+}
+
+async function openInGhostty(filePath: string, signal?: AbortSignal): Promise<void> {
+  const script = buildOpenScript(filePath);
+  await execFileAsync("/usr/bin/osascript", ["-e", script], { signal });
 }
 
 // ---------------------------------------------------------------------------
@@ -227,10 +250,10 @@ async function pickFile(ctx: ExtensionContext, files: string[]): Promise<string 
 
 export default function filesExtension(pi: ExtensionAPI) {
   pi.registerCommand("files", {
-    description: "Fuzzy-pick a file modified this session; open it in a new tmux split",
+    description: "Fuzzy-pick a file modified this session; open it in a new Ghostty split",
     handler: async (_args, ctx) => {
-      if (!process.env.TMUX) {
-        ctx.ui.notify("/files requires running inside a tmux session", "error");
+      if (platform() !== "darwin") {
+        ctx.ui.notify("/files requires macOS + Ghostty", "error");
         return;
       }
 
@@ -244,11 +267,11 @@ export default function filesExtension(pi: ExtensionAPI) {
       if (!selected) return;
 
       try {
-        await openInTmuxSplit(selected);
+        await openInGhostty(selected);
         ctx.ui.notify(`Opened ${relative(ctx.cwd, selected) || selected}`, "success");
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
-        ctx.ui.notify(`Failed to open in tmux split: ${msg}`, "error");
+        ctx.ui.notify(`Failed to open in Ghostty: ${msg}`, "error");
       }
     },
   });
