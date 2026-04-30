@@ -1,5 +1,5 @@
 vim.pack.add({ "https://github.com/tinted-theming/tinted-vim" })
-vim.cmd.colorscheme("base16-default-dark")
+vim.cmd.colorscheme(vim.o.background == "dark" and "base16-measured-dark" or "base16-measured-light")
 
 vim.api.nvim_create_autocmd("ColorScheme", {
   group = vim.api.nvim_create_augroup("DiffHighlights", {}),

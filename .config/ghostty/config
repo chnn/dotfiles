@@ -1,4 +1,4 @@
-theme = dark:base16-default-dark,light:base16-default-light
+theme = dark:measured-dark,light:measured-light
 
 font-size = 18
 font-family = IosevkaTerm Nerd Font Mono
