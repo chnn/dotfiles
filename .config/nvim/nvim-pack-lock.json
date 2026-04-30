@@ -35,7 +35,7 @@
       "src": "https://github.com/neoclide/jsonc.vim"
     },
     "lualine.nvim": {
-      "rev": "a905eeebc4e63fdc48b5135d3bf8aea5618fb21c",
+      "rev": "131a558e13f9f28b15cd235557150ccb23f89286",
       "src": "https://github.com/nvim-lualine/lualine.nvim"
     },
     "melange-nvim": {
@@ -43,11 +43,11 @@
       "src": "https://github.com/savq/melange-nvim"
     },
     "minuet-ai.nvim": {
-      "rev": "2141046f480a4582072854faffbe507f202a3c55",
+      "rev": "7e696b717082e524286192ddaf397f709427f1a5",
       "src": "https://github.com/milanglacier/minuet-ai.nvim"
     },
     "nvim-lspconfig": {
-      "rev": "81878de76c0de4ce289513734ad80c31ec7871b8",
+      "rev": "b66a8ce16b141cd26576267e2d1f371d658b7bb7",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-rip-substitute": {
@@ -92,7 +92,7 @@
       "src": "https://github.com/Goose97/timber.nvim"
     },
     "tinted-vim": {
-      "rev": "3b6128ba023812420defc3e870714e2131a564dd",
+      "rev": "122dba414a17b87af85aa981c580385b26af5e81",
       "src": "https://github.com/tinted-theming/tinted-vim"
     },
     "treesj": {
