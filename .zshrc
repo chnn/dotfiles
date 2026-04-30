@@ -141,11 +141,11 @@ setopt SHARE_HISTORY
 autoload -Uz compinit
 compinit
 
+[ -f /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
+
 export PATH="$HOME/.local/bin:/usr/local/bin:/usr/local/sbin:$PATH"
 
 export PATH="$HOME/.cargo/bin:$PATH"
-
-[ -f /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
 
 command -v jj &> /dev/null && source <(COMPLETE=zsh jj)
 
@@ -153,11 +153,10 @@ command -v zoxide &> /dev/null && eval "$(zoxide init zsh)"
 
 command -v tv &> /dev/null && eval "$(tv init zsh)"
 
-command -v wt &> /dev/null && eval "$(wt shell-init)"
-
 command -v starship &> /dev/null && eval "$(starship init zsh)"
 
 [ -f ~/.config/zsh/title.zsh ] && source ~/.config/zsh/title.zsh
+[ -f ~/.config/zsh/wt.zsh ] && source ~/.config/zsh/wt.zsh
 
 export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
