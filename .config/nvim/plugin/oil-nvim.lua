@@ -1,7 +1,7 @@
 vim.pack.add({ "https://github.com/stevearc/oil.nvim" })
 
 require("oil").setup({
-  default_file_explorer = false,
+  default_file_explorer = true,
   delete_to_trash = false,
   skip_confirm_for_simple_edits = true,
   use_default_keymaps = false,

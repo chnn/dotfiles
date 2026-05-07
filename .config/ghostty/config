@@ -6,6 +6,8 @@ font-feature = -calt
 window-new-tab-position = end
 shell-integration-features = no-title
 
+keybind=cmd+.=text:\x20\x2e
+
 # # tmux settings
 # # -------------
 #

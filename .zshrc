@@ -7,11 +7,13 @@ alias ls="ls -l"
 alias ns='cd "$NOTES" && $EDITOR && cd -'
 alias g="git"
 alias gca="git add -A && g commit"
-alias gs='git status -sb'
+alias gs='git status -sb --untracked-files=no'
+alias gsu='git status -sb --untracked-files=normal'
 alias gco='git checkout'
 alias gsu='git status -sb -uno'
 alias gd='git diff'
 alias gdt='git difftool -d -t nvim_difftool'
+alias jdt='jj --no-pager diff --tool nvim_difftool'
 alias glo='git log --oneline -n 10'
 alias gb='git branch --sort=-committerdate'
 alias gcb='git checkout $(git branch --sort=-committerdate | fzf)'
@@ -71,19 +73,6 @@ j() {
     z $1
   else
     zi
-  fi
-}
-
-tmux-dev() {
-  local name="${1:?Usage: tmux-dev <session-name>}"
-
-  tmux new-session -d -s "$name" -n editor
-  tmux new-window -t "$name" -n agent
-  tmux new-window -t "$name" -n dev
-  if [[ -n "$TMUX" ]]; then
-    tmux switch-client -t "$name"
-  else
-    tmux attach-session -t "$name"
   fi
 }
 

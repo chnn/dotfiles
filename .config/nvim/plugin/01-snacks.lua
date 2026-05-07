@@ -49,11 +49,17 @@ vim.keymap.set("n", "gs", function()
 end, { desc = "Go to symbol" })
 
 vim.keymap.set("n", "<D-p>", function()
-  Snacks.picker.smart({ hidden = true })
+  Snacks.picker.smart({
+    multi = { "buffers", "files" },
+    hidden = true,
+  })
 end, { desc = "Open smart file picker" })
 
 vim.keymap.set("n", "<space>p", function()
-  Snacks.picker.smart({ hidden = true })
+  Snacks.picker.smart({
+    multi = { "buffers", "files" },
+    hidden = true,
+  })
 end, { desc = "Open smart file picker" })
 
 vim.keymap.set("n", "<space>b", function()

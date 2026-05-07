@@ -60,7 +60,9 @@ wtn() {
   local hook="$root/.post-worktree.sh"
   if [[ -f "$hook" ]]; then
     print -u2 "wtn: running $hook"
-    ( cd "$wt_path" && WT_ROOT="$root" WT_NEW="$wt_path" bash "$hook" ) || {
+    # Redirect the hook's stdout to stderr so commands inside (yarn, etc.)
+    # can't pollute the worktree path that wtnp captures.
+    ( cd "$wt_path" && WT_ROOT="$root" WT_NEW="$wt_path" bash "$hook" ) >&2 || {
       print -u2 "wtn: $hook failed"
       return 1
     }
