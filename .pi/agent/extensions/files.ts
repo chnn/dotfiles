@@ -133,7 +133,7 @@ function buildOpenScript(filePath: string): string {
 tell application "Ghostty"
     activate
     set currentTerm to focused terminal of selected tab of front window
-    set newTerm to split currentTerm direction down
+    set newTerm to split currentTerm direction right
     input text "${escaped}" to newTerm
     send key "enter" to newTerm
     focus newTerm
