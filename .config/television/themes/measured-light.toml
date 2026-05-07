@@ -1,0 +1,26 @@
+# Measured Light
+# Based on the Ghostty measured-light theme
+# general
+background = '#fdf9f5'
+border_fg = '#5a5a5a'
+text_fg = '#292929'
+dimmed_text_fg = '#5a5a5a'
+# input
+input_text_fg = '#ac1f35'
+result_count_fg = '#ac1f35'
+# results
+result_name_fg = '#0158ad'
+result_line_number_fg = '#ad5601'
+result_value_fg = '#292929'
+selection_fg = '#0c680c'
+selection_bg = '#ffeada'
+match_fg = '#ac1f35'
+# preview
+preview_title_fg = '#0c680c'
+# modes
+channel_mode_fg = '#fdf9f5'
+channel_mode_bg = '#6645c2'
+remote_control_mode_fg = '#fdf9f5'
+remote_control_mode_bg = '#01716f'
+action_picker_mode_fg = '#fdf9f5'
+action_picker_mode_bg = '#0158ad'
