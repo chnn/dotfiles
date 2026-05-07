@@ -85,6 +85,28 @@ vim.keymap.set("n", "<space>r", function()
   Snacks.picker.resume()
 end, { desc = "Resume last picker" })
 
+-- grep within the nearest project root of the current buffer
+local function find_package_root()
+  local buf_name = vim.api.nvim_buf_get_name(0)
+  local start = (buf_name ~= "" and vim.fs.dirname(buf_name)) or vim.uv.cwd()
+
+  local found = vim.fs.find({ "package.json", ".jj", ".git" }, {
+    path = start,
+    upward = true,
+    type = nil,
+  })[1]
+
+  if found then
+    return vim.fs.dirname(found)
+  end
+
+  return vim.uv.cwd()
+end
+
+vim.keymap.set("n", "<leader>g", function()
+  Snacks.picker.grep({ cwd = find_package_root() })
+end, { desc = "Grep in nearest package root" })
+
 -- JS/TS import search keybinding
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "javascript", "typescript", "typescriptreact" },
