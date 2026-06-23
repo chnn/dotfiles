@@ -55,3 +55,34 @@ local function open_diagnostic_float_and_focus()
   vim.diagnostic.open_float()
 end
 vim.keymap.set("n", "<leader>df", open_diagnostic_float_and_focus, { desc = "Open and focus diagnostic float" })
+
+-- Restart all LSP servers attached to the current buffer
+vim.api.nvim_create_user_command("LspRestart", function()
+  local bufnr = vim.api.nvim_get_current_buf()
+  local clients = vim.lsp.get_clients({ bufnr = bufnr })
+
+  if #clients == 0 then
+    vim.notify("No LSP servers attached to the current buffer", vim.log.levels.INFO)
+    return
+  end
+
+  for _, client in ipairs(clients) do
+    local name = client.name
+    local config = client.config
+    local attached_buffers = vim.tbl_keys(client.attached_buffers)
+
+    client:stop()
+
+    vim.defer_fn(function()
+      local new_client_id = vim.lsp.start(config, { attach = false })
+      if new_client_id then
+        for _, buf in ipairs(attached_buffers) do
+          if vim.api.nvim_buf_is_valid(buf) then
+            vim.lsp.buf_attach_client(buf, new_client_id)
+          end
+        end
+        vim.notify("Restarted LSP server: " .. name, vim.log.levels.INFO)
+      end
+    end, 500)
+  end
+end, { desc = "Restart LSP servers for the current buffer" })
