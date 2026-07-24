@@ -4,6 +4,10 @@
       "rev": "e30b7f2008e52442154b66f7c519bfd2f1e32acb",
       "src": "https://github.com/numToStr/Comment.nvim"
     },
+    "baleia.nvim": {
+      "rev": "710537ff5cd669c5a76c5f5b6a9169fd9b913d18",
+      "src": "git@github.com:m00qek/baleia.nvim"
+    },
     "blink.cmp": {
       "rev": "78336bc89ee5365633bcf754d93df01678b5c08f",
       "src": "https://github.com/saghen/blink.cmp",
@@ -12,6 +16,10 @@
     "conform.nvim": {
       "rev": "dca1a190aa85f9065979ef35802fb77131911106",
       "src": "https://github.com/stevearc/conform.nvim"
+    },
+    "diffview.nvim": {
+      "rev": "4516612fe98ff56ae0415a259ff6361a89419b0a",
+      "src": "git@github.com:sindrets/diffview.nvim"
     },
     "fidget.nvim": {
       "rev": "2f7c08f45639a64a5c0abcf67321d52c3f499ae6",
@@ -45,6 +53,10 @@
     "minuet-ai.nvim": {
       "rev": "7e696b717082e524286192ddaf397f709427f1a5",
       "src": "https://github.com/milanglacier/minuet-ai.nvim"
+    },
+    "neogit": {
+      "rev": "2043096b7ae81e8350ec8cceb3e7ab08dca1dcfe",
+      "src": "git@github.com:neogitorg/neogit"
     },
     "nvim-lspconfig": {
       "rev": "b66a8ce16b141cd26576267e2d1f371d658b7bb7",
