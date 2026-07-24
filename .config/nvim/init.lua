@@ -105,8 +105,9 @@ vim.keymap.set("n", "<C-s>", "<C-W>s", { desc = "Split pane" })
 
 -- Shortcut to copy filename of buffer under the cursor to system clipboard
 -- In visual mode, appends line range (e.g., src/myFile.ts:30-34)
-local function copy_file_path()
-  local path = vim.fn.fnamemodify(vim.fn.expand("%"), ":~:.")
+local function copy_file_path(absolute)
+  local modifier = absolute and ":p" or ":~:."
+  local path = vim.fn.fnamemodify(vim.fn.expand("%"), modifier)
   local mode = vim.fn.mode()
   if mode == "v" or mode == "V" or mode == "\22" then
     local start_line = vim.fn.line("v")
@@ -134,6 +135,14 @@ vim.keymap.set(
   "<D-S-c>",
   copy_file_path,
   { silent = true, desc = "Copy path of current buffer to clipboard" }
+)
+vim.keymap.set(
+  { "n", "v" },
+  "<C-D-S-c>",
+  function()
+    copy_file_path(true)
+  end,
+  { silent = true, desc = "Copy absolute path of current buffer to clipboard" }
 )
 
 -- Toggle statusline visibility
