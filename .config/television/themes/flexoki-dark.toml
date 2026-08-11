@@ -1,0 +1,31 @@
+# Flexoki Dark by Steph Ango: https://stephango.com/flexoki
+# Ink surfaces, warm text, and accents from the published Flexoki palette.
+
+# General
+background = '#100F0F'
+border_fg = '#403E3C'
+text_fg = '#CECDC3'
+dimmed_text_fg = '#878580'
+
+# Input
+input_text_fg = '#CECDC3'
+result_count_fg = '#878580'
+
+# Results
+result_name_fg = '#4385BE'
+result_line_number_fg = '#878580'
+result_value_fg = '#CECDC3'
+selection_fg = '#CECDC3'
+selection_bg = '#12253B'
+match_fg = '#E8705F'
+
+# Preview
+preview_title_fg = '#3AA99F'
+
+# Modes
+channel_mode_fg = '#100F0F'
+channel_mode_bg = '#8B7EC8'
+remote_control_mode_fg = '#100F0F'
+remote_control_mode_bg = '#3AA99F'
+action_picker_mode_fg = '#100F0F'
+action_picker_mode_bg = '#4385BE'

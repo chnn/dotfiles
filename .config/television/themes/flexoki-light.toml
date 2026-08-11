@@ -1,0 +1,31 @@
+# Flexoki Light by Steph Ango: https://stephango.com/flexoki
+# Paper surfaces, ink text, and accents from the published Flexoki palette.
+
+# General
+background = '#FFFCF0'
+border_fg = '#CECDC3'
+text_fg = '#100F0F'
+dimmed_text_fg = '#6F6E69'
+
+# Input
+input_text_fg = '#100F0F'
+result_count_fg = '#6F6E69'
+
+# Results
+result_name_fg = '#205EA6'
+result_line_number_fg = '#6F6E69'
+result_value_fg = '#100F0F'
+selection_fg = '#100F0F'
+selection_bg = '#C6DDE8'
+match_fg = '#AF3029'
+
+# Preview
+preview_title_fg = '#1C6C66'
+
+# Modes
+channel_mode_fg = '#FFFCF0'
+channel_mode_bg = '#5E409D'
+remote_control_mode_fg = '#FFFCF0'
+remote_control_mode_bg = '#1C6C66'
+action_picker_mode_fg = '#FFFCF0'
+action_picker_mode_bg = '#205EA6'
