@@ -99,6 +99,11 @@ function preview(tool: string, args: Record<string, unknown>): string {
       return oneLine(args.command);
     case "codemode":
       return oneLine(args.code);
+    case "subagent": {
+      const model = [args.model, args.thinking].filter((v) => typeof v === "string" && v).join(":");
+      const label = oneLine(args.label) || oneLine(args.prompt);
+      return [label, model].filter(Boolean).join(" · ");
+    }
     default:
       return Object.entries(args)
         .map(([key, value]) => `${key}=${typeof value === "string" ? value : json(value)}`)
@@ -142,6 +147,65 @@ function textOutput(result: Result | undefined, codemode: boolean): string {
     .filter(Boolean)
     .join("\n")
     .trimEnd();
+}
+
+/** The parts of the subagent extension's result details used here; every field is optional. */
+interface SubagentDetails {
+  status?: string;
+  output?: string;
+  error?: string;
+  model?: string;
+  thinking?: string;
+  sessionFile?: string;
+  toolCalls?: number;
+  durationMs?: number;
+  usage?: { turns?: number; input?: number; output?: number; cost?: number };
+  activity?: Array<{
+    kind?: string;
+    name?: string;
+    preview?: string;
+    status?: string;
+    text?: string;
+  }>;
+}
+
+/** Tool calls listed on a collapsed subagent row; the expanded `activity` section lists all. */
+const SUBAGENT_RECENT_CALLS = 5;
+
+function subagentDetails(result: Result | undefined): SubagentDetails | undefined {
+  const details = result?.details;
+  return details && typeof details === "object" && "status" in details
+    ? (details as SubagentDetails)
+    : undefined;
+}
+
+function tokens(n: number): string {
+  if (n < 1000) return String(n);
+  if (n < 10_000) return `${(n / 1000).toFixed(1)}k`;
+  if (n < 1_000_000) return `${Math.round(n / 1000)}k`;
+  return `${(n / 1_000_000).toFixed(1)}M`;
+}
+
+function plural(n: number, word: string): string {
+  return `${n} ${word}${n === 1 ? "" : "s"}`;
+}
+
+function subagentStats(d: SubagentDetails): string {
+  const u = d.usage ?? {};
+  const parts: string[] = [];
+  if (d.status === "running" && !u.turns) parts.push("starting");
+  if (u.turns) parts.push(plural(u.turns, "turn"));
+  if (d.toolCalls) parts.push(plural(d.toolCalls, "tool call"));
+  if (u.input || u.output) parts.push(`↑${tokens(u.input ?? 0)} ↓${tokens(u.output ?? 0)}`);
+  if (u.cost) parts.push(`$${u.cost.toFixed(4)}`);
+  if (d.durationMs !== undefined) {
+    const s = Math.round(d.durationMs / 1000);
+    parts.push(s < 60 ? `${s}s` : `${Math.floor(s / 60)}m${String(s % 60).padStart(2, "0")}s`);
+  }
+  // Only the model id: the provider prefix is long and the header shows what was requested.
+  const model = d.model?.split("/").pop();
+  if (model) parts.push(d.thinking ? `${model}:${d.thinking}` : model);
+  return oneLine(parts.join(" · "));
 }
 
 /**
@@ -280,8 +344,9 @@ class ToolView implements Component {
       textSection("output", theme.fg(isError ? "error" : "text", oneLine(output)), () => output);
     const toolArgs = asArgs(args);
     let header = theme.fg("muted", `${expanded ? EXPANDED : COLLAPSED} ${this.tool}`);
-    const pathTool = ["read", "write", "edit"].includes(this.tool);
-    if (!expanded || pathTool) {
+    // These tools keep their preview when expanded because no section repeats it.
+    const keepPreview = ["read", "write", "edit", "subagent"].includes(this.tool);
+    if (!expanded || keepPreview) {
       const summary = styledPreview(this.tool, toolArgs, theme);
       if (summary) header += ` ${summary}`;
     }
@@ -295,7 +360,7 @@ class ToolView implements Component {
       // Nested-call statuses belong to the row itself, in both collapsed and expanded states.
       if (calls.length > 0) push("");
       for (const call of calls) {
-        const [icon, statusColor] = statusStyle(call);
+        const [icon, statusColor] = statusStyle(call.status);
         appendPreview(
           `${theme.fg(statusColor, icon)} ${theme.fg("muted", oneLine(call.name))} ${nestedPreview(call, theme)}`,
           2,
@@ -315,6 +380,57 @@ class ToolView implements Component {
           true,
         );
         outputSection(output);
+      }
+    } else if (this.tool === "subagent") {
+      const details = subagentDetails(state.result);
+      const calls = (details?.activity ?? []).filter((item) => item.kind === "tool");
+      const callLine = (call: (typeof calls)[number], indent: number) => {
+        const [icon, statusColor] = statusStyle(call.status);
+        appendPreview(
+          `${theme.fg(statusColor, icon)} ${theme.fg("muted", oneLine(call.name))} ${theme.fg("text", oneLine(call.preview))}`,
+          indent,
+        );
+      };
+      // A status line and, while collapsed, the latest tool calls belong to the row itself.
+      if (details) {
+        push("");
+        const [icon, statusColor] = statusStyle(details.status);
+        appendPreview(
+          `${theme.fg(statusColor, icon)} ${theme.fg("muted", subagentStats(details))}`,
+          2,
+        );
+        if (expanded && details.sessionFile) {
+          appendPreview(theme.fg("muted", `session ${oneLine(details.sessionFile)}`), 2);
+        }
+        if (!expanded) {
+          const recent = calls.slice(-SUBAGENT_RECENT_CALLS);
+          const earlier = Math.max(details.toolCalls ?? 0, calls.length) - recent.length;
+          if (earlier > 0)
+            appendPreview(theme.fg("muted", `… ${plural(earlier, "earlier tool call")}`), 4);
+          for (const call of recent) callLine(call, 4);
+        }
+      }
+      if (expanded) {
+        textSection("prompt", theme.fg("text", oneLine(toolArgs.prompt)), () =>
+          clean(toolArgs.prompt),
+        );
+        if (calls.length > 0) {
+          const total = Math.max(details?.toolCalls ?? 0, calls.length);
+          const summary =
+            total > calls.length
+              ? `last ${calls.length} of ${total} tool calls`
+              : plural(total, "tool call");
+          section("activity", theme.fg("text", summary), () => {
+            for (const call of calls) callLine(call, 4);
+          });
+        }
+        // The bare answer (or error) rather than the model-facing text with its status header.
+        const answer = details
+          ? details.status === "done"
+            ? (details.output ?? "")
+            : [details.error, details.output].filter(Boolean).join("\n\n")
+          : output;
+        outputSection(clean(answer).trimEnd());
       }
     } else if (expanded) {
       switch (this.tool) {
@@ -351,15 +467,19 @@ class ToolView implements Component {
   }
 }
 
-function statusStyle(call: NestedCall): [string, "warning" | "success" | "error" | "muted"] {
-  switch (call.status) {
+function statusStyle(
+  status: string | undefined,
+): [string, "warning" | "success" | "error" | "muted"] {
+  switch (status) {
     case "running":
       return ["…", "warning"];
     case "ok":
+    case "done":
       return ["✓", "success"];
     case "error":
       return ["✗", "error"];
     case "cancelled":
+    case "aborted":
       return ["⊘", "muted"];
     default:
       return ["?", "muted"];

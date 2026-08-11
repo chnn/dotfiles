@@ -629,6 +629,172 @@ test("resumed codemode calls format even though argsComplete is not set by Pi", 
   assert.ok(view.render().includes("    return 1;"));
 });
 
+function subagentDetails(overrides = {}) {
+  return {
+    status: "running",
+    output: "",
+    model: "ai-gw-openai/openai/gpt-6-luna",
+    thinking: "high",
+    toolCalls: 2,
+    durationMs: 3000,
+    usage: { turns: 1, input: 1200, output: 340, cost: 0 },
+    activity: [
+      { kind: "tool", name: "read", preview: "file.ts", status: "ok" },
+      { kind: "text", text: "Looking around" },
+      { kind: "tool", name: "bash", preview: "git diff", status: "running" },
+    ],
+    ...overrides,
+  };
+}
+
+const subagentArgs = {
+  prompt: "Review the code\nin file.ts",
+  model: "luna",
+  thinking: "high",
+  label: "Review",
+};
+
+test("subagent rows stream a status line and the latest tool calls while collapsed", () => {
+  const view = row("subagent", subagentArgs);
+  assert.deepEqual(view.render(), [" subagent Review · luna:high"]);
+  view.result(result("(running…)", subagentDetails()), true);
+  assert.deepEqual(view.render(), [
+    " subagent Review · luna:high",
+    "",
+    "  … 1 turn · 2 tool calls · ↑1.2k ↓340 · 3s · gpt-6-luna:high",
+    "    ✓ read file.ts",
+    "    … bash git diff",
+  ]);
+  const activity = Array.from({ length: 7 }, (_, i) => ({
+    kind: "tool",
+    name: "read",
+    preview: `f${i}`,
+    status: "ok",
+  }));
+  view.result(
+    result(
+      "Subagent finished\n\nAll good",
+      subagentDetails({ status: "done", output: "All good", toolCalls: 9, activity }),
+    ),
+  );
+  assert.deepEqual(view.render().slice(2), [
+    "  ✓ 1 turn · 9 tool calls · ↑1.2k ↓340 · 3s · gpt-6-luna:high",
+    "    … 4 earlier tool calls",
+    "    ✓ read f2",
+    "    ✓ read f3",
+    "    ✓ read f4",
+    "    ✓ read f5",
+    "    ✓ read f6",
+  ]);
+});
+
+test("expanded subagent rows fold prompt, activity, and the bare answer", () => {
+  const view = row("subagent", subagentArgs);
+  const details = subagentDetails({
+    status: "done",
+    output: "All good\nNo issues",
+    sessionFile: "/sessions/s.jsonl",
+    activity: subagentDetails().activity.map((item) => ({ ...item, status: "ok" })),
+  });
+  view.result(result('Subagent "Review" finished\nSession: x\n\nAll good\nNo issues', details));
+  view.click(0);
+  assert.deepEqual(view.render(), [
+    " subagent Review · luna:high",
+    "",
+    "  ✓ 1 turn · 2 tool calls · ↑1.2k ↓340 · 3s · gpt-6-luna:high",
+    "  session /sessions/s.jsonl",
+    "",
+    "   prompt Review the code in file.ts",
+    "",
+    "   activity 2 tool calls",
+    "",
+    "   output All good No issues",
+  ]);
+  // Status rows toggle the whole row; section headers toggle only their section.
+  view.click(2);
+  assert.equal(view.render().length, 5); // collapsed: header, blank, status, two calls
+  view.click(0);
+  view.click(5);
+  assert.deepEqual(view.render().slice(5), [
+    "   prompt",
+    "",
+    "    Review the code",
+    "    in file.ts",
+    "",
+    "   activity 2 tool calls",
+    "",
+    "   output All good No issues",
+  ]);
+  view.click(10);
+  assert.deepEqual(view.render().slice(10), [
+    "   activity",
+    "",
+    "    ✓ read file.ts",
+    "    ✓ bash git diff",
+    "",
+    "   output All good No issues",
+  ]);
+  view.click(15);
+  assert.deepEqual(view.render().slice(15), ["   output", "", "    All good", "    No issues"]);
+});
+
+test("failed subagents show the error in the header and output section", () => {
+  const view = row("subagent", { prompt: "Do it" }, { isError: true });
+  view.result(
+    result(
+      "Subagent failed",
+      subagentDetails({
+        status: "error",
+        error: "Model not found",
+        model: "nope",
+        thinking: undefined,
+        usage: {},
+        toolCalls: 0,
+        durationMs: 20,
+        activity: [],
+      }),
+    ),
+  );
+  assert.deepEqual(view.render(), [" subagent Do it [error]", "", "  ✗ 0s · nope"]);
+  view.click(0);
+  assert.deepEqual(view.render().slice(3), [
+    "",
+    "   prompt Do it",
+    "",
+    "   output Model not found",
+  ]);
+});
+
+test("subagent rows fall back to plain text output without subagent details", () => {
+  const view = row("subagent", { prompt: "Do it", label: "Task" });
+  view.result(result("plain answer"));
+  view.click(0);
+  assert.deepEqual(view.render(), [
+    " subagent Task",
+    "",
+    "   prompt Do it",
+    "",
+    "   output plain answer",
+  ]);
+});
+
+test("nested codemode subagent calls preview their label and model", () => {
+  const view = row("codemode", { code: "return 1;" });
+  const args = JSON.stringify({
+    label: "Review",
+    model: "luna",
+    thinking: "high",
+    prompt: "x".repeat(300),
+  });
+  view.result(
+    result("", {
+      calls: [{ id: "1", name: "subagent", args: args.slice(0, 200), status: "running" }],
+    }),
+    true,
+  );
+  assert.deepEqual(view.render().slice(1), ["", "  … subagent Review · luna:high"]);
+});
+
 test("unknown tools get input/output sections and errors remain visible", () => {
   const view = row("mcp__example__query", { query: "something" }, { isError: true });
   view.result(result("failed"));
@@ -891,4 +1057,5 @@ test("extension registers a renderer resolver without replacing any tool executi
   assert.equal(resolver("read").renderShell, "self");
   assert.equal(resolver("codemode").renderShell, "self");
   assert.equal(resolver("future_mcp_tool").renderShell, "self");
+  assert.equal(resolver("subagent").renderShell, "self");
 });

@@ -11,6 +11,7 @@ A rendering-only Pi extension. Tool execution, model-facing results, and session
 - `bash`: command preview / foldable `command` and `output` sections.
 - `edit`: path / theme-highlighted diff with added/removed/context colors and word-level change emphasis, **expanded by default**.
 - `codemode`: syntax-highlighted one-line code preview and live nested-call statuses (shown below the header whether the row is collapsed or expanded) / foldable syntax-highlighted JavaScript `code` and `output` sections. Nested previews use the same rules as top-level tools (bash command only, file path only, etc.), including when codemode truncates argument JSON. Syntax colors follow Pi’s active theme.
+- `subagent` (from the `subagent` extension): `label · model:thinking` header, a live status line (turns, tool calls, tokens, duration, resolved model), and the subagent's latest five tool calls with codemode-style statuses while collapsed / the session file plus foldable `prompt`, `activity` (every tracked tool call), and `output` (the bare answer, or the error) sections. Falls back to the plain result text when the result has no subagent details.
 - Other tools, including MCP tools: argument preview / foldable `input` and `output` sections.
 - Readable assistant text gets a full-width `customMessageBg` panel with one shaded padding row above and below. Native Markdown, horizontal `outputPad`, and syntax highlighting are preserved. Thinking and tool output remain unshaded.
 
