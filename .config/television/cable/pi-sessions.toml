@@ -1,0 +1,9 @@
+[metadata]
+name = "pi-sessions"
+description = "Pi sessions across projects: last modified, directory, and name or first prompt"
+requirements = ["node"]
+
+[source]
+command = 'node "${XDG_CONFIG_HOME:-$HOME/.config}/television/scripts/pi-sessions.mjs" list'
+display = "{split:\t:1}  {split:\t:2}  {split:\t:3}  [{split:\t:4}]"
+output = "{split:\t:0}"

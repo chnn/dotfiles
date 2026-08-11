@@ -24,6 +24,7 @@ alias gpr='gh pr view --web'
 alias ezsh='$EDITOR ~/.zshrc.personal && source ~/.zshrc.personal'
 alias pr="pnpm run"
 alias px="pnpm exec"
+alias pcp="pwd | pbcopy"
 
 # Chckout a specific branch, even if it is untracked
 gcor() {
@@ -146,6 +147,7 @@ command -v starship &> /dev/null && eval "$(starship init zsh)"
 
 [ -f ~/.config/zsh/title.zsh ] && source ~/.config/zsh/title.zsh
 [ -f ~/.config/zsh/wt.zsh ] && source ~/.config/zsh/wt.zsh
+[ -f ~/.config/zsh/pi.zsh ] && source ~/.config/zsh/pi.zsh
 
 export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
