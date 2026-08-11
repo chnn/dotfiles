@@ -11,7 +11,7 @@ vim.o.cursorline = false
 vim.o.signcolumn = "yes"
 vim.o.mouse = ""
 vim.o.conceallevel = 2
-vim.opt.fillchars:append({ vert = " ", eob = " " })
+vim.opt.fillchars:append({ vert = " ", eob = " ", diff = "╱" })
 
 -- Folds
 vim.o.foldmethod = "indent"
@@ -136,14 +136,9 @@ vim.keymap.set(
   copy_file_path,
   { silent = true, desc = "Copy path of current buffer to clipboard" }
 )
-vim.keymap.set(
-  { "n", "v" },
-  "<C-D-S-c>",
-  function()
-    copy_file_path(true)
-  end,
-  { silent = true, desc = "Copy absolute path of current buffer to clipboard" }
-)
+vim.keymap.set({ "n", "v" }, "<C-D-S-c>", function()
+  copy_file_path(true)
+end, { silent = true, desc = "Copy absolute path of current buffer to clipboard" })
 
 -- Toggle statusline visibility
 vim.keymap.set("n", "yo<space>", function()

@@ -1,3 +1,5 @@
+-- Use the theme's readable hash color instead of arbitrary per-commit RGBs.
+vim.g.fugitive_dynamic_colors = 0
 vim.pack.add({ "https://github.com/tpope/vim-fugitive" })
 
 -- When a fugitive status window opens: resize to 15 lines and scroll past

@@ -1,8 +1,10 @@
 vim.pack.add({ "https://github.com/nvim-lualine/lualine.nvim" })
 
 require("lualine").setup({
-  extensions = { "oil" },
+  extensions = { "oil", "fugitive" },
   options = {
+    -- "auto" finds lua/lualine/themes/flexoki.lua and follows background changes.
+    theme = "auto",
     icons_enabled = false,
     section_separators = { left = "", right = "" },
     component_separators = { left = "", right = "" },
