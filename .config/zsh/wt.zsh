@@ -47,7 +47,7 @@ wtn() {
     return 1
   fi
 
-  local branch="chnn/${slug}"
+  local branch="christopher.henn/${slug}"
 
   # Redirect git's stdout to stderr so only the worktree path lands on
   # our stdout (wtnp captures it via command substitution).

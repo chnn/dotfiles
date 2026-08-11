@@ -7,8 +7,7 @@ alias ls="ls -l"
 alias ns='cd "$NOTES" && $EDITOR && cd -'
 alias g="git"
 alias gca="git add -A && g commit"
-alias gs='git status -sb --untracked-files=no'
-alias gsu='git status -sb --untracked-files=normal'
+alias gs='git status -sb'
 alias gco='git checkout'
 alias gsu='git status -sb -uno'
 alias gd='git diff'
