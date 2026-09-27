@@ -25,6 +25,10 @@ alias pr="pnpm run"
 alias px="pnpm exec"
 alias pcp="pwd | pbcopy"
 
+nj() {
+  "$EDITOR" "$JOURNAL/$(date +%F).md"
+}
+
 # Chckout a specific branch, even if it is untracked
 gcor() {
   git fetch -f origin "$1:$1"
@@ -135,6 +139,7 @@ compinit
 export PATH="$HOME/.local/bin:/usr/local/bin:/usr/local/sbin:$PATH"
 
 export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$(brew --prefix rustup)/bin:$PATH"
 
 command -v jj &> /dev/null && source <(COMPLETE=zsh jj)
 
