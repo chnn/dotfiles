@@ -130,13 +130,7 @@ vim.keymap.set(
   copy_file_path,
   { silent = true, desc = "Copy path of current buffer to clipboard" }
 )
-vim.keymap.set(
-  { "n", "v" },
-  "<D-S-c>",
-  copy_file_path,
-  { silent = true, desc = "Copy path of current buffer to clipboard" }
-)
-vim.keymap.set({ "n", "v" }, "<C-D-S-c>", function()
+vim.keymap.set({ "n", "v" }, "<leader>C", function()
   copy_file_path(true)
 end, { silent = true, desc = "Copy absolute path of current buffer to clipboard" })
 

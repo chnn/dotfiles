@@ -10,7 +10,6 @@ vim.diagnostic.config({
   jump = { float = true, severity = vim.diagnostic.severity.ERROR },
 })
 
-vim.keymap.set("n", "<D-.>", vim.lsp.buf.code_action, { desc = "Show code actions" })
 vim.keymap.set("n", "<space>.", vim.lsp.buf.code_action, { desc = "Show code actions" })
 
 vim.api.nvim_create_autocmd("LspAttach", {
